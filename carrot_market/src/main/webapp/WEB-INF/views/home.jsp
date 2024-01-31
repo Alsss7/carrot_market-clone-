@@ -6,10 +6,28 @@
 <head>
 <meta charset="UTF-8">
 <title>Home</title>
+<script type="text/javascript">
+	function search(e) {
+		const code = e.code;
+		var input = document.getElementById("search");
+		if(code == 'Enter') {
+			console.log(input.value);
+			input.value = '';
+		}
+	}
+</script>
 </head>
 <body>
-   <h1>당근마켓</h1>
-
-   <P>The time on the server is ${serverTime}.</P>
+   <header>
+      <nav>
+         <h1>당근</h1>
+         <span>중고거래</span>
+         <span>동네업체</span>
+         <span>알바</span>
+         <span>부동산 직거래</span>
+         <span>중고차 직거래</span>
+         <span><input type="search" id="search" name="search" onkeypress="search(event)"/></span>
+      </nav>
+   </header>
 </body>
 </html>

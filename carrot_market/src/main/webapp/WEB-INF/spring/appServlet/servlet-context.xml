@@ -29,17 +29,6 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 
-
-	<!-- HandlerMapping -->
-	<beans:bean
-		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-		<beans:property name="mappings">
-			<beans:props>
-				<beans:prop key="/member/**">memberController</beans:prop>
-			</beans:props>
-		</beans:property>
-	</beans:bean>
-
 	<context:component-scan
 		base-package="com.mycompany.carrotMarket" />
 

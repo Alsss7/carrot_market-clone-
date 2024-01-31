@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>당근 - 로그인</title>
 </head>
 <body>
    <form action="/member/login.do" method="post">
