@@ -19,17 +19,17 @@ public class MemberController {
 	@Autowired
 	MemberService memberService;
 
-	@RequestMapping(value = "/loginForm", method = RequestMethod.GET)
+	@RequestMapping(value = "/loginForm.do", method = RequestMethod.GET)
 	public ModelAndView loginForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/loginForm");
 		return mav;
 	}
 
-	@RequestMapping(value = "/memberForm", method = RequestMethod.GET)
+	@RequestMapping(value = "/joinForm.do", method = RequestMethod.GET)
 	public ModelAndView memberForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("member/memberForm");
+		mav.setViewName("member/joinForm");
 		return mav;
 	}
 

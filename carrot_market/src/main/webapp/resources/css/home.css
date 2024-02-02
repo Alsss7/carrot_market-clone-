@@ -1,78 +1,7 @@
 @charset "UTF-8";
 
-header {
-	padding-top: 5px;
-	width: 100%;
-	height: 65px;
-	position: fixed;
-	top: 0;
-	left: 0;
-	background-color: white;
-}
-
 body {
 	padding-top: 60px;
-}
-
-#danggeun {
-	margin-right: 15px;
-}
-
-#danggeun a img {
-	width: 64px;
-	height: 32px;
-}
-
-.menu {
-	font-size: 13.5pt;
-	margin-left: 15px;
-	margin-right: 15px;
-	color: #696969;
-	font-weight: bold;
-}
-
-.menu a {
-	color: #696969;
-}
-
-.member {
-	border-style: solid;
-	border-color: gray;
-	border-width: 1px;
-	padding: 5px;
-	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
-	margin-right: 10px;
-}
-
-.member a {
-	font-size: 13.5pt;
-	font-weight: bold;
-	color: black;
-}
-
-.header-wrapper {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 60px;
-	padding: 0 16px;
-}
-
-.header-wrapper nav {
-	display: flex;
-	align-items: center;
-}
-
-#search {
-	margin-left: 110px;
-	margin-right: 10px;
-	border: 0;
-	background-color: #F0F0F0;
-	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
-	width: 300px;
-	height: 40px;
-	padding-left: 10px;
-	font-size: 12pt;
 }
 
 #introduce {
@@ -122,8 +51,7 @@ body {
 .install span {
 	display: inline-block;
 	background-color: #EE7832;
-	padding: 10px;
-	padding-top: 13px;
+	padding: 17px 12px 10px 12px;
 	margin-right: 5px;
 	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
 	width: 160px;
@@ -142,8 +70,8 @@ body {
 }
 
 .install span a img {
-	width: 25px;
-	height: 25px;
+	width: 20px;
+	height: 20px;
 }
 
 a {

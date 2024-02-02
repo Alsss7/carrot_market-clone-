@@ -1,0 +1,56 @@
+@charset "UTF-8";
+
+#seperate {
+	position: absolute;
+	width: 100%;
+	padding-top: 0px;
+	margin-top: 0px;
+	border: 0.1px solid #ccc; /* 회색 선의 두께와 색상 설정 */
+	opacity: 0.5; /* 투명도 설정 */
+	display: block;
+}
+
+#footer {
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+	justify-content: center;
+}
+
+#footer div {
+	padding-top: 20px;
+}
+
+#footer div ul {
+	font-size: 10.5pt;
+	color: black;
+	list-style: none;
+}
+
+#footer div ul li {
+	margin-bottom: 30px;
+}
+
+#install {
+	margin-left: 100px;
+}
+
+#install p {
+	font-size: 11pt;
+	font-weight: bold;
+}
+
+#install span {
+	text-align: center;
+	background-color: #E9E9E9;
+	font-size: 15pt;
+	font-weight: bold;
+	padding: 7px 12px 7px 12px;
+	margin-left: 10px;
+	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
