@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
   isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
@@ -28,12 +29,22 @@
               placeholder="물품이나 동네를 검색해보세요" size="30" />
           </span>
         </form>
-        <span class="member">
-          <a href="${contextPath }/member/loginForm.do">로그인</a>
-        </span>
-        <span class="member">
-          <a href="${contextPath }/member/joinForm.do">회원가입</a>
-        </span>
+        <sec:authorize access="isAuthenticated()">
+          <form action="${contextPath }/logout" method="post">
+            <span>
+              <button type="submit" id="logout_bt">로그아웃</button>
+              <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
+            </span>
+          </form>
+        </sec:authorize>
+        <sec:authorize access="!isAuthenticated()">
+          <span class="member">
+            <a href="${contextPath }/login">로그인</a>
+          </span>
+          <span class="member">
+            <a href="${contextPath }/join">회원가입</a>
+          </span>
+        </sec:authorize>
       </nav>
     </div>
   </header>

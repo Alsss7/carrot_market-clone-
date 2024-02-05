@@ -15,12 +15,12 @@
 		<put-attribute name="body" value="/WEB-INF/views/home.jsp" />
 	</definition>
 	
-	<definition name="member/loginForm" extends="default">
+	<definition name="login" extends="default">
 		<put-attribute name="title" value="클론 당근 - 로그인" />
 		<put-attribute name="body" value="/WEB-INF/views/member/loginForm.jsp" />
 	</definition>
 	
-	<definition name="member/joinForm" extends="default">
+	<definition name="join" extends="default">
 		<put-attribute name="title" value="클론 당근 - 회원가입" />
 		<put-attribute name="body" value="/WEB-INF/views/member/joinForm.jsp" />
 	</definition>

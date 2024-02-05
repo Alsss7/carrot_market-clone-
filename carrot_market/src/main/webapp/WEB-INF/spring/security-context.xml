@@ -3,26 +3,38 @@
 	xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-    https://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.springframework.org/schema/security 
-    http://www.springframework.org/schema/security/spring-security.xsd">
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/security
+                        http://www.springframework.org/schema/security/spring-security.xsd">
 
-	<security:http auto-config="true" use-expressions="true">
-		<security:intercept-url pattern="/home" access="permitAll" />
-		<security:intercept-url pattern="/member/loginForm" access="permitAll" />
-		
-		<security:form-login login-page="/member/loginForm"/>
-	</security:http>
 
-	<security:authentication-manager>
-		<security:authentication-provider>
-			<security:user-service>
-				<security:user name="admin" password="{noop}admin" authorities="ROLE_ADMIN" />
-				<security:user name="user" password="{noop}user" authorities="ROLE_USER" />
-			</security:user-service>
-		</security:authentication-provider>
-	</security:authentication-manager>
+	<!-- Authentication Manager 설정 -->
+	<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="user" password="{noop}password"
+					authorities="ROLE_USER" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
 
+	<!-- HTTP Security 설정 -->
+	<http>
+		<!-- 최소한의 설정 -->
+		<intercept-url pattern="/home" access="permitAll" />
+		<intercept-url pattern="/login" access="permitAll" />
+		<intercept-url pattern="/join" access="permitAll" />
+		<form-login login-page="/login"
+			default-target-url="/home"
+			authentication-failure-url="/login?error=true" />
+			
+		<logout
+			logout-url="/logout"
+			logout-success-url="/home"
+			invalidate-session="true"
+			delete-cookies="JSESSIONID"
+		/>
+		<http-basic />
+	</http>
 </beans:beans>

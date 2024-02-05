@@ -75,3 +75,20 @@ a {
 	text-decoration: none;
 	color: black;
 }
+
+#logout_bt {
+	border-style: solid;
+	border-color: gray;
+	border-width: 1px;
+	padding: 5px;
+	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
+	margin-right: 10px;
+	font-size: 13.5pt;
+	font-weight: bold;
+	color: black;
+	background-color: white;
+}
+
+#logout_bt:hover {
+	cursor: pointer;
+}

@@ -73,5 +73,5 @@ public class MemberVO {
 	public Date getCreated_at() {
 		return created_at;
 	}
-
+	
 }

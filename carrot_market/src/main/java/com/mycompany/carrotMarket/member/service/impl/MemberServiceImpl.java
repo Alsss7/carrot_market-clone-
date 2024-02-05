@@ -16,14 +16,13 @@ public class MemberServiceImpl implements MemberService {
 	SqlSession sqlSession;
 
 	@Override
-	public int login(LoginMemberDTO dto) throws DataAccessException {
-		return sqlSession.selectOne("mappers.member.loginById", dto);
+	public MemberVO login(LoginMemberDTO dto) throws DataAccessException {
+		return sqlSession.selectOne("mappers.member.findById", dto);
 	}
 
 	@Override
 	public int addMember(MemberVO memberVO) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return 0;
+		return sqlSession.insert("mappers.member.insertMember", memberVO);
 	}
 
 }
