@@ -11,7 +11,7 @@ request.setCharacterEncoding("utf-8");
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath }/resources/css/member/loginForm.css" />
 <c:choose>
-  <c:when test="${result=='loginFailed' }">
+  <c:when test="${param.error == 'true'}">
     <script>
 					window.onload = function() {
 						alert("아이디나 비밀번호가 틀립니다. 다시 로그인 하세요.");
