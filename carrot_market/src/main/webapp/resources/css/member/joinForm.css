@@ -50,14 +50,16 @@ body {
 .input {
 	background-color: #F0F0F0;
 	height: 30px;
-	width: 220px;
+	width: auto;
 	border-width: 0 0 1px;
 	border-color: gray;
 	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
 	margin-bottom: 15px;
 	margin-top: 15px;
 	padding-left: 10px;
+	padding-right: 10px;
 	font-size: 12pt;
+	text-align: center;
 }
 
 .input:focus {

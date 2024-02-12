@@ -39,12 +39,18 @@
     <div id="install">
       <p>당근 앱 다운로드</p>
       <span>
-        <a href="#">Google Play</a>
+        <a href="https://play.google.com/store/apps/details?id=com.towneers.www&hl=ko-KR">
+          Google Play </a>
       </span>
       <span>
-        <a href="#">App Store</a>
+        <a href="https://apps.apple.com/kr/app/%EB%8B%B9%EA%B7%BC/id1018769995">App Store</a>
       </span>
     </div>
+  </div>
+  <div class="copyright">
+    <a
+      href="https://kr.freepik.com/icon/user_747376#fromView=search&term=%EC%82%AC%EB%9E%8C&track=ais&page=1&position=32&uuid=fd044a7f-bd3c-43fd-a305-0633829ee21f">
+      Designed by Freepik </a>
   </div>
 </body>
 </html>

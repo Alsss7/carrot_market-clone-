@@ -14,7 +14,9 @@
     <div class="header-wrapper">
       <nav>
         <span style="display: inline" id="danggeun">
-          <a href="/carrotMarket/home"><img src="${contextPath }/resources/image/logo.webp" /></a>
+          <a href="${contextPath }/home">
+            <img src="${contextPath }/resources/image/logo.webp" />
+          </a>
         </span>
         <span class="menu">
           <a href="#">중고거래</a>
@@ -36,6 +38,13 @@
               <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
             </span>
           </form>
+          &nbsp;&nbsp;
+          <b><sec:authentication property="principal.username" /></b>님
+          &nbsp;&nbsp;
+          <a href="${contextPath }/mypage">
+            <img src="${contextPath }/resources/image/mypage.png"
+              style="width: 20px; height: 20px;" />
+          </a>
         </sec:authorize>
         <sec:authorize access="!isAuthenticated()">
           <span class="member">

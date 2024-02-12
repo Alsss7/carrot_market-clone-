@@ -54,3 +54,8 @@ a {
 	text-decoration: none;
 	color: black;
 }
+
+.copyright {
+	position: absolute;
+	margin-top: 300px;
+}
