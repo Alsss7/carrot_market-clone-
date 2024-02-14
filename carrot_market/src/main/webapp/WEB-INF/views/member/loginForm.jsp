@@ -11,12 +11,19 @@ request.setCharacterEncoding("utf-8");
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath }/resources/css/member/loginForm.css" />
 <c:choose>
-  <c:when test="${param.error == 'true'}">
+  <c:when test="${result == 'success'}">
     <script>
-					window.onload = function() {
-						alert("아이디나 비밀번호가 틀립니다. 다시 로그인 하세요.");
-					};
-				</script>
+		window.onload = function() {
+			alert("회원가입 성공!");
+		};
+	</script>
+  </c:when>
+  <c:when test="${param.error == 'true' }">
+    <script>
+    	window.onload = function() {
+    		alert("아이디나 비밀번호가 다릅니다.	");
+    	}
+    </script>
   </c:when>
 </c:choose>
 </head>

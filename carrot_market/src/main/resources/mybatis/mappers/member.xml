@@ -3,7 +3,7 @@
       PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.mycompany.carrotMarket.mapper.UserMapper">
+<mapper namespace="mappers.member">
 	<resultMap id="memResult" type="memberVO">
 		<result property="id" column="id" />
 		<result property="pwd" column="pwd" />
@@ -12,18 +12,17 @@
 		<result property="joinDate" column="joinDate" />
 	</resultMap>
 
-	<select id="findById" resultType="memberVO"
-		parameterType="memberDTO">
-		<![CDATA[
-			select * from member
-			where id = #{id} and pw = #{pw}
-		]]>
-	</select>
-
 	<insert id="insertMember" parameterType="memberVO">
 		<![CDATA[
-		 insert into member(id, pwd, name, nickname, email, region1, profile_img)
-		 values(#{id}, #{pwd}, #{name}, #{nickname}, #{email}, #{region1}, #{profile_img})
+		 insert into members(id, pw, name, nickname, email, region1)
+		 values(#{id}, #{pw}, #{name}, #{nickname}, #{email}, #{region1})
+		]]>
+	</insert>
+
+	<insert id="insertAuthority" parameterType="memberVO">
+		<![CDATA[
+			insert into authorities(id, authority)
+			values(#{id}, #{authority})
 		]]>
 	</insert>
 

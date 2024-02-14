@@ -17,7 +17,7 @@
 		<authentication-provider>
 			<!-- PasswordEncoder를 사용하여 비밀번호를 인코딩 -->
 			<password-encoder ref="passwordEncoder" />
-			
+
 			<jdbc-user-service data-source-ref="dataSource"
 				users-by-username-query="SELECT id AS username, pw AS password, enabled FROM members WHERE id=?"
 				authorities-by-username-query="SELECT id AS username, authority FROM authorities WHERE id=?" />
@@ -30,6 +30,7 @@
 		<intercept-url pattern="/home" access="permitAll" />
 		<intercept-url pattern="/login" access="permitAll" />
 		<intercept-url pattern="/join" access="permitAll" />
+		<intercept-url pattern="/member/join" access="permitAll" />
 		<form-login login-page="/login" default-target-url="/home"
 			authentication-failure-url="/login?error=true" />
 

@@ -1,0 +1,11 @@
+package com.mycompany.carrotMarket.member.dao;
+
+import org.springframework.dao.DataAccessException;
+
+import com.mycompany.carrotMarket.member.vo.MemberVO;
+
+public interface MemberDAO {
+	public int insertMember(MemberVO memberVO) throws DataAccessException;
+
+	public int insertAuthority(MemberVO memberVO) throws DataAccessException;
+}

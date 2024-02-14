@@ -6,9 +6,5 @@
 	<typeAliases>
 		<typeAlias
 			type="com.mycompany.carrotMarket.member.vo.MemberVO" alias="memberVO" />
-
-		<typeAlias
-			type="com.mycompany.carrotMarket.member.dto.LoginMemberDTO"
-			alias="memberDTO" />
 	</typeAliases>
 </configuration>
