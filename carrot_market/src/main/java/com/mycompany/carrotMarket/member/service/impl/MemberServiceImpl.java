@@ -32,4 +32,30 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
+	@Override
+	public MemberVO findById(String id) throws DataAccessException {
+		MemberVO member = memberDAO.findById(id);
+		return member;
+	}
+
+	@Override
+	public boolean isAvailableId(String id) throws DataAccessException {
+		MemberVO member = memberDAO.findById(id);
+		if (member != null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@Override
+	public boolean isAvailableNickname(String nickname) throws DataAccessException {
+		MemberVO member = memberDAO.findByNickname(nickname);
+		if (member != null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 }

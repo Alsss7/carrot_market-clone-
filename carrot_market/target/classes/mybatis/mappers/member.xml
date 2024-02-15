@@ -12,6 +12,20 @@
 		<result property="joinDate" column="joinDate" />
 	</resultMap>
 
+	<select id="findById" parameterType="String"
+		resultType="memberVO">
+		<![CDATA[
+			select * from members where id=#{id}
+		]]>
+	</select>
+
+	<select id="findByNickname" parameterType="String"
+		resultType="memberVO">
+		<![CDATA[
+			select * from members where nickname=#{nickname}
+		]]>
+	</select>
+
 	<insert id="insertMember" parameterType="memberVO">
 		<![CDATA[
 		 insert into members(id, pw, name, nickname, email, region1)

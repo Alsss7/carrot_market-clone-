@@ -4,7 +4,7 @@ body {
 	padding-top: 70px;
 }
 
-#joinForm {
+#joinFormDiv {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -13,7 +13,7 @@ body {
 	background-color: #FEFAE2;
 }
 
-#joinForm form {
+#joinForm {
 	display: flex;
 	flex-flow: column;
 	justify-content: center;
@@ -71,7 +71,7 @@ table tr {
 	outline: none;
 }
 
-#searchRegion {
+.button {
 	background-color: #EE7832;
 	border: 0;
 	color: white;
@@ -81,7 +81,7 @@ table tr {
 	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
 }
 
-#searchRegion:hover {
+.button:hover {
 	cursor: pointer;
 }
 
