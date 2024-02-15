@@ -21,10 +21,6 @@ public class MemberVO {
 	public MemberVO() {
 	}
 
-	public String getAuthority() {
-		return authority;
-	}
-
 	public void setAuthority(String authority) {
 		this.authority = authority;
 	}
@@ -67,6 +63,10 @@ public class MemberVO {
 
 	public void setCreated_at(Date created_at) {
 		this.created_at = created_at;
+	}
+
+	public String getAuthority() {
+		return authority;
 	}
 
 	public String getId() {

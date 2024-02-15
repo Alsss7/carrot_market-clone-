@@ -40,7 +40,7 @@ async function getRegion() {
 	    console.log(position);
 	    lat = position.coords.latitude;
 	    lon = position.coords.longitude;
-	    request();
+	    regionRequest();
 	} catch (err) {
 		console.warn('ERROR(' + err.code + '): ' + err.message);
 		lat = 36.366701;

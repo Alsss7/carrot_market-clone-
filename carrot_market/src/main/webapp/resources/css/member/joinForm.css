@@ -9,8 +9,8 @@ body {
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-	height: 700px;
-	background-color: #F9F9F9;
+	height: 100%;
+	background-color: #FEFAE2;
 }
 
 #joinForm form {
@@ -18,7 +18,7 @@ body {
 	flex-flow: column;
 	justify-content: center;
 	align-items: center;
-	border: solid 1px gray;
+	border: solid 0px gray;
 	padding: 25px 250px 25px 250px;
 	background-color: #FEFAE2;
 	border-radius: 20px 20px 20px 20px/20px 20px 20px 20px;
@@ -47,23 +47,61 @@ body {
 	margin-top: 15px;
 }
 
+table tr {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
 .input {
 	background-color: #F0F0F0;
 	height: 30px;
-	width: auto;
+	width: 250px;
 	border-width: 0 0 1px;
 	border-color: gray;
 	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
-	margin-bottom: 15px;
 	margin-top: 15px;
-	padding-left: 10px;
+	margin-bottom: 15px;
 	padding-right: 10px;
+	padding-left: 10px;
 	font-size: 12pt;
 	text-align: center;
 }
 
 .input:focus {
 	outline: none;
+}
+
+#searchRegion {
+	background-color: #EE7832;
+	border: 0;
+	color: white;
+	font-size: 10pt;
+	padding: 8px 10px 8px 10px;
+	margin-left: 10px;
+	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
+}
+
+#searchRegion:hover {
+	cursor: pointer;
+}
+
+.errors {
+	margin-top: 0;
+	padding-top: 0;
+	margin-bottom: 0;
+	padding-bottom: 0;
+	padding-left: 10px;
+	font-size: 9pt;
+	color: red;
+	height: 18px;
+	width: 100%;
+}
+
+.error_msg {
+	padding-top: 0;
+	padding-bottom: 0;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 #join_bt {
