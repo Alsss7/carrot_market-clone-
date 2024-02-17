@@ -9,7 +9,6 @@ public interface MemberService {
 
 	public MemberVO findById(String id) throws DataAccessException;
 
-	public boolean isAvailableId(String id) throws DataAccessException;
+	public MemberVO findByNickname(String nickname) throws DataAccessException;
 
-	public boolean isAvailableNickname(String nickname) throws DataAccessException;
 }

@@ -27,16 +27,10 @@ public class MemberValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		MemberVO member = (MemberVO) target;
 
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "id", "field.required", "아이디는 필수입니다.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pw", "field.required", "비밀번호는 필수입니다.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "field.required", "이름은 필수입니다.");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nickname", "field.required", "닉네임은 필수입니다.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "field.required", "이메일은 필수입니다.");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "region1", "field.required", "동네는 필수입니다. 동네 찾기를 눌러주세요.");
-
-		if (member.getId() != null && member.getId().length() < 4) {
-			errors.rejectValue("id", "field.minlength", "아이디는 4글자 이상 입력해야 합니다.");
-		}
 
 		if (member.getPw() != null && member.getPw().length() < 8) {
 			errors.rejectValue("pw", "field.minlength", "비밀번호는 8글자 이상 입력해야 합니다.");
@@ -46,10 +40,6 @@ public class MemberValidator implements Validator {
 
 		if (member.getName() != null && member.getName().length() < 2) {
 			errors.rejectValue("name", "field.minlength", "이름은 2글자 이상 입력해야 합니다.");
-		}
-
-		if (member.getNickname() != null && member.getNickname().length() < 2) {
-			errors.rejectValue("nickname", "field.minlength", "닉네임은 2글자 이상 입력해야 합니다.");
 		}
 
 		if (member.getEmail() != null && member.getEmail().length() < 5) {

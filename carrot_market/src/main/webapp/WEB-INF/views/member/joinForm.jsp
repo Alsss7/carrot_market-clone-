@@ -11,6 +11,10 @@ request.setCharacterEncoding("utf-8");
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath }/resources/css/member/joinForm.css" />
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+	var csrfToken = "${_csrf.token}";
+	var csrfParameterName = "${_csrf.parameterName}";
+</script>
 </head>
 <body>
 	<div id="joinFormDiv">
@@ -33,14 +37,22 @@ request.setCharacterEncoding("utf-8");
 				</tr>
 				<tr class="errors">
 					<td></td>
-					<c:choose>
-						<c:when test="${not empty id}">
-							<td class="error_msg" colspan="2">*${id}</td>
-						</c:when>
-						<c:otherwise>
-							<td></td>
-						</c:otherwise>
-					</c:choose>
+					<td id="id_error" class="error_msg" colspan="2"></td>
+				</tr>
+
+				<tr>
+					<td class="label">닉네임&nbsp;</td>
+					<td>
+						<input type="text" name="nickname" id="nickname" class="input" value="${member.nickname }"
+							required />
+					</td>
+					<td>
+						<input type="button" id="checkNickname" class="button" value="중복 확인" />
+					</td>
+				</tr>
+				<tr class="errors">
+					<td></td>
+					<td id="nickname_error" class="error_msg" colspan="2"></td>
 				</tr>
 
 				<tr>
@@ -72,28 +84,6 @@ request.setCharacterEncoding("utf-8");
 					<c:choose>
 						<c:when test="${not empty name}">
 							<td class="error_msg" colspan="2">*${name}</td>
-						</c:when>
-						<c:otherwise>
-							<td></td>
-						</c:otherwise>
-					</c:choose>
-				</tr>
-
-				<tr>
-					<td class="label">닉네임&nbsp;</td>
-					<td>
-						<input type="text" name="nickname" id="nickname" class="input" value="${member.nickname }"
-							required />
-					</td>
-					<td>
-						<input type="button" id="checkNickname" class="button" value="중복 확인" />
-					</td>
-				</tr>
-				<tr class="errors">
-					<td></td>
-					<c:choose>
-						<c:when test="${not empty nickname}">
-							<td class="error_msg" colspan="2">*${nickname}</td>
 						</c:when>
 						<c:otherwise>
 							<td></td>
