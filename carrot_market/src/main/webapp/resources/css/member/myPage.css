@@ -1,10 +1,12 @@
 @charset "UTF-8";
 
+@charset "UTF-8";
+
 body {
 	padding-top: 70px;
 }
 
-#joinFormDiv {
+#myPageDiv {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -13,7 +15,7 @@ body {
 	background-color: #FEFAE2;
 }
 
-#joinForm {
+#myPageForm {
 	display: flex;
 	flex-flow: column;
 	justify-content: center;
@@ -24,7 +26,7 @@ body {
 	border-radius: 20px 20px 20px 20px/20px 20px 20px 20px;
 }
 
-#join_subject {
+#myPage_subject {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -75,6 +77,14 @@ table tr {
 	background-color: #F0F0F0;
 }
 
+#checkNickname {
+	background-color: #EE7832;
+}
+
+#checkNickname[disabled] {
+	background-color: #F0F0F0;
+}
+
 .button {
 	background-color: #EE7832;
 	border: 0;
@@ -108,7 +118,7 @@ table tr {
 	margin-bottom: 0;
 }
 
-#join_bt {
+#modify_bt, #confirm_bt {
 	background-color: #EE7832;
 	border: 0;
 	color: white;
@@ -119,6 +129,6 @@ table tr {
 	padding: 13px 150px 13px 150px;
 }
 
-#join_bt:hover {
+#modify_bt:hover, #confirm_bt:hover {
 	cursor: pointer;
 }

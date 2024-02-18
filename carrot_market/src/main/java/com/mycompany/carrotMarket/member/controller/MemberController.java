@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mycompany.carrotMarket.member.dto.IdDTO;
+import com.mycompany.carrotMarket.member.dto.MemberDTO;
 import com.mycompany.carrotMarket.member.dto.NicknameDTO;
 import com.mycompany.carrotMarket.member.service.MemberService;
 import com.mycompany.carrotMarket.member.vo.MemberVO;
@@ -66,6 +68,61 @@ public class MemberController {
 	}
 
 	/*
+	 * 마이페이지 메서드
+	 */
+	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
+	public ModelAndView myPage(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("myPage");
+		return mav;
+	}
+
+	@RequestMapping(value = "/myPage", method = RequestMethod.POST)
+	public ModelAndView getInfo(@ModelAttribute MemberDTO dto, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		ModelAndView mav = new ModelAndView();
+		MemberVO member = memberService.findById(dto.getId());
+		boolean isMatch = memberService.matchesPassword(dto.getPw(), member.getPw());
+		System.out.println(isMatch);
+		mav.addObject("isMatch", isMatch);
+		if (isMatch) {
+			member.setPw(dto.getPw());
+			mav.addObject("member", member);
+		}
+		mav.setViewName("myPage");
+		return mav;
+	}
+
+	@RequestMapping(value = "/myPage/modify", method = RequestMethod.POST)
+	public ModelAndView modifyMember(@ModelAttribute("member") MemberVO memberVO, BindingResult bindingResult,
+			RedirectAttributes attributes) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		attributes.addFlashAttribute("isMatch", true);
+		String password = memberVO.getPw();
+		memberValidator.validate(memberVO, bindingResult);
+		if (bindingResult.hasErrors()) {
+			for (FieldError error : bindingResult.getFieldErrors()) {
+				attributes.addFlashAttribute(error.getField(), error.getDefaultMessage());
+			}
+			attributes.addFlashAttribute("member", memberVO);
+		} else {
+			boolean result = memberService.modifyMember(memberVO);
+			if (result) {
+				attributes.addFlashAttribute("result", "success");
+				MemberVO modifiedMember = memberService.findById(memberVO.getId());
+				modifiedMember.setPw(password);
+				attributes.addFlashAttribute("member", modifiedMember);
+			} else {
+				attributes.addFlashAttribute("result", "failed");
+				attributes.addFlashAttribute("member", memberVO);
+				System.out.println(attributes.getAttribute("memeber"));
+			}
+		}
+		mav.setViewName("redirect:/member/myPage");
+		return mav;
+	}
+
+	/*
 	 * 회원가입 메서드
 	 */
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
@@ -83,7 +140,7 @@ public class MemberController {
 			mav.setViewName("redirect:/join"); // 리다이렉트
 		} else { // 에러가 없다면
 			boolean result = memberService.addMember(memberVO); // 회원가입 실행
-			if (result == true) { // 완료되었다면
+			if (result) { // 완료되었다면
 				attributes.addFlashAttribute("result", "success");
 			} else { // 실패했다면
 				attributes.addFlashAttribute("result", "failed");

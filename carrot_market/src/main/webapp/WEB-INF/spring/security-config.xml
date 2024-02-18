@@ -35,6 +35,10 @@
 			access="permitAll" />
 		<intercept-url pattern="/member/checkNickname"
 			access="permitAll" />
+		<intercept-url pattern="/member/myPage"
+			access="hasAuthority('USER')" />
+		<intercept-url pattern="/member/myPage/modify"
+			access="hasAuthority('USER')" />
 		<form-login login-page="/login" default-target-url="/home"
 			authentication-failure-url="/login?error=true" />
 

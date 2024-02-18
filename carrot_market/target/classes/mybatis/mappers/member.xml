@@ -40,4 +40,15 @@
 		]]>
 	</insert>
 
+	<update id="updateMember" parameterType="memberVO">
+		<![CDATA[
+			update members
+			set pw = #{pw},
+				nickname = #{nickname},
+				email = #{email},
+				region1 = #{region1}
+			where id = #{id}
+		]]>
+	</update>
+
 </mapper>

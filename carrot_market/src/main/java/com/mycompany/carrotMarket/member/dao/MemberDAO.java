@@ -7,6 +7,8 @@ import com.mycompany.carrotMarket.member.vo.MemberVO;
 public interface MemberDAO {
 	public int insertMember(MemberVO memberVO) throws DataAccessException;
 
+	public int updateMember(MemberVO memberVO) throws DataAccessException;
+
 	public MemberVO findById(String id) throws DataAccessException;
 
 	public MemberVO findByNickname(String nickname) throws DataAccessException;

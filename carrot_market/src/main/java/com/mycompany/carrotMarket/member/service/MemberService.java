@@ -11,4 +11,8 @@ public interface MemberService {
 
 	public MemberVO findByNickname(String nickname) throws DataAccessException;
 
+	public boolean modifyMember(MemberVO memberVO) throws DataAccessException;
+
+	public boolean matchesPassword(String inputPw, String encodedPw);
+
 }

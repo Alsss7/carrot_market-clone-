@@ -44,4 +44,20 @@ public class MemberServiceImpl implements MemberService {
 		return member;
 	}
 
+	@Override
+	public boolean modifyMember(MemberVO memberVO) throws DataAccessException {
+		memberVO.setPw(encoder.encode(memberVO.getPw()));
+		int result = memberDAO.updateMember(memberVO);
+		if (result == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean matchesPassword(String inputPw, String encodedPw) {
+		return encoder.matches(inputPw, encodedPw);
+	}
+
 }

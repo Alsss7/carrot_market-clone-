@@ -4,24 +4,36 @@
 	"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
-	<definition name="default" template="/WEB-INF/views/common/layout.jsp" >
-		<put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+	<definition name="default"
+		template="/WEB-INF/views/common/layout.jsp">
+		<put-attribute name="header"
+			value="/WEB-INF/views/common/header.jsp" />
 		<put-attribute name="body" value="" />
-		<put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+		<put-attribute name="footer"
+			value="/WEB-INF/views/common/footer.jsp" />
 	</definition>
-	
+
 	<definition name="home" extends="default">
 		<put-attribute name="title" value="당신 근처의 클론 당근" />
-		<put-attribute name="body" value="/WEB-INF/views/home.jsp" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/home.jsp" />
 	</definition>
-	
+
 	<definition name="login" extends="default">
 		<put-attribute name="title" value="클론 당근 - 로그인" />
-		<put-attribute name="body" value="/WEB-INF/views/member/loginForm.jsp" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/loginForm.jsp" />
 	</definition>
-	
+
 	<definition name="join" extends="default">
 		<put-attribute name="title" value="클론 당근 - 회원가입" />
-		<put-attribute name="body" value="/WEB-INF/views/member/joinForm.jsp" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/joinForm.jsp" />
+	</definition>
+
+	<definition name="myPage" extends="default">
+		<put-attribute name="title" value="클론 당근 - 마이 페이지" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/myPage.jsp" />
 	</definition>
 </tiles-definitions>

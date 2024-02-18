@@ -13,7 +13,6 @@ request.setCharacterEncoding("utf-8");
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 	var csrfToken = "${_csrf.token}";
-	var csrfParameterName = "${_csrf.parameterName}";
 </script>
 </head>
 <body>
@@ -131,11 +130,12 @@ request.setCharacterEncoding("utf-8");
 					</c:choose>
 				</tr>
 			</table>
-			<button type="button" id="join_bt" onclick="joinSubmit()">회원가입</button>
+			<button type="button" id="join_bt">회원가입</button>
 			<input name="authority" type="hidden" value="USER" />
 			<input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
 		</form>
 	</div>
-	<script src="${contextPath }/resources/js/joinForm.js"></script>
+	<script src="${contextPath }/resources/js/getRegion.js"></script>
+	<script src="${contextPath }/resources/js/joinDupCheck.js"></script>
 </body>
 </html>
