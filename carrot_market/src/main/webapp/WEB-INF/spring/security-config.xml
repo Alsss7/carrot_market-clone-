@@ -39,6 +39,10 @@
 			access="hasAuthority('USER')" />
 		<intercept-url pattern="/member/myPage/modify"
 			access="hasAuthority('USER')" />
+		<intercept-url pattern="/article/new"
+			access="hasAuthority('USER')" />
+		<intercept-url pattern="/article/register"
+			access="hasAuthority('USER')" />
 		<form-login login-page="/login" default-target-url="/home"
 			authentication-failure-url="/login?error=true" />
 

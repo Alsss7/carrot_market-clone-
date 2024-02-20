@@ -67,7 +67,7 @@ request.setCharacterEncoding("utf-8");
 							<td class="error_msg" colspan="2">*${pw}</td>
 						</c:when>
 						<c:otherwise>
-							<td></td>
+							<td colspan="2" class="default_msg">영문, 숫자, 특수문자를 1개 이상 포함(8글자 이상)</td>
 						</c:otherwise>
 					</c:choose>
 				</tr>
@@ -111,7 +111,8 @@ request.setCharacterEncoding("utf-8");
 				<tr>
 					<td class="label">동네&nbsp;</td>
 					<td>
-						<input type="text" name="region1" id="region1" class="input" readonly value="감정동" required />
+						<input type="text" name="region1" id="region1" class="input" readonly value="경기 김포시 감정동"
+							required />
 					</td>
 					<td>
 						<input type="button" class="button" id="find_region" value="동네 찾기" />

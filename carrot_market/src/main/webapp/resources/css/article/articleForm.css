@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+#article-div {
+	padding-top: 70px;
+	flex-flow: column;
+	display: flex;
+	align-items: center;
+}
+
+#article-form {
+	display: flex;
+	flex-flow: column;
+}
+
+#article-form>div {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#input-photo {
+	
+}
+
+#input-photo img {
+	width: 60px;
+	height: 60px;
+}

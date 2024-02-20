@@ -19,7 +19,7 @@
 					</a>
 				</span>
 				<span class="menu">
-					<a href="#">중고거래</a>
+					<a href="${contextPath }/fleamarket">중고거래</a>
 				</span>
 				<span class="menu">동네업체</span>
 				<span class="menu">알바</span>
@@ -38,10 +38,10 @@
 							<input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
 						</span>
 					</form>
-          &nbsp;&nbsp;
-          <b><sec:authentication property="principal.username" /></b>님
-          &nbsp;&nbsp;
-          <a href="${contextPath }/member/myPage">
+          			&nbsp;&nbsp;
+          			<b><sec:authentication property="principal.username" /></b>님
+          			&nbsp;&nbsp;
+          			<a href="${contextPath }/member/myPage">
 						<img src="${contextPath }/resources/image/mypage.png" style="width: 20px; height: 20px;" />
 					</a>
 				</sec:authorize>
@@ -56,6 +56,5 @@
 			</nav>
 		</div>
 	</header>
-
 </body>
 </html>

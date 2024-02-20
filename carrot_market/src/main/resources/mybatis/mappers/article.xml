@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.article">
+	<insert id="insertArticle" parameterType="articleVO">
+		<selectKey keyProperty="productId" order="AFTER"
+			resultType="java.lang.Integer">
+			<![CDATA[
+				SELECT PRODUCT_SEQ.NEXTVAL FROM DUAL
+			]]>
+		</selectKey>
+		<![CDATA[
+			insert into products(user_id, title, description, sellOrShare, price, category, region, place)
+			values(#{userId}, #{title}, #{description, jdbcType=CLOB},#{sellOrShare}, #{price}, #{category}, #{region}, #{place})
+		]]>
+	</insert>
+
+	<insert id="insertImageFile" parameterType="imageFileVO">
+		<![CDATA[
+        	INSERT INTO post_images (post_id, image_file_name)
+        	VALUES (#{postId}, #{imageFileName})
+		]]>
+	</insert>
+
+</mapper>

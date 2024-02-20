@@ -21,9 +21,12 @@ function regionRequest() {
 		},
 		success : function(data) {
 			console.log(data);
-			var region = data.documents[0].address.region_3depth_name;
+			var region = data.documents[0].address;
+			var region1 = region.region_1depth_name;
+			var region2 = region.region_2depth_name;
+			var region3 = region.region_3depth_name;
 			console.log(region);
-			$('#region1').val(region);
+			$('#region1').val(region1 + " " + region2 + " " + region3);
 		},
 		error : function(e) {
 			console.log(e);

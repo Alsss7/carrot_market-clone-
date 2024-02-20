@@ -185,10 +185,10 @@ public class MemberController {
 		if (member != null) { // 회원이 있다면
 			isAvailable = "false";
 		} else { // 회원이 없다면
-			if (object instanceof IdDTO) { // 대상이 아이디면
+			if (object instanceof IdDTO) { // 검사 대상이 아이디면
 				idValidator.validate((IdDTO) object, result);
 				target = "idAvailable";
-			} else if (object instanceof NicknameDTO) { // 대상이 닉네임이면
+			} else if (object instanceof NicknameDTO) { // 검사 대상이 닉네임이면
 				nicknameValidator.validate((NicknameDTO) object, result);
 				target = "nicknameAvailable";
 			}
