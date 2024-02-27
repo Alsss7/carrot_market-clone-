@@ -130,8 +130,6 @@
 			<version>5.2.15.RELEASE</version>
 		</dependency>
 
-
-
 		<!-- mybatis -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -186,6 +184,20 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.9.2</version>
 		</dependency>
+
+		<!-- file upload -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.11.0</version>
+		</dependency>
+
 
 		<!-- Test -->
 		<dependency>

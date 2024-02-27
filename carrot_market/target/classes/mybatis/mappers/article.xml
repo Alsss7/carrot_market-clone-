@@ -4,24 +4,26 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mappers.article">
-	<insert id="insertArticle" parameterType="articleVO">
-		<selectKey keyProperty="productId" order="AFTER"
-			resultType="java.lang.Integer">
-			<![CDATA[
-				SELECT PRODUCT_SEQ.NEXTVAL FROM DUAL
-			]]>
+	<insert id="insertArticle" parameterType="articleVO"
+		useGeneratedKeys="true" keyProperty="productId">
+		<![CDATA[
+			INSERT INTO products(user_id, title, description, sellOrShare, price, category, region, place)
+			VALUES(#{userId}, #{title}, #{description, jdbcType=CLOB},#{sellOrShare}, #{price}, #{category}, #{region}, #{place})
+		]]>
+
+		<selectKey keyProperty="productId" resultType="int"
+			order="AFTER">
+			SELECT PRODUCT_SEQ.CURRVAL AS productId FROM DUAL
 		</selectKey>
-		<![CDATA[
-			insert into products(user_id, title, description, sellOrShare, price, category, region, place)
-			values(#{userId}, #{title}, #{description, jdbcType=CLOB},#{sellOrShare}, #{price}, #{category}, #{region}, #{place})
-		]]>
 	</insert>
 
-	<insert id="insertImageFile" parameterType="imageFileVO">
-		<![CDATA[
-        	INSERT INTO post_images (post_id, image_file_name)
-        	VALUES (#{postId}, #{imageFileName})
-		]]>
-	</insert>
-
+	<update id="insertProductImages" parameterType="articleVO">
+		<foreach collection="filesName" item="file" separator=" "
+			open="INSERT ALL" close="SELECT * FROM DUAL">
+			INTO product_images(product_id,
+			image_file_name)
+			VALUES
+			(#{productId}, #{file, jdbcType=VARCHAR})
+		</foreach>
+	</update>
 </mapper>

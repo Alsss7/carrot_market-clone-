@@ -11,10 +11,11 @@
 </head>
 <body>
 	<div id="article-div">
-		<form action="${contextPath }/article/register" method="post" id="article-form">
+		<form action="${contextPath }/article/register" method="post" id="article-form"
+			enctype="multipart/form-data">
 			<div>
 				<div id="input-photo">
-					<img src="${contextPath }/resources/image/empty.png" />
+					<input type="file" name="files" accept="image/*" multiple />
 				</div>
 			</div>
 			<div>
@@ -61,8 +62,8 @@
 			<div id="article_bt">
 				<button type="submit">작성 완료</button>
 			</div>
-			<input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
 			<input type="hidden" name="userId" value="<sec:authentication property="principal.username" />" />
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 	</div>
 	<script src="${contextPath }/resources/css/article/articleForm.css"></script>

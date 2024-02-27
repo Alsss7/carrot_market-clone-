@@ -7,18 +7,14 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath }/resources/css/fleamarket.css" />
-<script type="text/javascript">
-	function search(e) {
-		const code = e.code;
-		var input = document.getElementById("search");
-		var form = document.getElementById("")
-		if (code == 'Enter') {
-			// 검색어 처리 로직
-			console.log(input.value);
-			input.value = '';
+<c:if test="${not empty result }">
+	<script>
+		var message = "${result}";
+		window.onload = function() {
+			alert(message);
 		}
-	}
-</script>
+	</script>
+</c:if>
 </head>
 <body>
 	<main>

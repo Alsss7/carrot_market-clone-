@@ -3,6 +3,7 @@
 	xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
                         http://www.springframework.org/schema/beans/spring-beans.xsd
                         http://www.springframework.org/schema/security
@@ -25,29 +26,40 @@
 	</authentication-manager>
 
 	<!-- HTTP Security 설정 -->
-	<http>
-		<!-- 최소한의 설정 -->
-		<intercept-url pattern="/home" access="permitAll" />
-		<intercept-url pattern="/login" access="permitAll" />
-		<intercept-url pattern="/join" access="permitAll" />
-		<intercept-url pattern="/member/join" access="permitAll" />
-		<intercept-url pattern="/member/checkId"
+	<security:http>
+		<security:intercept-url pattern="/home"
 			access="permitAll" />
-		<intercept-url pattern="/member/checkNickname"
+		<security:intercept-url pattern="/login"
 			access="permitAll" />
-		<intercept-url pattern="/member/myPage"
+		<security:intercept-url pattern="/join"
+			access="permitAll" />
+		<security:intercept-url pattern="/member/join"
+			access="permitAll" />
+		<security:intercept-url
+			pattern="/member/checkId" access="permitAll" />
+		<security:intercept-url
+			pattern="/member/checkNickname" access="permitAll" />
+		<security:intercept-url
+			pattern="/member/myPage/modify" access="hasAuthority('USER')" />
+		<security:intercept-url
+			pattern="/member/myPage" access="hasAuthority('USER')" />
+		<security:intercept-url pattern="/fleamarket"
+			access="permitAll" />
+		<security:intercept-url pattern="/hot_article"
+			access="permitAll" />
+		<security:intercept-url pattern="/article/new"
 			access="hasAuthority('USER')" />
-		<intercept-url pattern="/member/myPage/modify"
-			access="hasAuthority('USER')" />
-		<intercept-url pattern="/article/new"
-			access="hasAuthority('USER')" />
-		<intercept-url pattern="/article/register"
-			access="hasAuthority('USER')" />
-		<form-login login-page="/login" default-target-url="/home"
+		<security:intercept-url
+			pattern="/article/register" access="hasAuthority('USER')" />
+		<security:form-login login-page="/login"
+			default-target-url="/home"
 			authentication-failure-url="/login?error=true" />
 
-		<logout logout-url="/logout" logout-success-url="/home"
-			invalidate-session="true" delete-cookies="JSESSIONID" />
-		<http-basic />
-	</http>
+		<security:logout logout-url="/logout"
+			logout-success-url="/home" invalidate-session="true"
+			delete-cookies="JSESSIONID" />
+
+		<security:csrf disabled="true" />
+	</security:http>
+
 </beans:beans>

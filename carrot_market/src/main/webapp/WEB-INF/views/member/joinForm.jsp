@@ -136,7 +136,7 @@ request.setCharacterEncoding("utf-8");
 			<input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
 		</form>
 	</div>
-	<script src="${contextPath }/resources/js/getRegion.js"></script>
-	<script src="${contextPath }/resources/js/joinDupCheck.js"></script>
+	<script src="${contextPath }/resources/js/member/getRegion.js"></script>
+	<script src="${contextPath }/resources/js/member/joinDupCheck.js"></script>
 </body>
 </html>

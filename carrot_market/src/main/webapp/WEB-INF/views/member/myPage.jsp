@@ -193,7 +193,7 @@ request.setCharacterEncoding("utf-8");
     	var result = ${!empty isMatch and isMatch};
         if (result) {
             var scriptElement = document.createElement("script");
-            scriptElement.src = "${contextPath}/resources/js/modDupCheck.js";
+            scriptElement.src = "${contextPath}/resources/js/member/modDupCheck.js";
             document.body.appendChild(scriptElement);
         }
     </script>

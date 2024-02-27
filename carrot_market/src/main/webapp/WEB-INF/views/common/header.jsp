@@ -8,6 +8,18 @@
 <head>
 <link rel="stylesheet" href="${contextPath }/resources/css/common/header.css" />
 <meta charset="UTF-8">
+<script type="text/javascript">
+	function search(e) {
+		const code = e.code;
+		var input = document.getElementById("search");
+		var form = document.getElementById("")
+		if (code == 'Enter') {
+			// 검색어 처리 로직
+			console.log(input.value);
+			input.value = '';
+		}
+	}
+</script>
 </head>
 <body>
 	<header>

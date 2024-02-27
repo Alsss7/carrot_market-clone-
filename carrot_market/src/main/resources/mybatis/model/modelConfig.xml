@@ -9,8 +9,5 @@
 		<typeAlias
 			type="com.mycompany.carrotMarket.article.vo.ArticleVO"
 			alias="articleVO" />
-		<typeAlias
-			type="com.mycompany.carrotMarket.article.vo.ImageFileVO"
-			alias="imageFileVO" />
 	</typeAliases>
 </configuration>

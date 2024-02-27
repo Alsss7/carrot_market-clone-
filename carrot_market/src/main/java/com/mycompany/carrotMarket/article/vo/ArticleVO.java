@@ -1,5 +1,9 @@
 package com.mycompany.carrotMarket.article.vo;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 public class ArticleVO {
 	private int productId;
 
@@ -18,6 +22,10 @@ public class ArticleVO {
 	private String region;
 
 	private String place;
+
+	private List<MultipartFile> files;
+
+	private List<String> filesName;
 
 	public int getProductId() {
 		return productId;
@@ -89,6 +97,22 @@ public class ArticleVO {
 
 	public void setPlace(String place) {
 		this.place = place;
+	}
+
+	public List<MultipartFile> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<MultipartFile> files) {
+		this.files = files;
+	}
+
+	public List<String> getFilesName() {
+		return filesName;
+	}
+
+	public void setFilesName(List<String> filesName) {
+		this.filesName = filesName;
 	}
 
 }

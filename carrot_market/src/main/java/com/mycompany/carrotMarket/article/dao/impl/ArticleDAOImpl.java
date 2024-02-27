@@ -16,11 +16,14 @@ public class ArticleDAOImpl implements ArticleDAO {
 
 	@Override
 	public int insertArticle(ArticleVO articleVO) throws DataAccessException {
-		int result1 = sqlSession.insert("mappers.article.insertArticle", articleVO);
-//		imageFileVO.setPostId(articleVO.getProductId());
-//		int result2 = sqlSession.insert("mappers.article.insertImageFile", imageFileVO);
+		int result = sqlSession.insert("mappers.article.insertArticle", articleVO);
+		return result;
+	}
 
-		return result1;
+	@Override
+	public int insertImageFiles(ArticleVO articleVO) throws DataAccessException {
+		int result = sqlSession.update("mappers.article.insertProductImages", articleVO);
+		return result;
 	}
 
 }
