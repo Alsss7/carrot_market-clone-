@@ -43,10 +43,10 @@
 			pattern="/member/myPage/modify" access="hasAuthority('USER')" />
 		<security:intercept-url
 			pattern="/member/myPage" access="hasAuthority('USER')" />
-		<security:intercept-url pattern="/fleamarket"
-			access="permitAll" />
-		<security:intercept-url pattern="/hot_article"
-			access="permitAll" />
+		<security:intercept-url
+			pattern="/article/fleamarket" access="permitAll" />
+		<security:intercept-url
+			pattern="/article/hot_article" access="permitAll" />
 		<security:intercept-url pattern="/article/new"
 			access="hasAuthority('USER')" />
 		<security:intercept-url

@@ -4,6 +4,7 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mappers.article">
+
 	<insert id="insertArticle" parameterType="articleVO"
 		useGeneratedKeys="true" keyProperty="productId">
 		<![CDATA[
@@ -26,4 +27,25 @@
 			(#{productId}, #{file, jdbcType=VARCHAR})
 		</foreach>
 	</update>
+
+	<select id="selectArticles" resultType="articleVO">
+		SELECT
+		product_id AS productId,
+		user_id AS userId,
+		title,
+		price,
+		region,
+		like_count AS likeCount,
+		chat_count AS chatCount,
+		view_count AS viewCount
+		FROM products
+		ORDER BY view_count DESC
+	</select>
+
+	<select id="selectImages" parameterType="int"
+		resultType="String">
+		SELECT image_file_name FROM product_images
+		WHERE product_id = #{value}
+	</select>
+
 </mapper>

@@ -1,5 +1,6 @@
 package com.mycompany.carrotMarket.article.vo;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,14 @@ public class ArticleVO {
 	private List<MultipartFile> files;
 
 	private List<String> filesName;
+
+	private int likeCount;
+
+	private int viewCount;
+
+	private int chatCount;
+
+	private Date createdAt;
 
 	public int getProductId() {
 		return productId;
@@ -113,6 +122,38 @@ public class ArticleVO {
 
 	public void setFilesName(List<String> filesName) {
 		this.filesName = filesName;
+	}
+
+	public int getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
+	}
+
+	public int getViewCount() {
+		return viewCount;
+	}
+
+	public void setViewCount(int viewCount) {
+		this.viewCount = viewCount;
+	}
+
+	public int getChatCount() {
+		return chatCount;
+	}
+
+	public void setChatCount(int chatCount) {
+		this.chatCount = chatCount;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 
 }

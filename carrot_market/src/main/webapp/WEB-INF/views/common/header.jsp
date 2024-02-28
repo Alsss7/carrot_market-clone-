@@ -31,7 +31,7 @@
 					</a>
 				</span>
 				<span class="menu">
-					<a href="${contextPath }/fleamarket">중고거래</a>
+					<a href="${contextPath }/article/fleamarket">중고거래</a>
 				</span>
 				<span class="menu">동네업체</span>
 				<span class="menu">알바</span>

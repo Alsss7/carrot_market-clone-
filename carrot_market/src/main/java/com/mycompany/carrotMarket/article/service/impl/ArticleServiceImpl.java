@@ -1,5 +1,10 @@
 package com.mycompany.carrotMarket.article.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -32,6 +37,23 @@ public class ArticleServiceImpl implements ArticleService {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	@Transactional
+	public Map<ArticleVO, List<String>> selectArticles() throws DataAccessException {
+		Map<ArticleVO, List<String>> map = new HashMap<ArticleVO, List<String>>();
+
+		List<ArticleVO> articleList = articleDAO.selectArticles();
+		if (articleList.size() > 0) {
+			List<String> imageList = new ArrayList<String>();
+			for (ArticleVO article : articleList) {
+				System.out.println("productId : " + article.getProductId());
+				imageList = articleDAO.selectImages(article.getProductId());
+				map.put(article, imageList);
+			}
+		}
+		return map;
 	}
 
 }

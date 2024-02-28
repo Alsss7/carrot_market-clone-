@@ -40,13 +40,13 @@
 	<definition name="fleamarket" extends="default">
 		<put-attribute name="title" value="클론 당근 - 중고 거래" />
 		<put-attribute name="body"
-			value="/WEB-INF/views/fleamarket.jsp" />
+			value="/WEB-INF/views/article/fleamarket.jsp" />
 	</definition>
 
 	<definition name="hotArticle" extends="default">
 		<put-attribute name="title" value="클론 마켓 - 인기 매물" />
 		<put-attribute name="body"
-			value="/WEB-INF/views/hot_article.jsp" />
+			value="/WEB-INF/views/article/hot_article.jsp" />
 	</definition>
 
 	<definition name="articleForm" extends="default">

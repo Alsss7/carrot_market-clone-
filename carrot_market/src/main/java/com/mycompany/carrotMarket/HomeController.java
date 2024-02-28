@@ -54,18 +54,4 @@ public class HomeController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/fleamarket", method = RequestMethod.GET)
-	public ModelAndView fleamarket(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("fleamarket");
-		return mav;
-	}
-
-	@RequestMapping(value = "/hot_article", method = RequestMethod.GET)
-	public ModelAndView hotArticle(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("hotArticle");
-		return mav;
-	}
-
 }

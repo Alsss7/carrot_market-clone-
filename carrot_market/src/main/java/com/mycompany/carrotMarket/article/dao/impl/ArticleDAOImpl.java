@@ -1,5 +1,7 @@
 package com.mycompany.carrotMarket.article.dao.impl;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -24,6 +26,18 @@ public class ArticleDAOImpl implements ArticleDAO {
 	public int insertImageFiles(ArticleVO articleVO) throws DataAccessException {
 		int result = sqlSession.update("mappers.article.insertProductImages", articleVO);
 		return result;
+	}
+
+	@Override
+	public List<ArticleVO> selectArticles() throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticles");
+		return list;
+	}
+
+	@Override
+	public List<String> selectImages(int productId) throws DataAccessException {
+		List<String> list = sqlSession.selectList("mappers.article.selectImages", productId);
+		return list;
 	}
 
 }

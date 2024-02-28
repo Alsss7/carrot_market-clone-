@@ -13,7 +13,7 @@
 	<div id="footer">
 		<div>
 			<ul>
-				<li><a href="${contextPath }/fleamarket">중고거래</a></li>
+				<li><a href="${contextPath }/article/fleamarket">중고거래</a></li>
 				<li>동네업체</li>
 				<li>당근알바</li>
 				<li>부동산 직거래</li>
