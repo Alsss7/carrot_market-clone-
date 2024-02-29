@@ -12,7 +12,7 @@
 <body>
 	<div id="article-div">
 		<form action="${contextPath }/article/register" method="post" id="article-form"
-			enctype="multipart/form-data">
+			enctype="multipart/form-data" onsubmit="return validateForm()">
 			<div>
 				<div id="input-photo">
 					<input type="file" name="files" accept="image/*" multiple />
@@ -20,43 +20,62 @@
 			</div>
 			<div>
 				<div class="label">제목</div>
-				<div id="title">
-					<input type="text" name="title" />
+				<div id="input-title">
+					<input type="text" id="title" name="title" />
 				</div>
 			</div>
 			<div>
 				<div class="label">카테고리</div>
-				<div id="category">
-					<select name="category">
-						<option>의류</option>
-						<option>전자제품</option>
+				<div id="select-category">
+					<select name="category" id="category">
+						<option value="" selected disabled hidden>선택해주세요</option>
+						<option value="디지털기기">디지털기기</option>
+						<option value="생활가전">생활가전</option>
+						<option value="가구/인테리어">가구/인테리어</option>
+						<option value="생활/주방">생활/주방</option>
+						<option value="유아동">유아동</option>
+						<option value="유아도서">유아도서</option>
+						<option value="여성의류">여성의류</option>
+						<option value="여성잡화">여성잡화</option>
+						<option value="남성패션/잡화">남성패션/잡화</option>
+						<option value="뷰티/미용">뷰티/미용</option>
+						<option value="스포츠/레저">스포츠/레저</option>
+						<option value="취미/게임/음반">취미/게임/음반</option>
+						<option value="도서">도서</option>
+						<option value="티켓/교환권">티켓/교환권</option>
+						<option value="가공식품">가공식품</option>
+						<option value="반려동물용품">반려동물용품</option>
+						<option value="식물">식물</option>
+						<option value="기타 중고물품">기타 중고물품</option>
+						<option value="삽니다">삽니다</option>
 					</select>
 				</div>
 			</div>
 			<div>
 				<div class="label">거래 방식</div>
 				<div id="select-style">
-					<select name="sellOrShare">
+					<select name="sellOrShare" id="trade-style" onchange="tradeStyleChange(this)">
 						<option value="sell">판매하기</option>
 						<option value="share">나눔하기</option>
 					</select>
 				</div>
-				<div id="price">
-					<input type="text" name="price" placeholder="가격을 입력해주세요." />
+				<div id="input-price">
+					<input type="text" id="price" name="price" placeholder="가격을 입력해주세요."
+						oninput="numberFormat(this)" onblur="removeCommas(this)" />
+					<span id="won">원</span>
 				</div>
 			</div>
 			<div>
 				<div class="label">자세한 설명</div>
 				<div id="input-explain">
-					<textarea rows="4" cols="50" name="description"
-						placeholder="에 올릴 게시글 내용을 작성해 주세요.(판매 금지 물품은 게시가 제한될 수 있어요.)\n\n신뢰할 수 있는 거래를 위해 자세히 적어주세요.">
-					</textarea>
+					<textarea rows="4" cols="50" id="description" name="description"
+						placeholder="에 올릴 게시글 내용을 작성해 주세요.(판매 금지 물품은 게시가 제한될 수 있어요.) 신뢰할 수 있는 거래를 위해 자세히 적어주세요."></textarea>
 				</div>
 			</div>
 			<div>
 				<div class="label">거래 희망 장소</div>
-				<div id="trade-place">
-					<input type="text" name="place" />
+				<div id="input-place">
+					<input type="text" id="place" name="place" />
 				</div>
 			</div>
 			<div id="article_bt">
@@ -66,6 +85,6 @@
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 	</div>
-	<script src="${contextPath }/resources/css/article/articleForm.css"></script>
+	<script src="${contextPath }/resources/js/article/articleForm.js"></script>
 </body>
 </html>

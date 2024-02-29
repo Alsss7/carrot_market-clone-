@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
@@ -43,7 +44,7 @@
 						<a href="#">
 							<c:choose>
 								<c:when test="${image.size() == 0 }">
-									<img src="${contextPath }/resources/image/empty.png">
+									<img src="${contextPath }/resources/image/product_image/empty.png">
 									<br>
 								</c:when>
 								<c:otherwise>
@@ -52,7 +53,18 @@
 								</c:otherwise>
 							</c:choose>
 							<div class="article_title">${article.title }</div>
-							<div class="price">${article.price }원</div>
+							<c:choose>
+								<c:when test="${article.price == 0 }">
+									<div class="price">나눔</div>
+								</c:when>
+								<c:otherwise>
+									<div class="price">
+										<c:set var="productPrice" value="${article.price }" />
+										<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
+										${formattedPrice }원
+									</div>
+								</c:otherwise>
+							</c:choose>
 							<div class="region">${article.region }</div>
 							<div class="likeAndChat">
 								<span class="">관심 ${article.likeCount}</span>

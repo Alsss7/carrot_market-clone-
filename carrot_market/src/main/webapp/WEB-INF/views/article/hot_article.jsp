@@ -26,61 +26,32 @@
 	</div>
 	<div id="item-wrap">
 		<div id="item-list">
-			<div id="item">
-				<a href="#">
-					<img src="${contextPath }/resources/image/empty.png"><br>
-					<div class="article_title">사과 한박스</div>
-					<div class="price">1,000원</div>
-					<div class="region">경기도 용인시 수지구 상현동</div>
-					<div class="likeAndChat">
-						<span class="">관심 15</span>
-						·
-						<span class="">채팅 46</span>
-					</div>
-				</a>
-			</div>
-			<div id="item">
-				<a href="#">
-					<img src="${contextPath }/resources/image/empty.png"><br>
-					<div class="article_title">사과 한박스</div>
-					<div class="price">1,000원</div>
-					<div class="region">경기도 용인시 수지구 상현동</div>
-					<div class="likeAndChat">
-						<span class="">관심 15</span>
-						·
-						<span class="">채팅 46</span>
-					</div>
-				</a>
-			</div>
-			<div id="item">
-				<a href="#">
-					<img src="${contextPath }/resources/image/empty.png"><br>
-					<div class="article_title">사과 한박스</div>
-					<div class="price">1,000원</div>
-					<div class="region">경기도 용인시 수지구 상현동</div>
-					<div class="likeAndChat">
-						<span class="">관심 15</span>
-						·
-						<span class="">채팅 46</span>
-					</div>
-				</a>
-			</div>
-			<div id="item">
-				<a href="#">
-					<img src="${contextPath }/resources/image/empty.png"><br>
-					<div class="article_title">사과 한박스</div>
-					<div class="price">1,000원</div>
-					<div class="region">경기도 용인시 수지구 상현동</div>
-					<div class="likeAndChat">
-						<span class="">관심 15</span>
-						.
-						<span class="">채팅 46</span>
-					</div>
-				</a>
-			</div>
-		</div>
-		<div id="more-item">
-			<a href="#">인기매물 더 보기</a>
+			<c:forEach var="entry" items="${map }">
+				<c:set var="article" value="${entry.key }" />
+				<c:set var="image" value="${entry.value }" />
+				<div id="item">
+					<a href="#">
+						<c:choose>
+							<c:when test="${image.size() == 0 }">
+								<img src="${contextPath }/resources/image/empty.png">
+								<br>
+							</c:when>
+							<c:otherwise>
+								<img src="${contextPath }/resources/image/product_image/${article.productId}/${image[0] }" />
+								<br>
+							</c:otherwise>
+						</c:choose>
+						<div class="article_title">${article.title }</div>
+						<div class="price">${article.price }원</div>
+						<div class="region">${article.region }</div>
+						<div class="likeAndChat">
+							<span class="">관심 ${article.likeCount}</span>
+							·
+							<span class="">채팅 ${article.chatCount }</span>
+						</div>
+					</a>
+				</div>
+			</c:forEach>
 		</div>
 	</div>
 	<sec:authorize access="isAuthenticated()">

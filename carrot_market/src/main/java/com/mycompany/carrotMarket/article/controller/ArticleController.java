@@ -50,6 +50,8 @@ public class ArticleController {
 	@RequestMapping(value = "/hot_article", method = RequestMethod.GET)
 	public ModelAndView hotArticle(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
+		Map<ArticleVO, List<String>> map = articleService.selectArticles();
+		mav.addObject("map", map);
 		mav.setViewName("hotArticle");
 		return mav;
 	}
