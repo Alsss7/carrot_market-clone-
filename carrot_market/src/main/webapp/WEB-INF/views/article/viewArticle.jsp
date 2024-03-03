@@ -1,0 +1,92 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+	isELIgnored="false"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath }" />
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="${contextPath }/resources/css/article/view-article.css" />
+</head>
+<body>
+	<main>
+		<div id="images-and-user">
+			<div id="images">
+				<div class="slider-btn" id="prevBtn" onclick="prevSlide()">&#10094;</div>
+				<div id="slides">
+					<c:set var="images" value="${article.filesName }" />
+					<c:choose>
+						<c:when test="${images.size() == 0}">
+							<div class="slide">
+								<img src="${contextPath }/resources/image/product_image/empty.png" />
+							</div>
+						</c:when>
+						<c:otherwise>
+							<c:forEach var="image" items="${images}" varStatus="status">
+								<div class="slide ${status.first ? 'active' : ''}">
+									<img src="${contextPath}/resources/image/product_image/${article.productId}/${image}">
+								</div>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
+				</div>
+				<div class="slider-btn" id="nextBtn" onclick="nextSlide()">&#10095;</div>
+			</div>
+			<div id="user-info">
+				<div id="profile">
+					<div id="profile-image">
+						<img src="${contextPath }" />
+					</div>
+					<div id="info">
+						<span id="user-id">${member.id }</span>
+						<br>
+						<span id="user-region">${article.region }</span>
+					</div>
+				</div>
+				<div id="manner">
+					<div id="manner-detail">
+						<div id="user-manner">
+							<span> ${member.manner } &#8451; </span>
+							<br>
+							<span>
+								<progress value="${member.manner }" max="100"></progress>
+							</span>
+						</div>
+						<div id="manner-image">
+							<img src="${contextPath }">
+						</div>
+						<br>
+					</div>
+					<div id="manner-temperature">매너온도</div>
+				</div>
+			</div>
+			<div id="line"></div>
+		</div>
+		<div id="details">
+			<div>
+				<div id="title">${article.title }</div>
+				<div id="category-date">
+					<span>${article.category }</span>
+					·
+					<span>${article.createdAt }</span>
+				</div>
+				<div id="price">
+					<c:set var="productPrice" value="${article.price }" />
+					<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
+					${formattedPrice }원
+				</div>
+				<div id="description">${article.description }</div>
+				<div id="count">
+					<span>관심 ${article.likeCount }</span>
+					·
+					<span>채팅 ${article.chatCount }</span>
+					·
+					<span>조회 ${article.viewCount }</span>
+				</div>
+			</div>
+		</div>
+	</main>
+	<script src="${contextPath }/resources/js/article/viewArticle.js"></script>
+</body>
+</html>

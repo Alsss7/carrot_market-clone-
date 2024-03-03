@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -96,6 +97,23 @@ public class ArticleController {
 		mav.setViewName("redirect:/article/fleamarket");
 		return mav;
 
+	}
+
+	@RequestMapping(value = "/{productId}", method = RequestMethod.GET)
+	public ModelAndView getArticle(@PathVariable int productId) {
+		ModelAndView mav = new ModelAndView();
+		ArticleVO article = articleService.selectArticle(productId);
+		if (article != null) {
+			System.out.println(article.getFilesName().toString());
+			mav.addObject("msg", "success");
+			mav.addObject("article", article);
+			MemberVO member = memberService.findById(article.getUserId());
+			mav.addObject("member", member);
+		} else {
+			mav.addObject("msg", "fail");
+		}
+		mav.setViewName("article");
+		return mav;
 	}
 
 	private void imageFileUpload(int productId, List<MultipartFile> files, HttpServletRequest request) {

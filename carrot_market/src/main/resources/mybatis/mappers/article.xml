@@ -21,8 +21,7 @@
 	<update id="insertProductImages" parameterType="articleVO">
 		<foreach collection="filesName" item="file" separator=" "
 			open="INSERT ALL" close="SELECT * FROM DUAL">
-			INTO product_images(product_id,
-			image_file_name)
+			INTO product_images(product_id, image_file_name)
 			VALUES
 			(#{productId}, #{file, jdbcType=VARCHAR})
 		</foreach>
@@ -46,6 +45,26 @@
 		resultType="String">
 		SELECT image_file_name FROM product_images
 		WHERE product_id = #{value}
+	</select>
+
+	<select id="selectArticle" parameterType="int"
+		resultType="articleVO">
+		SELECT
+		product_id AS productId,
+		user_id AS userId,
+		title,
+		description,
+		sellOrShare,
+		price,
+		category,
+		status,
+		region,
+		place,
+		like_count AS likeCount,
+		chat_count AS chatCount,
+		view_count AS viewCount
+		FROM products
+		WHERE product_id = #{productId}
 	</select>
 
 </mapper>

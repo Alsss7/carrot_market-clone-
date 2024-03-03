@@ -20,6 +20,8 @@ public class ArticleVO {
 
 	private String category;
 
+	private String status;
+
 	private String region;
 
 	private String place;
@@ -92,6 +94,14 @@ public class ArticleVO {
 		this.category = category;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public String getRegion() {
 		return region;
 	}
@@ -154,6 +164,11 @@ public class ArticleVO {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	@Override
+	public String toString() {
+		return "번호 : " + getProductId() + " 회원 아이디 : " + getUserId();
 	}
 
 }

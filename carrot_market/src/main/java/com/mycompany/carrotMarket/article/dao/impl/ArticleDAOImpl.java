@@ -40,4 +40,10 @@ public class ArticleDAOImpl implements ArticleDAO {
 		return list;
 	}
 
+	@Override
+	public ArticleVO selectArticle(int productId) throws DataAccessException {
+		ArticleVO article = sqlSession.selectOne("mappers.article.selectArticle", productId);
+		return article;
+	}
+
 }

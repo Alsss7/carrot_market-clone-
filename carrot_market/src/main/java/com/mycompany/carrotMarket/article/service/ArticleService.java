@@ -11,4 +11,6 @@ public interface ArticleService {
 	public boolean addArticle(ArticleVO articleVO) throws DataAccessException;
 
 	public Map<ArticleVO, List<String>> selectArticles() throws DataAccessException;
+
+	public ArticleVO selectArticle(int productId) throws DataAccessException;
 }

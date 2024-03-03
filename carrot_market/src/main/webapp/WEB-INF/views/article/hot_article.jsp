@@ -30,10 +30,10 @@
 				<c:set var="article" value="${entry.key }" />
 				<c:set var="image" value="${entry.value }" />
 				<div id="item">
-					<a href="#">
+					<a href="${contextPath }/article/${article.productId}">
 						<c:choose>
 							<c:when test="${image.size() == 0 }">
-								<img src="${contextPath }/resources/image/empty.png">
+								<img src="${contextPath }/resources/image/product_image/empty.png">
 								<br>
 							</c:when>
 							<c:otherwise>

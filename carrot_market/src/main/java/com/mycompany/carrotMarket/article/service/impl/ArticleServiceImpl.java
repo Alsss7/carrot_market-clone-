@@ -56,4 +56,16 @@ public class ArticleServiceImpl implements ArticleService {
 		return map;
 	}
 
+	@Override
+	@Transactional
+	public ArticleVO selectArticle(int productId) throws DataAccessException {
+		ArticleVO article = articleDAO.selectArticle(productId);
+
+		if (article != null) {
+			List<String> imageList = articleDAO.selectImages(productId);
+			article.setFilesName(imageList);
+		}
+		return article;
+	}
+
 }

@@ -14,4 +14,6 @@ public interface ArticleDAO {
 	public List<ArticleVO> selectArticles() throws DataAccessException;
 
 	public List<String> selectImages(int productId) throws DataAccessException;
+
+	public ArticleVO selectArticle(int productId) throws DataAccessException;
 }

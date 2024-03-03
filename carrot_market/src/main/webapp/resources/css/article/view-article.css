@@ -1,0 +1,157 @@
+@charset "UTF-8";
+
+body {
+	padding-top: 80px;
+}
+
+main {
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	justify-content: center;
+	z-index: 0;
+}
+
+#images-and-user {
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	justify-content: center;
+	width: 800px;
+	height: auto;
+}
+
+#images {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	overflow: hidden;
+	margin: auto;
+}
+
+.slide {
+	display: none; /* 슬라이드 감추기 */
+}
+
+.slide.active {
+	display: block; /* 활성 슬라이드 보이기 */
+}
+
+#images img {
+	width: 700px;
+	height: 500px;
+	object-fit: cover;
+	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
+}
+
+.slider-btn {
+	font-size: 20pt;
+	margin-left: 20px;
+	margin-right: 20px;
+	cursor: pointer;
+}
+
+#user-info {
+	width: 90%;
+	display: flex;
+	justify-content: space-between;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+#profile {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+}
+
+#info {
+	margin-left: 10px;
+}
+
+#user-id {
+	font-size: 13pt;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+#user-region {
+	font-size: 10pt;
+}
+
+#manner {
+	display: flex;
+	flex-flow: column;
+}
+
+#manner-detail {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+}
+
+#user-manner {
+	font-size: 12pt;
+	font-weight: bold;
+	color: blue;
+	text-align: right;
+	margin-right: 20px;
+}
+
+#manner-temperature {
+	font-size: 10pt;
+	color: gray;
+	display: flex;
+	justify-content: flex-end;
+}
+
+#line {
+	width: 92%;
+	padding-top: 0px;
+	margin-top: 0px;
+	border: 0.1px solid #ccc; /* 회색 선의 두께와 색상 설정 */
+	opacity: 0.5; /* 투명도 설정 */
+	display: block;
+}
+
+#details {
+	margin-top: 20px;
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	width: 730px;
+	height: auto;
+}
+
+#title {
+	font-size: 15pt;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+#category-date {
+	font-size: 10pt;
+	color: gray;
+	margin-bottom: 10px;
+}
+
+#price {
+	font-size: 14pt;
+	font-weight: bold;
+	margin-bottom: 25px;
+}
+
+#description {
+	margin-bottom: 20px;
+}
+
+#count {
+	font-size: 10pt;
+	color: gray;
+	margin-bottom: 50px;
+}
+
+progress {
+	height: 10px;
+	width: 100px;
+}
