@@ -9,5 +9,7 @@
 		<typeAlias
 			type="com.mycompany.carrotMarket.article.vo.ArticleVO"
 			alias="articleVO" />
+		<typeAlias
+			type="com.mycompany.carrotMarket.article.dto.LikeDTO" alias="likeDTO" />
 	</typeAliases>
 </configuration>

@@ -38,7 +38,7 @@
 		chat_count AS chatCount,
 		view_count AS viewCount
 		FROM products
-		ORDER BY view_count DESC
+		ORDER BY product_id ASC
 	</select>
 
 	<select id="selectImages" parameterType="int"
@@ -66,5 +66,35 @@
 		FROM products
 		WHERE product_id = #{productId}
 	</select>
-
+	
+	<select id="selectLike" parameterType="likeDTO"
+		resultType="int">
+		<![CDATA[
+			SELECT COUNT(*)
+			FROM LIKES
+			WHERE user_id = #{userId} and product_id = #{productId}
+		]]>
+	</select>
+	
+	<insert id="addLike" parameterType="likeDTO">
+		INSERT INTO LIKES(user_id, product_id)
+		VALUES(#{userId}, #{productId})
+	</insert>
+	
+	<update id="increaseLike" parameterType="int">
+		UPDATE products
+		SET LIKE_COUNT = LIKE_COUNT + 1
+		WHERE PRODUCT_ID = #{value}
+	</update>
+	
+	<delete id="removeLike" parameterType="likeDTO">
+		DELETE FROM LIKES
+		WHERE user_id = #{userId} AND product_id = #{productId}
+	</delete>
+	
+	<update id="decreaseLike" parameterType="int">
+		UPDATE products
+		SET LIKE_COUNT = LIKE_COUNT - 1
+		WHERE PRODUCT_ID = #{value}
+	</update>
 </mapper>

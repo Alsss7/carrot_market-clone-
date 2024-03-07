@@ -8,6 +8,34 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath }/resources/css/article/view-article.css" />
+<c:if test="${addResult }">
+	<c:choose>
+		<c:when test="${addResult == true }">
+			<script>
+				alert('찜하기 성공!');
+			</script>
+		</c:when>
+		<c:otherwise>
+			<script>
+				alert('찜하기 실패!');
+			</script>
+		</c:otherwise>
+	</c:choose>
+</c:if>
+<c:if test="${removeResult }">
+	<c:choose>
+		<c:when test="${removeResult == true }">
+			<script>
+				alert('찜하기 해제!');
+			</script>
+		</c:when>
+		<c:otherwise>
+			<script>
+				alert('에러!');
+			</script>
+		</c:otherwise>
+	</c:choose>
+</c:if>
 </head>
 <body>
 	<main>
@@ -36,7 +64,8 @@
 			<div id="user-info">
 				<div id="profile">
 					<div id="profile-image">
-						<img src="${contextPath }" />
+						<img
+							src="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-c649f052a34ebc4eee35048815d8e4f73061bf74552558bb70e07133f25524f9.png" />
 					</div>
 					<div id="info">
 						<span id="user-id">${member.id }</span>
@@ -85,6 +114,20 @@
 					<span>조회 ${article.viewCount }</span>
 				</div>
 			</div>
+		</div>
+		<div id="line"></div>
+		<div id="like-and-chat">
+			<a href="${contextPath }/article/like/${article.productId}?userId=${member.id}" id="like">
+				<c:choose>
+					<c:when test="${like == true }">
+						<span> ♥ </span>
+					</c:when>
+					<c:otherwise>
+						<span id="like"> ♡ </span>
+					</c:otherwise>
+				</c:choose>
+			</a>
+			<button id="chat">채팅하기</button>
 		</div>
 	</main>
 	<script src="${contextPath }/resources/js/article/viewArticle.js"></script>

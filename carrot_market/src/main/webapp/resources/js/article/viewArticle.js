@@ -1,4 +1,3 @@
-
 const slidesContainer = document.getElementById('slides');
 const slides = document.querySelectorAll('.slide');
 const prevBtn = document.getElementById('prevBtn');

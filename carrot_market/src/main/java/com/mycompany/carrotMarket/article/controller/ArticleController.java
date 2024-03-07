@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 import com.mycompany.carrotMarket.member.service.MemberService;
@@ -100,7 +102,7 @@ public class ArticleController {
 	}
 
 	@RequestMapping(value = "/{productId}", method = RequestMethod.GET)
-	public ModelAndView getArticle(@PathVariable int productId) {
+	public ModelAndView viewArticle(@PathVariable int productId) {
 		ModelAndView mav = new ModelAndView();
 		ArticleVO article = articleService.selectArticle(productId);
 		if (article != null) {
@@ -108,11 +110,32 @@ public class ArticleController {
 			mav.addObject("msg", "success");
 			mav.addObject("article", article);
 			MemberVO member = memberService.findById(article.getUserId());
+			LikeDTO likeDTO = new LikeDTO(member.getId(), productId);
+			boolean isLiked = articleService.selectLike(likeDTO);
 			mav.addObject("member", member);
+			mav.addObject("like", isLiked);
 		} else {
 			mav.addObject("msg", "fail");
 		}
 		mav.setViewName("article");
+		return mav;
+	}
+
+	@RequestMapping(value = "/like/{productId}", method = RequestMethod.GET)
+	public ModelAndView likeArticle(@PathVariable int productId, @RequestParam("userId") String userId,
+			RedirectAttributes attributes) {
+		System.out.println(userId + " " + productId);
+		ModelAndView mav = new ModelAndView();
+		LikeDTO likeDTO = new LikeDTO(userId, productId);
+		boolean isLiked = articleService.selectLike(likeDTO);
+		if (isLiked) {
+			boolean result = articleService.removeLike(likeDTO);
+			attributes.addFlashAttribute("removeResult", result);
+		} else {
+			boolean result = articleService.addLike(likeDTO);
+			attributes.addFlashAttribute("addResult", result);
+		}
+		mav.setViewName("redirect:/article/" + productId);
 		return mav;
 	}
 

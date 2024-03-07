@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 
+import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 
 public interface ArticleService {
@@ -13,4 +14,10 @@ public interface ArticleService {
 	public Map<ArticleVO, List<String>> selectArticles() throws DataAccessException;
 
 	public ArticleVO selectArticle(int productId) throws DataAccessException;
+
+	public boolean selectLike(LikeDTO likeDTO) throws DataAccessException;
+
+	public boolean addLike(LikeDTO likeDTO) throws DataAccessException;
+
+	public boolean removeLike(LikeDTO likeDTO) throws DataAccessException;
 }

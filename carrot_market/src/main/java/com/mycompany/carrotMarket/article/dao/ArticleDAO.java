@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
+import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 
 public interface ArticleDAO {
@@ -16,4 +17,14 @@ public interface ArticleDAO {
 	public List<String> selectImages(int productId) throws DataAccessException;
 
 	public ArticleVO selectArticle(int productId) throws DataAccessException;
+
+	public boolean selectLike(LikeDTO likeDTO) throws DataAccessException;
+
+	public int addLike(LikeDTO likeDTO) throws DataAccessException;
+
+	public int increaseLike(int productId) throws DataAccessException;
+
+	public int removeLike(LikeDTO likeDTO) throws DataAccessException;
+
+	public int decreaseLike(int productId) throws DataAccessException;
 }

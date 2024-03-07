@@ -2,9 +2,15 @@
 
 body {
 	padding-top: 80px;
+	overflow-x: hidden;
+	display: flex;
+	align-items: center;
+	flex-flow: column;
 }
 
 main {
+	width: 800px;
+	height: auto;
 	display: flex;
 	flex-flow: column;
 	align-items: center;
@@ -17,7 +23,6 @@ main {
 	flex-flow: column;
 	align-items: center;
 	justify-content: center;
-	width: 800px;
 	height: auto;
 }
 
@@ -37,6 +42,10 @@ main {
 	display: block; /* 활성 슬라이드 보이기 */
 }
 
+#images {
+	width: 800px;
+}
+
 #images img {
 	width: 700px;
 	height: 500px;
@@ -52,7 +61,7 @@ main {
 }
 
 #user-info {
-	width: 90%;
+	width: 86%;
 	display: flex;
 	justify-content: space-between;
 	margin-top: 15px;
@@ -63,6 +72,17 @@ main {
 	display: flex;
 	flex-flow: row;
 	align-items: center;
+}
+
+#profile-image {
+	width: 40px;
+	height: 40px;
+}
+
+#profile-image img {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
 }
 
 #info {
@@ -106,7 +126,7 @@ main {
 }
 
 #line {
-	width: 92%;
+	width: 88%;
 	padding-top: 0px;
 	margin-top: 0px;
 	border: 0.1px solid #ccc; /* 회색 선의 두께와 색상 설정 */
@@ -119,7 +139,7 @@ main {
 	display: flex;
 	flex-flow: column;
 	justify-content: center;
-	width: 730px;
+	width: 705px;
 	height: auto;
 }
 
@@ -148,10 +168,36 @@ main {
 #count {
 	font-size: 10pt;
 	color: gray;
-	margin-bottom: 50px;
+	margin-bottom: 30px;
 }
 
 progress {
 	height: 10px;
 	width: 100px;
+}
+
+#like-and-chat {
+	width: 88%;
+	margin-top: 40px;
+	margin-bottom: 40px;
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	justify-content: center;
+}
+
+#like {
+	color: orange;
+	font-size: 40pt;
+	padding-bottom: 10px;
+	margin-right: 20px;
+}
+
+#chat {
+	background-color: #EE7832;
+	color: white;
+	font-size: 20pt;
+	border: 0;
+	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
+	padding: 13px 150px 13px 150px;
 }

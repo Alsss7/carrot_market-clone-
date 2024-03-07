@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.mycompany.carrotMarket.article.dao.ArticleDAO;
+import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 
 @Repository
@@ -44,6 +45,40 @@ public class ArticleDAOImpl implements ArticleDAO {
 	public ArticleVO selectArticle(int productId) throws DataAccessException {
 		ArticleVO article = sqlSession.selectOne("mappers.article.selectArticle", productId);
 		return article;
+	}
+
+	@Override
+	public boolean selectLike(LikeDTO likeDTO) throws DataAccessException {
+		int result = sqlSession.selectOne("mappers.article.selectLike", likeDTO);
+		if (result == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public int addLike(LikeDTO likeDTO) throws DataAccessException {
+		int result = sqlSession.insert("mappers.article.addLike", likeDTO);
+		return result;
+	}
+
+	@Override
+	public int increaseLike(int productId) throws DataAccessException {
+		int result = sqlSession.update("mappers.article.increaseLike", productId);
+		return result;
+	}
+
+	@Override
+	public int removeLike(LikeDTO likeDTO) throws DataAccessException {
+		int result = sqlSession.delete("mappers.article.removeLike", likeDTO);
+		return result;
+	}
+
+	@Override
+	public int decreaseLike(int productId) throws DataAccessException {
+		int result = sqlSession.update("mappers.article.decreaseLike", productId);
+		return result;
 	}
 
 }
