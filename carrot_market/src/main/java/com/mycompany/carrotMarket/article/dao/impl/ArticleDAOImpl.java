@@ -81,4 +81,9 @@ public class ArticleDAOImpl implements ArticleDAO {
 		return result;
 	}
 
+	@Override
+	public void increaseView(int productId) throws DataAccessException {
+		sqlSession.update("mappers.article.increaseView", productId);
+	}
+
 }

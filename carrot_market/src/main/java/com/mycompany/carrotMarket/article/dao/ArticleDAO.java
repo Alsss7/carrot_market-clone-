@@ -27,4 +27,6 @@ public interface ArticleDAO {
 	public int removeLike(LikeDTO likeDTO) throws DataAccessException;
 
 	public int decreaseLike(int productId) throws DataAccessException;
+
+	public void increaseView(int productId) throws DataAccessException;
 }

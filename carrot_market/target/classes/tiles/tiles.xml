@@ -32,9 +32,15 @@
 	</definition>
 
 	<definition name="myPage" extends="default">
-		<put-attribute name="title" value="클론 당근 - 마이 페이지" />
+		<put-attribute name="title" value="클론 당근 - 마이페이지" />
 		<put-attribute name="body"
 			value="/WEB-INF/views/member/myPage.jsp" />
+	</definition>
+
+	<definition name="profile" extends="default">
+		<put-attribute name="title" value="클론 당근 - 프로필" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/profile.jsp" />
 	</definition>
 
 	<definition name="fleamarket" extends="default">
@@ -46,7 +52,7 @@
 	<definition name="hotArticle" extends="default">
 		<put-attribute name="title" value="클론 마켓 - 인기 매물" />
 		<put-attribute name="body"
-			value="/WEB-INF/views/article/hot_article.jsp" />
+			value="/WEB-INF/views/article/hotArticle.jsp" />
 	</definition>
 
 	<definition name="articleForm" extends="default">

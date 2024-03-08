@@ -42,19 +42,17 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	@Transactional
-	public Map<ArticleVO, List<String>> selectArticles() throws DataAccessException {
-		Map<ArticleVO, List<String>> map = new HashMap<ArticleVO, List<String>>();
-
+	public List<ArticleVO> selectArticles() throws DataAccessException {
 		List<ArticleVO> articleList = articleDAO.selectArticles();
 		if (articleList.size() > 0) {
 			List<String> imageList = new ArrayList<String>();
 			for (ArticleVO article : articleList) {
 				System.out.println("productId : " + article.getProductId());
 				imageList = articleDAO.selectImages(article.getProductId());
-				map.put(article, imageList);
+				article.setFilesName(imageList);
 			}
 		}
-		return map;
+		return articleList;
 	}
 
 	@Override
@@ -97,6 +95,11 @@ public class ArticleServiceImpl implements ArticleService {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public void increaseView(int productId) throws DataAccessException {
+		articleDAO.increaseView(productId);
 	}
 
 }

@@ -37,22 +37,22 @@
 
 		<div id="item-wrap">
 			<div id="item-list">
-				<c:forEach var="entry" items="${map }">
-					<c:set var="article" value="${entry.key }" />
-					<c:set var="image" value="${entry.value }" />
+				<c:forEach var="article" items="${articles}">
+					<c:set var="images" value="${article.filesName }" />
 					<div id="item">
 						<a href="${contextPath }/article/${article.productId}">
 							<c:choose>
-								<c:when test="${image.size() == 0 }">
+								<c:when test="${images.size() == 0 }">
 									<img src="${contextPath }/resources/image/product_image/empty.png">
 									<br>
 								</c:when>
 								<c:otherwise>
-									<img src="${contextPath }/resources/image/product_image/${article.productId}/${image[0] }" />
+									<img
+										src="${contextPath }/resources/image/product_image/${article.productId}/${images[0] }" />
 									<br>
 								</c:otherwise>
 							</c:choose>
-							<div class="article_title">${article.title }</div>
+							<div class="article-title">${article.title }</div>
 							<c:choose>
 								<c:when test="${article.price == 0 }">
 									<div class="price">나눔</div>
@@ -66,7 +66,7 @@
 								</c:otherwise>
 							</c:choose>
 							<div class="region">${article.region }</div>
-							<div class="likeAndChat">
+							<div class="like-and-chat">
 								<span class="">관심 ${article.likeCount}</span>
 								·
 								<span class="">채팅 ${article.chatCount }</span>
@@ -76,7 +76,7 @@
 				</c:forEach>
 			</div>
 			<div id="more-item">
-				<a href="${contextPath }/article/hot_article">인기매물 더 보기</a>
+				<a href="${contextPath }/article/hotArticle">인기매물 더 보기</a>
 			</div>
 		</div>
 		<sec:authorize access="isAuthenticated()">

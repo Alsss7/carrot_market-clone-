@@ -1,0 +1,133 @@
+@charset "UTF-8";
+
+body {
+	padding-top: 70px;
+	overflow-x: hidden;
+}
+
+#profileDiv {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	background-color: #FEFAE2;
+}
+
+#profileForm {
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+	border: solid 0px gray;
+	padding: 25px 250px 25px 250px;
+	background-color: #FEFAE2;
+	border-radius: 20px 20px 20px 20px/20px 20px 20px 20px;
+}
+
+.profile_subject {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 25pt;
+	font-weight: bold;
+	margin-bottom: 30px;
+	color: #EE7832;
+}
+
+#logo {
+	width: 100px;
+	height: 50px;
+}
+
+.label {
+	text-align: right;
+	font-size: 15pt;
+	font-weight: bold;
+	margin-bottom: 15px;
+	margin-top: 15px;
+}
+
+table tr {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.input {
+	background-color: white;
+	height: 30px;
+	width: 250px;
+	border-width: 0 0 1px;
+	border-color: gray;
+	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	padding-right: 10px;
+	padding-left: 10px;
+	font-size: 12pt;
+	text-align: center;
+}
+
+.input:focus {
+	outline: none;
+}
+
+.input[readonly] {
+	background-color: #F0F0F0;
+}
+
+#checkNickname {
+	background-color: #EE7832;
+}
+
+#checkNickname[disabled] {
+	background-color: #F0F0F0;
+}
+
+.button {
+	background-color: #EE7832;
+	border: 0;
+	color: white;
+	font-size: 10pt;
+	padding: 8px 10px 8px 10px;
+	margin-left: 10px;
+	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
+}
+
+.button:hover {
+	cursor: pointer;
+}
+
+.errors {
+	margin-top: 0;
+	padding-top: 0;
+	margin-bottom: 0;
+	padding-bottom: 0;
+	padding-left: 10px;
+	font-size: 9pt;
+	color: red;
+	height: 18px;
+	width: 100%;
+}
+
+.error_msg {
+	padding-top: 0;
+	padding-bottom: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+#modify_bt, #confirm_bt {
+	background-color: #EE7832;
+	border: 0;
+	color: white;
+	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
+	font-size: 14pt;
+	font-weight: bold;
+	margin-top: 30px;
+	padding: 13px 150px 13px 150px;
+}
+
+#modify_bt:hover, #confirm_bt:hover {
+	cursor: pointer;
+}

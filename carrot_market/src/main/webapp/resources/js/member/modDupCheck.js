@@ -1,6 +1,3 @@
-let hostIndex = location.href.indexOf( location.host ) + location.host.length;
-let contextPath = location.href.substring( hostIndex, location.href.indexOf('/', hostIndex + 1) );
-
 var storedNickname = document.getElementById("nickname").value;
 var nickInput = document.getElementById("nickname");
 var nickChecked = true;
@@ -66,7 +63,7 @@ nickInput.addEventListener("input", function() {
 var modifyButton = document.getElementById("modify_bt");
 modifyButton.onclick = function() {
 	if(nickChecked) {
-		document.getElementById("myPageForm").submit();
+		document.getElementById("profileForm").submit();
 	} else {
 		alert("닉네임 중복 확인을 해주세요!");
 	}

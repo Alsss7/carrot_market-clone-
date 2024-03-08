@@ -51,6 +51,15 @@
 		<a
 			href="https://kr.freepik.com/icon/user_747376#fromView=search&term=%EC%82%AC%EB%9E%8C&track=ais&page=1&position=32&uuid=fd044a7f-bd3c-43fd-a305-0633829ee21f">
 			Designed by Freepik </a>
+		<br>
+		<a href="https://www.flaticon.com/kr/free-icons/" title="심장 아이콘">심장 아이콘 제작자: Dave Gandy -
+			Flaticon</a>
+		<br>
+		<a href="https://www.flaticon.com/kr/free-icons/" title="영수증 아이콘">영수증 아이콘 제작자: Saepul Nahwan
+			- Flaticon</a>
+		<br>
+		<a href="https://www.flaticon.com/kr/free-icons/" title="쇼핑 아이콘">쇼핑 아이콘 제작자: laterunlabs -
+			Flaticon</a>
 	</div>
 </body>
 </html>

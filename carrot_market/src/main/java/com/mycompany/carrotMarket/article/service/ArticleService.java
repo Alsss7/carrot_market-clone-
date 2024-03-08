@@ -11,7 +11,7 @@ import com.mycompany.carrotMarket.article.vo.ArticleVO;
 public interface ArticleService {
 	public boolean addArticle(ArticleVO articleVO) throws DataAccessException;
 
-	public Map<ArticleVO, List<String>> selectArticles() throws DataAccessException;
+	public List<ArticleVO> selectArticles() throws DataAccessException;
 
 	public ArticleVO selectArticle(int productId) throws DataAccessException;
 
@@ -20,4 +20,6 @@ public interface ArticleService {
 	public boolean addLike(LikeDTO likeDTO) throws DataAccessException;
 
 	public boolean removeLike(LikeDTO likeDTO) throws DataAccessException;
+	
+	public void increaseView(int productId) throws DataAccessException;
 }

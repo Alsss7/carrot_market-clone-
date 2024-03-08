@@ -38,7 +38,7 @@
 		chat_count AS chatCount,
 		view_count AS viewCount
 		FROM products
-		ORDER BY product_id ASC
+		ORDER BY product_id DESC
 	</select>
 
 	<select id="selectImages" parameterType="int"
@@ -95,6 +95,12 @@
 	<update id="decreaseLike" parameterType="int">
 		UPDATE products
 		SET LIKE_COUNT = LIKE_COUNT - 1
+		WHERE PRODUCT_ID = #{value}
+	</update>
+	
+	<update id="increaseView" parameterType="int">
+		UPDATE products
+		SET VIEW_COUNT = VIEW_COUNT + 1
 		WHERE PRODUCT_ID = #{value}
 	</update>
 </mapper>

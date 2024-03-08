@@ -66,9 +66,6 @@ public class MemberController {
 		binder.addValidators(nicknameValidator);
 	}
 
-	/*
-	 * 마이페이지 메서드
-	 */
 	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
 	public ModelAndView myPage(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
@@ -76,7 +73,17 @@ public class MemberController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/myPage", method = RequestMethod.POST)
+	/*
+	 * 마이페이지 메서드
+	 */
+	@RequestMapping(value = "/profile", method = RequestMethod.GET)
+	public ModelAndView profile(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("profile");
+		return mav;
+	}
+
+	@RequestMapping(value = "/profile", method = RequestMethod.POST)
 	public ModelAndView getInfo(@ModelAttribute MemberDTO dto, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		ModelAndView mav = new ModelAndView();
@@ -88,11 +95,11 @@ public class MemberController {
 			member.setPw(dto.getPw());
 			mav.addObject("member", member);
 		}
-		mav.setViewName("myPage");
+		mav.setViewName("profile");
 		return mav;
 	}
 
-	@RequestMapping(value = "/myPage/modify", method = RequestMethod.POST)
+	@RequestMapping(value = "/profile/modify", method = RequestMethod.POST)
 	public ModelAndView modifyMember(@ModelAttribute("member") MemberVO memberVO, BindingResult bindingResult,
 			RedirectAttributes attributes) throws Exception {
 		ModelAndView mav = new ModelAndView();
@@ -117,7 +124,7 @@ public class MemberController {
 				System.out.println(attributes.getAttribute("memeber"));
 			}
 		}
-		mav.setViewName("redirect:/member/myPage");
+		mav.setViewName("redirect:/member/profile");
 		return mav;
 	}
 

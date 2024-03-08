@@ -26,18 +26,17 @@
 	</div>
 	<div id="item-wrap">
 		<div id="item-list">
-			<c:forEach var="entry" items="${map }">
-				<c:set var="article" value="${entry.key }" />
-				<c:set var="image" value="${entry.value }" />
+			<c:forEach var="article" items="${articles}">
+				<c:set var="images" value="${article.filesName }" />
 				<div id="item">
 					<a href="${contextPath }/article/${article.productId}">
 						<c:choose>
-							<c:when test="${image.size() == 0 }">
+							<c:when test="${images.size() == 0 }">
 								<img src="${contextPath }/resources/image/product_image/empty.png">
 								<br>
 							</c:when>
 							<c:otherwise>
-								<img src="${contextPath }/resources/image/product_image/${article.productId}/${image[0] }" />
+								<img src="${contextPath }/resources/image/product_image/${article.productId}/${images[0] }" />
 								<br>
 							</c:otherwise>
 						</c:choose>

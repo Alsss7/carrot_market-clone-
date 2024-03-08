@@ -54,7 +54,7 @@
           			<b><sec:authentication property="principal.username" /></b>님
           			&nbsp;&nbsp;
           			<a href="${contextPath }/member/myPage">
-						<img src="${contextPath }/resources/image/mypage.png" style="width: 20px; height: 20px;" />
+						<img src="${contextPath }/resources/image/myPage/mypage.png" id="myPage-icon" />
 					</a>
 				</sec:authorize>
 				<sec:authorize access="!isAuthenticated()">

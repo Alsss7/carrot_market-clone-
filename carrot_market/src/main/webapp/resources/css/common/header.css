@@ -92,3 +92,8 @@ a {
 #logout_bt:hover {
 	cursor: pointer;
 }
+
+#myPage-icon {
+	width: 20px;
+	height: 20px;
+}
