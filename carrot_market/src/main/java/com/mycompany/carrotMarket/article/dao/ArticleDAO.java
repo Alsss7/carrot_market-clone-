@@ -14,9 +14,13 @@ public interface ArticleDAO {
 
 	public List<ArticleVO> selectArticles() throws DataAccessException;
 
+	public List<ArticleVO> selectArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException;
+
 	public List<String> selectImages(int productId) throws DataAccessException;
 
 	public ArticleVO selectArticle(int productId) throws DataAccessException;
+
+	public List<LikeDTO> selectLikeList(String loginId) throws DataAccessException;
 
 	public boolean selectLike(LikeDTO likeDTO) throws DataAccessException;
 

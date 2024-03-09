@@ -29,16 +29,59 @@
 
 	<select id="selectArticles" resultType="articleVO">
 		SELECT
-		product_id AS productId,
-		user_id AS userId,
-		title,
-		price,
-		region,
-		like_count AS likeCount,
-		chat_count AS chatCount,
-		view_count AS viewCount
+			product_id AS productId,
+			user_id AS userId,
+			title,
+			price,
+			region,
+			like_count AS likeCount,
+			chat_count AS chatCount,
+			view_count AS viewCount
 		FROM products
-		ORDER BY product_id DESC
+		ORDER BY created_at DESC
+	</select>
+	
+	<select id="selectArticlesByProductIdList" parameterType="java.util.List" resultType="articleVO">
+		SELECT
+			product_id AS productId,
+			user_id AS userId,
+			title,
+			price,
+			region,
+			like_count AS likeCount,
+			chat_count AS chatCount,
+			view_count AS viewCount
+		FROM products
+		WHERE product_id IN 
+		<if test="list != null and list.size() > 0">
+        	<foreach collection="list" item="productId" open="(" separator="," close=")">
+	            #{productId}
+        	</foreach>
+    	</if>
+    	<if test="list == null or list.size() == 0">
+	        (NULL)
+	    </if>
+	</select>
+
+	<select id="selectArticle" parameterType="int"
+		resultType="articleVO">
+		SELECT
+			product_id AS productId,
+			user_id AS userId,
+			title,
+			description,
+			sellOrShare,
+			price,
+			category,
+			status,
+			region,
+			place,
+			like_count AS likeCount,
+			chat_count AS chatCount,
+			view_count AS viewCount,
+			created_at AS createdAt
+		FROM products
+		WHERE product_id = #{productId}
 	</select>
 
 	<select id="selectImages" parameterType="int"
@@ -46,25 +89,14 @@
 		SELECT image_file_name FROM product_images
 		WHERE product_id = #{value}
 	</select>
-
-	<select id="selectArticle" parameterType="int"
-		resultType="articleVO">
+	
+	<select id="selectLikeList" parameterType="String" resultType="likeDTO">
 		SELECT
-		product_id AS productId,
-		user_id AS userId,
-		title,
-		description,
-		sellOrShare,
-		price,
-		category,
-		status,
-		region,
-		place,
-		like_count AS likeCount,
-		chat_count AS chatCount,
-		view_count AS viewCount
-		FROM products
-		WHERE product_id = #{productId}
+			user_id as userId,
+			product_id as productId
+		FROM LIKES
+		WHERE user_id = #{value}
+		ORDER BY created_at DESC
 	</select>
 	
 	<select id="selectLike" parameterType="likeDTO"

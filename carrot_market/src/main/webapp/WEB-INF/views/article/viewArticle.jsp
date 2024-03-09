@@ -109,12 +109,19 @@
 						<div id="category-date">
 							<span>${article.category }</span>
 							·
-							<span>${article.createdAt }</span>
+							<span id="created-at"></span>
 						</div>
 						<div id="price">
 							<c:set var="productPrice" value="${article.price }" />
-							<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
-							${formattedPrice }원
+							<c:choose>
+								<c:when test="${productPrice == 0 }">
+									나눔
+								</c:when>
+								<c:otherwise>
+									<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
+									${formattedPrice }원
+								</c:otherwise>
+							</c:choose>
 						</div>
 						<div id="description">${article.description }</div>
 						<div id="count">
@@ -159,6 +166,9 @@
 			</c:otherwise>
 		</c:choose>
 	</main>
+	<script>
+		var timeDiff = "${timeDiff}";
+	</script>
 	<script src="${contextPath }/resources/js/article/viewArticle.js"></script>
 </body>
 </html>

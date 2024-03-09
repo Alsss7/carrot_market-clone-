@@ -11,7 +11,7 @@ request.setCharacterEncoding("utf-8");
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="${contextPath }/resources/css/member/profile.css">
+<link rel="stylesheet" href="${contextPath }/resources/css/member/myPage/profile.css">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 	var csrfToken = "${_csrf.token}";
@@ -28,7 +28,7 @@ request.setCharacterEncoding("utf-8");
 						}
 					</script>
 				</c:if>
-				<form action="${contextPath }/member/profile" method="post" id="profileForm">
+				<form action="${contextPath }/member/myPage/profile" method="post" id="profileForm">
 					<div class="profile_subject">
 						<span>
 							<img src="${contextPath }/resources/image/logo.webp" id="logo">

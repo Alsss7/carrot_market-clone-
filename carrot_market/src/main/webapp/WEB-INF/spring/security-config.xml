@@ -29,30 +29,41 @@
 	<security:http>
 		<security:intercept-url pattern="/home"
 			access="permitAll" />
+
 		<security:intercept-url pattern="/login"
 			access="permitAll" />
+
 		<security:intercept-url pattern="/join"
 			access="permitAll" />
+
 		<security:intercept-url pattern="/member/join"
 			access="permitAll" />
+
 		<security:intercept-url
 			pattern="/member/checkId" access="permitAll" />
+
 		<security:intercept-url
 			pattern="/member/checkNickname" access="permitAll" />
+
 		<security:intercept-url
-			pattern="/member/profile" access="hasAuthority('USER')" />
-		<security:intercept-url
-			pattern="/member/profile/modify" access="hasAuthority('USER')" />
-		<security:intercept-url
-			pattern="/member/myPage" access="hasAuthority('USER')" />
+			pattern="/member/myPage/**" access="hasAuthority('USER')" />
+
 		<security:intercept-url
 			pattern="/article/fleamarket" access="permitAll" />
+
 		<security:intercept-url
 			pattern="/article/hot_article" access="permitAll" />
+
 		<security:intercept-url pattern="/article/new"
 			access="hasAuthority('USER')" />
+
 		<security:intercept-url
 			pattern="/article/register" access="hasAuthority('USER')" />
+
+		<security:intercept-url
+			pattern="/article/like/*" access="hasAuthority('USER')" />
+
+
 		<security:form-login login-page="/login"
 			default-target-url="/home"
 			authentication-failure-url="/login?error=true" />

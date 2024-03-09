@@ -3,8 +3,8 @@ package com.mycompany.carrotMarket.article.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -44,7 +44,6 @@ public class ArticleController {
 
 	@RequestMapping(value = "/fleamarket", method = RequestMethod.GET)
 	public ModelAndView fleamarket(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println("fleamarket");
 		ModelAndView mav = new ModelAndView();
 		List<ArticleVO> articleList = articleService.selectArticles();
 		mav.addObject("articles", articleList);
@@ -108,12 +107,16 @@ public class ArticleController {
 		ModelAndView mav = new ModelAndView();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String loginId = authentication.getName();
-		System.out.println(loginId);
 		ArticleVO article = articleService.selectArticle(productId);
 		if (article != null) {
+			Date currentTime = new Date();
+			Date dbTimeStamp = article.getCreatedAt();
+			long timeDiff = currentTime.getTime() - dbTimeStamp.getTime();
+
 			MemberVO member = memberService.findById(article.getUserId());
 			mav.addObject("msg", "success");
 			mav.addObject("article", article);
+			mav.addObject("timeDiff", timeDiff);
 			mav.addObject("member", member);
 			if (loginId != null) {
 				LikeDTO likeDTO = new LikeDTO(loginId, productId);

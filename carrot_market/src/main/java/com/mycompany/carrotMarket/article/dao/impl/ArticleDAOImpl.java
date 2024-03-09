@@ -36,6 +36,12 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
+	public List<ArticleVO> selectArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesByProductIdList", productIdList);
+		return list;
+	}
+
+	@Override
 	public List<String> selectImages(int productId) throws DataAccessException {
 		List<String> list = sqlSession.selectList("mappers.article.selectImages", productId);
 		return list;
@@ -45,6 +51,12 @@ public class ArticleDAOImpl implements ArticleDAO {
 	public ArticleVO selectArticle(int productId) throws DataAccessException {
 		ArticleVO article = sqlSession.selectOne("mappers.article.selectArticle", productId);
 		return article;
+	}
+
+	@Override
+	public List<LikeDTO> selectLikeList(String loginId) throws DataAccessException {
+		List<LikeDTO> likeList = sqlSession.selectList("mappers.article.selectLikeList", loginId);
+		return likeList;
 	}
 
 	@Override

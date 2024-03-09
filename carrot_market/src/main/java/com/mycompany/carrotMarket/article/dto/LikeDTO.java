@@ -1,9 +1,17 @@
 package com.mycompany.carrotMarket.article.dto;
 
+import java.util.Date;
+
 public class LikeDTO {
 	private String userId;
 
 	private int productId;
+
+	private Date createdAt;
+
+	public LikeDTO() {
+
+	}
 
 	public LikeDTO(String userId, int productId) {
 		this.userId = userId;
@@ -24,6 +32,14 @@ public class LikeDTO {
 
 	public void setProductId(int productId) {
 		this.productId = productId;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 
 }

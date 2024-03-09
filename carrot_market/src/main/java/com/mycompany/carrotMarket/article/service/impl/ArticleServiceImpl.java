@@ -1,9 +1,6 @@
 package com.mycompany.carrotMarket.article.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -45,10 +42,21 @@ public class ArticleServiceImpl implements ArticleService {
 	public List<ArticleVO> selectArticles() throws DataAccessException {
 		List<ArticleVO> articleList = articleDAO.selectArticles();
 		if (articleList.size() > 0) {
-			List<String> imageList = new ArrayList<String>();
 			for (ArticleVO article : articleList) {
-				System.out.println("productId : " + article.getProductId());
-				imageList = articleDAO.selectImages(article.getProductId());
+				List<String> imageList = articleDAO.selectImages(article.getProductId());
+				article.setFilesName(imageList);
+			}
+		}
+		return articleList;
+	}
+
+	@Override
+	@Transactional
+	public List<ArticleVO> selectArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException {
+		List<ArticleVO> articleList = articleDAO.selectArticlesByProductIdList(productIdList);
+		if (articleList.size() > 0) {
+			for (ArticleVO article : articleList) {
+				List<String> imageList = articleDAO.selectImages(article.getProductId());
 				article.setFilesName(imageList);
 			}
 		}
@@ -65,6 +73,12 @@ public class ArticleServiceImpl implements ArticleService {
 			article.setFilesName(imageList);
 		}
 		return article;
+	}
+
+	@Override
+	public List<LikeDTO> selectLikeList(String loginId) throws DataAccessException {
+		List<LikeDTO> likeList = articleDAO.selectLikeList(loginId);
+		return likeList;
 	}
 
 	@Override

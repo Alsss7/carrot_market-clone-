@@ -1,6 +1,8 @@
 package com.mycompany.carrotMarket.member.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,11 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mycompany.carrotMarket.article.dto.LikeDTO;
+import com.mycompany.carrotMarket.article.service.ArticleService;
+import com.mycompany.carrotMarket.article.vo.ArticleVO;
 import com.mycompany.carrotMarket.member.dto.IdDTO;
 import com.mycompany.carrotMarket.member.dto.MemberDTO;
 import com.mycompany.carrotMarket.member.dto.NicknameDTO;
@@ -31,10 +39,12 @@ import com.mycompany.carrotMarket.validator.MemberValidator;
 import com.mycompany.carrotMarket.validator.NicknameValidator;
 
 @RestController
-@RequestMapping("/member/*")
+@RequestMapping("/member")
 public class MemberController {
 
 	private final MemberService memberService;
+
+	private final ArticleService articleService;
 
 	private final MemberValidator memberValidator;
 
@@ -43,9 +53,10 @@ public class MemberController {
 	private final NicknameValidator nicknameValidator;
 
 	@Autowired
-	public MemberController(MemberService memberService, MemberValidator memberValidator, IdValidator idValidator,
-			NicknameValidator nicknameValidator) {
+	public MemberController(MemberService memberService, ArticleService articleService, MemberValidator memberValidator,
+			IdValidator idValidator, NicknameValidator nicknameValidator) {
 		this.memberService = memberService;
+		this.articleService = articleService;
 		this.memberValidator = memberValidator;
 		this.idValidator = idValidator;
 		this.nicknameValidator = nicknameValidator;
@@ -73,17 +84,46 @@ public class MemberController {
 		return mav;
 	}
 
+	@RequestMapping(value = "/myPage/likeList", method = RequestMethod.GET)
+	public ModelAndView likeList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+		List<LikeDTO> likeList = articleService.selectLikeList(loginId);
+		List<Integer> likedProducts = new ArrayList<Integer>();
+		for (LikeDTO like : likeList) {
+			likedProducts.add(like.getProductId());
+		}
+		List<ArticleVO> articleList = articleService.selectArticlesByProductIdList(likedProducts);
+		mav.addObject("articles", articleList);
+		mav.setViewName("likeList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/myPage/likeList/remove/{productId}", method = RequestMethod.GET)
+	public ModelAndView removeLikeAtLikeList(@PathVariable int productId, RedirectAttributes attributes)
+			throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+		boolean result = articleService.removeLike(new LikeDTO(loginId, productId));
+		attributes.addFlashAttribute("removeResult", result);
+
+		mav.setViewName("redirect:/member/myPage/likeList");
+		return mav;
+	}
+
 	/*
 	 * 마이페이지 메서드
 	 */
-	@RequestMapping(value = "/profile", method = RequestMethod.GET)
+	@RequestMapping(value = "/myPage/profile", method = RequestMethod.GET)
 	public ModelAndView profile(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("profile");
 		return mav;
 	}
 
-	@RequestMapping(value = "/profile", method = RequestMethod.POST)
+	@RequestMapping(value = "/myPage/profile", method = RequestMethod.POST)
 	public ModelAndView getInfo(@ModelAttribute MemberDTO dto, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		ModelAndView mav = new ModelAndView();
@@ -99,7 +139,7 @@ public class MemberController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/profile/modify", method = RequestMethod.POST)
+	@RequestMapping(value = "/myPage/profile/modify", method = RequestMethod.POST)
 	public ModelAndView modifyMember(@ModelAttribute("member") MemberVO memberVO, BindingResult bindingResult,
 			RedirectAttributes attributes) throws Exception {
 		ModelAndView mav = new ModelAndView();

@@ -34,13 +34,19 @@
 	<definition name="myPage" extends="default">
 		<put-attribute name="title" value="클론 당근 - 마이페이지" />
 		<put-attribute name="body"
-			value="/WEB-INF/views/member/myPage.jsp" />
+			value="/WEB-INF/views/member/myPage/myPage.jsp" />
 	</definition>
 
 	<definition name="profile" extends="default">
 		<put-attribute name="title" value="클론 당근 - 프로필" />
 		<put-attribute name="body"
-			value="/WEB-INF/views/member/profile.jsp" />
+			value="/WEB-INF/views/member/myPage/profile.jsp" />
+	</definition>
+
+	<definition name="likeList" extends="default">
+		<put-attribute name="title" value="클론 당근 - 관심 목록" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/myPage/likeList.jsp" />
 	</definition>
 
 	<definition name="fleamarket" extends="default">

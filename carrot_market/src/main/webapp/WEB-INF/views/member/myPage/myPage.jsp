@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="${contextPath }/resources/css/member/myPage.css">
+<link rel="stylesheet" href="${contextPath }/resources/css/member/myPage/myPage.css">
 <meta charset="UTF-8">
 </head>
 <body>
@@ -22,7 +22,7 @@
 				</span>
 			</div>
 			<div id="modify-profile">
-				<a href="${contextPath }/member/profile">
+				<a href="${contextPath }/member/myPage/profile">
 					<span>프로필 수정</span>
 				</a>
 			</div>
@@ -30,7 +30,7 @@
 		<div id="line"></div>
 		<div id="my-trade">
 			<div id="trade-title">나의 거래</div>
-			<a href="#">
+			<a href="${contextPath }/member/myPage/likeList">
 				<span id="like-list" class="list">
 					<img src="${contextPath }/resources/image/myPage/like_icon.png" />&nbsp;관심 목록
 				</span>
