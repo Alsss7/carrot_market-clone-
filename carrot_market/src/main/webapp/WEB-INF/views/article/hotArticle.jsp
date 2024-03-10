@@ -6,17 +6,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="${contextPath }/resources/css/hot_article.css" />
 <meta charset="UTF-8">
+<link rel="stylesheet" href="${contextPath }/resources/css/hot_article.css" />
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
 	<h1 class="subject">중고거래 인기매물</h1>
 	<div id="select-region">
-		<form>
-			<select>
+		<form action="${contextPath }/article/hotArticle" method="GET" id="regionForm">
+			<select id="region1">
+				<option value="" selected>지역을 선택하세요</option>
+				<option value="서울특별시">서울특별시</option>
 				<option value="경기도">경기도</option>
 			</select>
-			<select>
+			<select id="region2" disabled>
+				<option value="" selected>동네를 선택하세요</option>
 				<option value="가평군">가평군</option>
 				<option value="고양시 덕양구">고양시 덕양구</option>
 				<option value="고양시 일산동구">고양시 일산동구</option>
@@ -58,5 +62,6 @@
 			<img src="${contextPath}/resources/image/register.png">
 		</a>
 	</sec:authorize>
+	<script src="${contextPath }/resources/js/article/hotArticle.js"></script>
 </body>
 </html>

@@ -18,7 +18,7 @@ body {
 }
 
 #item-wrap {
-	width: 757px;
+	width: 1000px;
 	margin: 0 auto;
 	margin-bottom: 100px;
 }
@@ -38,6 +38,7 @@ body {
 #item img {
 	width: 223px;
 	height: 223px;
+	object-fit: cover;
 	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
 }
 

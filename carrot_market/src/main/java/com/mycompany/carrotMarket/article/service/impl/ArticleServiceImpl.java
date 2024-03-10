@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.carrotMarket.article.dao.ArticleDAO;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
+import com.mycompany.carrotMarket.article.dto.SalesDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 
@@ -65,9 +66,21 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	@Transactional
+	public List<ArticleVO> selectArticlesByUserIdAndStat(SalesDTO salesDTO) throws DataAccessException {
+		List<ArticleVO> articleList = articleDAO.selectArticlesByUserIdAndStat(salesDTO);
+		if (articleList.size() > 0) {
+			for (ArticleVO article : articleList) {
+				List<String> imageList = articleDAO.selectImages(article.getProductId());
+				article.setFilesName(imageList);
+			}
+		}
+		return articleList;
+	}
+
+	@Override
+	@Transactional
 	public ArticleVO selectArticle(int productId) throws DataAccessException {
 		ArticleVO article = articleDAO.selectArticle(productId);
-
 		if (article != null) {
 			List<String> imageList = articleDAO.selectImages(productId);
 			article.setFilesName(imageList);

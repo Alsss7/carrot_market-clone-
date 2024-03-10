@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mycompany.carrotMarket.article.dao.ArticleDAO;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
+import com.mycompany.carrotMarket.article.dto.SalesDTO;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 
 @Repository
@@ -38,6 +39,12 @@ public class ArticleDAOImpl implements ArticleDAO {
 	@Override
 	public List<ArticleVO> selectArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException {
 		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesByProductIdList", productIdList);
+		return list;
+	}
+
+	@Override
+	public List<ArticleVO> selectArticlesByUserIdAndStat(SalesDTO salesDTO) throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesByUserIdAndStat", salesDTO);
 		return list;
 	}
 

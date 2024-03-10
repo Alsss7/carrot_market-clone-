@@ -7,29 +7,26 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="${contextPath }/resources/css/member/myPage/likeList.css" />
-<c:if test="${removeResult }">
-	<c:choose>
-		<c:when test="${removeResult == true }">
-			<script>
-				window.onload = function() {
-					alert('찜하기 해제!');
-				}
-			</script>
-		</c:when>
-		<c:otherwise>
-			<script>
-				window.onload = function() {
-					alert('찜하기 해제 실패!');
-				}
-			</script>
-		</c:otherwise>
-	</c:choose>
-</c:if>
+<link rel="stylesheet" href="${contextPath }/resources/css/member/myPage/salesHistory.css" />
 </head>
 <body>
 	<main>
-		<h2 style="text-align: center">관심목록</h2>
+		<div id="my-sales">
+			<div id="mySales-title">
+				<h2>나의 판매내역</h2>
+			</div>
+			<div id="write-new">
+				<a href="${contextPath }/article/new">글쓰기</a>
+			</div>
+		</div>
+		<div id="status-wrapper">
+			<span id="active">
+				<a href="${contextPath }/member/myPage/salesHistory?status=Active">판매 중</a>
+			</span>
+			<span id="sold">
+				<a href="${contextPath }/member/myPage/salesHistory?status=Sold">거래 완료</a>
+			</span>
+		</div>
 		<div id="line"></div>
 		<c:choose>
 			<c:when test="${articles.size() != 0 }">
@@ -39,7 +36,15 @@
 						<a href="${contextPath }/article/${article.productId}">
 							<div id="product">
 								<div id="thumbnail">
-									<img src="${contextPath }/resources/image/product_image/${article.productId}/${images[0]}" />
+									<c:choose>
+										<c:when test="${images.size() == 0 }">
+											<img src="${contextPath }/resources/image/product_image/empty.png" />
+										</c:when>
+										<c:otherwise>
+											<img
+												src="${contextPath }/resources/image/product_image/${article.productId}/${images[0]}" />
+										</c:otherwise>
+									</c:choose>
 								</div>
 								<div id="product-detail">
 									<div class="title">${article.title }</div>
@@ -60,9 +65,6 @@
 							</div>
 						</a>
 						<div id="like-chat">
-							<a href="${contextPath }/member/myPage/likeList/remove/${article.productId}">
-								<span id="isLiked">♥</span>
-							</a>
 							<div>
 								<c:if test="${article.chatCount != 0 }">
 									<div id="chat-count">${article.chatCount }</div>
@@ -75,9 +77,17 @@
 				</c:forEach>
 			</c:when>
 			<c:otherwise>
-				<h1 style="text-align: center; color: orange">찜한 상품이 없습니다!</h1>
+				<c:choose>
+					<c:when test="${status == 'Active' }">
+						<h1 style="text-align: center; color: orange">판매 중인 상품이 없습니다!</h1>
+					</c:when>
+					<c:when test="${status == 'Sold' }">
+						<h1 style="text-align: center; color: orange">거래 완료된 상품이 없습니다!</h1>
+					</c:when>
+				</c:choose>
 			</c:otherwise>
 		</c:choose>
 	</main>
+	<script src="${contextPath }/resources/js/member/myPage/salesHistory.js"></script>
 </body>
 </html>

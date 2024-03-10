@@ -21,12 +21,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
+import com.mycompany.carrotMarket.article.dto.SalesDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 import com.mycompany.carrotMarket.member.dto.IdDTO;
@@ -84,35 +86,6 @@ public class MemberController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/myPage/likeList", method = RequestMethod.GET)
-	public ModelAndView likeList(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
-		List<LikeDTO> likeList = articleService.selectLikeList(loginId);
-		List<Integer> likedProducts = new ArrayList<Integer>();
-		for (LikeDTO like : likeList) {
-			likedProducts.add(like.getProductId());
-		}
-		List<ArticleVO> articleList = articleService.selectArticlesByProductIdList(likedProducts);
-		mav.addObject("articles", articleList);
-		mav.setViewName("likeList");
-		return mav;
-	}
-
-	@RequestMapping(value = "/myPage/likeList/remove/{productId}", method = RequestMethod.GET)
-	public ModelAndView removeLikeAtLikeList(@PathVariable int productId, RedirectAttributes attributes)
-			throws Exception {
-		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
-		boolean result = articleService.removeLike(new LikeDTO(loginId, productId));
-		attributes.addFlashAttribute("removeResult", result);
-
-		mav.setViewName("redirect:/member/myPage/likeList");
-		return mav;
-	}
-
 	/*
 	 * 마이페이지 메서드
 	 */
@@ -165,6 +138,47 @@ public class MemberController {
 			}
 		}
 		mav.setViewName("redirect:/member/profile");
+		return mav;
+	}
+
+	@RequestMapping(value = "/myPage/likeList", method = RequestMethod.GET)
+	public ModelAndView likeList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+		List<LikeDTO> likeList = articleService.selectLikeList(loginId);
+		List<Integer> likedProducts = new ArrayList<Integer>();
+		for (LikeDTO like : likeList) {
+			likedProducts.add(like.getProductId());
+		}
+		List<ArticleVO> articleList = articleService.selectArticlesByProductIdList(likedProducts);
+		mav.addObject("articles", articleList);
+		mav.setViewName("likeList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/myPage/likeList/remove/{productId}", method = RequestMethod.GET)
+	public ModelAndView removeLikeAtLikeList(@PathVariable int productId, RedirectAttributes attributes)
+			throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+		boolean result = articleService.removeLike(new LikeDTO(loginId, productId));
+		attributes.addFlashAttribute("removeResult", result);
+
+		mav.setViewName("redirect:/member/myPage/likeList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/myPage/salesHistory", method = RequestMethod.GET)
+	public ModelAndView getSalesHistory(@RequestParam("status") String status) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+		List<ArticleVO> articleList = articleService.selectArticlesByUserIdAndStat(new SalesDTO(loginId, status));
+		mav.addObject("articles", articleList);
+		mav.addObject("status", status);
+		mav.setViewName("salesHistory");
 		return mav;
 	}
 

@@ -62,6 +62,21 @@
 	        (NULL)
 	    </if>
 	</select>
+	
+	<select id="selectArticlesByUserIdAndStat" parameterType="salesDTO" resultType="articleVO">
+		SELECT
+			product_id AS productId,
+			user_id AS userId,
+			title,
+			price,
+			region,
+			like_count AS likeCount,
+			chat_count AS chatCount,
+			view_count AS viewCount,
+			status
+		FROM products
+		WHERE user_id = #{userId} AND status = #{status}
+	</select>
 
 	<select id="selectArticle" parameterType="int"
 		resultType="articleVO">

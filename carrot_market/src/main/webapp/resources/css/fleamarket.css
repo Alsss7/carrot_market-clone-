@@ -73,6 +73,7 @@ body {
 #item img {
 	width: 223px;
 	height: 223px;
+	object-fit: cover;
 	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
 }
 

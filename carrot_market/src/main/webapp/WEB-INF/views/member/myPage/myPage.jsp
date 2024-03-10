@@ -35,7 +35,7 @@
 					<img src="${contextPath }/resources/image/myPage/like_icon.png" />&nbsp;관심 목록
 				</span>
 			</a>
-			<a href="#">
+			<a href="${contextPath }/member/myPage/salesHistory?status=Active">
 				<span id="sell-list" class="list">
 					<img src="${contextPath }/resources/image/myPage/receipt.png" />&nbsp;판매 내역
 				</span>

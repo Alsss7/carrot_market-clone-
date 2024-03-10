@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
+import com.mycompany.carrotMarket.article.dto.SalesDTO;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 
 public interface ArticleDAO {
@@ -15,6 +16,8 @@ public interface ArticleDAO {
 	public List<ArticleVO> selectArticles() throws DataAccessException;
 
 	public List<ArticleVO> selectArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException;
+
+	public List<ArticleVO> selectArticlesByUserIdAndStat(SalesDTO salesDTO) throws DataAccessException;
 
 	public List<String> selectImages(int productId) throws DataAccessException;
 

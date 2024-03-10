@@ -11,5 +11,8 @@
 			alias="articleVO" />
 		<typeAlias
 			type="com.mycompany.carrotMarket.article.dto.LikeDTO" alias="likeDTO" />
+		<typeAlias
+			type="com.mycompany.carrotMarket.article.dto.SalesDTO"
+			alias="salesDTO" />
 	</typeAliases>
 </configuration>

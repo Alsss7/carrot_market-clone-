@@ -30,7 +30,7 @@
 						<img src="${contextPath }/resources/image/logo.webp" />
 					</a>
 				</span>
-				<span class="menu">
+				<span class="menu" id="fleamarket">
 					<a href="${contextPath }/article/fleamarket">중고거래</a>
 				</span>
 				<span class="menu">동네업체</span>

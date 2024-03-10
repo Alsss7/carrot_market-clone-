@@ -63,6 +63,10 @@ public class ArticleController {
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public ModelAndView articleForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+		MemberVO member = memberService.findById(loginId);
+		mav.addObject("region", member.getRegion1());
 		mav.setViewName("articleForm");
 		return mav;
 	}

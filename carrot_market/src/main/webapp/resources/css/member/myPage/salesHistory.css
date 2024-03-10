@@ -1,0 +1,107 @@
+@charset "UTF-8";
+
+body {
+	margin-top: 80px;
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	overflow-x: hidden;
+}
+
+h2 {
+	margin-bottom: 30px;
+}
+
+#line {
+	width: 100%;
+	padding-top: 0px;
+	margin-top: 10px;
+	border: 0.1px solid #ccc; /* 회색 선의 두께와 색상 설정 */
+	opacity: 0.5; /* 투명도 설정 */
+	display: block;
+}
+
+main {
+	width: 700px;
+	height: auto;
+	display: flex;
+	flex-flow: column;
+	margin-bottom: 50px;
+}
+
+#my-sales {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+#write-new {
+	background-color: lightgray;
+	padding: 5px 10px 5px 10px;
+	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
+}
+
+#status-wrapper {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	justify-content: space-around;
+}
+
+#product-wrapper {
+	display: flex;
+	flex-flow: row;
+	margin-top: 20px;
+	justify-content: space-between;
+}
+
+#product {
+	display: flex;
+	flex-flow: row;
+}
+
+#thumbnail img {
+	width: 150px;
+	height: 150px;
+	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
+}
+
+#product-detail {
+	margin-left: 15px;
+	margin-top: 5px;
+}
+
+#product-detail>div {
+	margin-bottom: 5px;
+}
+
+.title {
+	font-size: 13pt;
+}
+
+.region {
+	font-size: 10pt;
+	color: gray;
+}
+
+.price {
+	font-size: 12pt;
+	font-weight: bold;
+}
+
+#isLiked {
+	color: orange;
+	font-size: 20pt;
+}
+
+#isLiked:hover {
+	cursor: pointer;
+}
+
+#like-chat {
+	display: flex;
+	flex-flow: column;
+	justify-content: flex-end;
+}
