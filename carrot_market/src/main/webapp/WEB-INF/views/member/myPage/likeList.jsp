@@ -44,18 +44,28 @@
 								<div id="product-detail">
 									<div class="title">${article.title }</div>
 									<div class="region">${article.region }</div>
-									<c:choose>
-										<c:when test="${article.price == 0 }">
-											<div class="price">나눔</div>
-										</c:when>
-										<c:otherwise>
-											<div class="price">
-												<c:set var="productPrice" value="${article.price }" />
-												<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
-												${formattedPrice }원
-											</div>
-										</c:otherwise>
-									</c:choose>
+									<div id="status-price">
+										<c:choose>
+											<c:when test="${article.status == 'Booking' }">
+												<span class="status" style="background-color: green;">예약 중</span>
+											</c:when>
+											<c:when test="${article.status == 'Sold' }">
+												<span class="status" style="background-color: black;">거래완료</span>
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when test="${article.price == 0 }">
+												<div class="price">나눔</div>
+											</c:when>
+											<c:otherwise>
+												<div class="price">
+													<c:set var="productPrice" value="${article.price }" />
+													<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
+													${formattedPrice }원
+												</div>
+											</c:otherwise>
+										</c:choose>
+									</div>
 								</div>
 							</div>
 						</a>

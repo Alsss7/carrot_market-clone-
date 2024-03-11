@@ -8,6 +8,17 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath }/resources/css/member/myPage/salesHistory.css" />
+<c:if test="${not empty result}">
+	<script>
+		var result = "${result}";
+		window.onload = function() {
+			alert(result);
+		}
+	</script>
+</c:if>
+<script>
+	
+</script>
 </head>
 <body>
 	<main>
@@ -25,6 +36,9 @@
 			</span>
 			<span id="sold">
 				<a href="${contextPath }/member/myPage/salesHistory?status=Sold">거래 완료</a>
+			</span>
+			<span id="hide">
+				<a href="${contextPath }/member/myPage/salesHistory?status=Hide">숨김</a>
 			</span>
 		</div>
 		<div id="line"></div>
@@ -49,22 +63,35 @@
 								<div id="product-detail">
 									<div class="title">${article.title }</div>
 									<div class="region">${article.region }</div>
-									<c:choose>
-										<c:when test="${article.price == 0 }">
-											<div class="price">나눔</div>
-										</c:when>
-										<c:otherwise>
-											<div class="price">
-												<c:set var="productPrice" value="${article.price }" />
-												<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
-												${formattedPrice }원
-											</div>
-										</c:otherwise>
-									</c:choose>
+									<div id="status-price">
+										<c:choose>
+											<c:when test="${article.status == 'Booking' }">
+												<span class="status" style="background-color: green;">예약 중</span>
+											</c:when>
+											<c:when test="${article.status == 'Sold' }">
+												<span class="status" style="background-color: black;">거래완료</span>
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when test="${article.price == 0 }">
+												<div class="price">나눔</div>
+											</c:when>
+											<c:otherwise>
+												<div class="price">
+													<c:set var="productPrice" value="${article.price }" />
+													<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
+													${formattedPrice }원
+												</div>
+											</c:otherwise>
+										</c:choose>
+									</div>
 								</div>
 							</div>
 						</a>
 						<div id="like-chat">
+							<div id="indicator" onclick="openModal(this, ${article.productId})">
+								<img src="${contextPath }/resources/image/myPage/indicator.png" />
+							</div>
 							<div>
 								<c:if test="${article.chatCount != 0 }">
 									<div id="chat-count">${article.chatCount }</div>
@@ -74,6 +101,84 @@
 						</div>
 					</div>
 					<div id="line"></div>
+
+
+					<div class="modal-container" id="modalContainer${article.productId }">
+						<div id="modal${article.productId }" class="modal">
+							<div class="modal-content">
+								<c:choose>
+									<c:when test="${article.status == 'Booking' }">
+										<div id="booking" class="options">
+											<a
+												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Active">판매중</a>
+										</div>
+										<div id="line"></div>
+										<div id="modify" class="options">
+											<a href="">게시글 수정</a>
+										</div>
+									</c:when>
+									<c:when test="${article.status == 'Sold' }">
+										<div id="booking" class="options">
+											<a
+												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Active">판매중</a>
+										</div>
+										<div id="line"></div>
+										<div id="modify" class="options">
+											<a href="">게시글 수정</a>
+										</div>
+										<div id="line"></div>
+										<div id="hidden" class="options">
+											<a
+												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Hide">숨기기</a>
+										</div>
+										<div id="line"></div>
+										<div id="delete" class="options">
+											<a href="">삭제</a>
+										</div>
+									</c:when>
+									<c:when test="${article.status == 'Hide' }">
+										<div id="booking" class="options">
+											<a
+												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Active">숨기기
+												해제</a>
+										</div>
+										<div id="line"></div>
+										<div id="modify" class="options">
+											<a href="">게시글 수정</a>
+										</div>
+										<div id="line"></div>
+										<div id="delete" class="options">
+											<a href="">삭제</a>
+										</div>
+									</c:when>
+									<c:otherwise>
+										<div id="booking" class="options">
+											<a
+												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Booking">예약중</a>
+										</div>
+										<div id="line"></div>
+										<div id="complete" class="options">
+											<a
+												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Sold">거래완료</a>
+										</div>
+										<div id="line"></div>
+										<div id="modify" class="options">
+											<a href="">게시글 수정</a>
+										</div>
+										<div id="line"></div>
+										<div id="hidden" class="options">
+											<a
+												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Hide">숨기기</a>
+										</div>
+										<div id="line"></div>
+										<div id="delete" class="options">
+											<a href="">삭제</a>
+										</div>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+					</div>
 				</c:forEach>
 			</c:when>
 			<c:otherwise>
@@ -83,6 +188,9 @@
 					</c:when>
 					<c:when test="${status == 'Sold' }">
 						<h1 style="text-align: center; color: orange">거래 완료된 상품이 없습니다!</h1>
+					</c:when>
+					<c:when test="${status == 'Hide' }">
+						<h1 style="text-align: center; color: orange">숨긴 상품이 없습니다!</h1>
 					</c:when>
 				</c:choose>
 			</c:otherwise>

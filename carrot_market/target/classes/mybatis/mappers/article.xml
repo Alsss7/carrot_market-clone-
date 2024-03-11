@@ -36,7 +36,8 @@
 			region,
 			like_count AS likeCount,
 			chat_count AS chatCount,
-			view_count AS viewCount
+			view_count AS viewCount,
+			status
 		FROM products
 		ORDER BY created_at DESC
 	</select>
@@ -50,7 +51,8 @@
 			region,
 			like_count AS likeCount,
 			chat_count AS chatCount,
-			view_count AS viewCount
+			view_count AS viewCount,
+			status
 		FROM products
 		WHERE product_id IN 
 		<if test="list != null and list.size() > 0">
@@ -75,7 +77,15 @@
 			view_count AS viewCount,
 			status
 		FROM products
-		WHERE user_id = #{userId} AND status = #{status}
+		WHERE user_id = #{userId}
+		<choose>
+        	<when test="status == 'Active'">
+            	AND status IN (#{status}, 'Booking')
+        	</when>
+        	<otherwise>
+	    		AND status = #{status}
+        	</otherwise>
+    	</choose>
 	</select>
 
 	<select id="selectArticle" parameterType="int"
@@ -98,6 +108,12 @@
 		FROM products
 		WHERE product_id = #{productId}
 	</select>
+	
+	<update id="updateArticleStatus" parameterType="updateStatusDTO">
+		UPDATE products
+		SET status = #{status}
+		WHERE product_id = #{productId}
+	</update>
 
 	<select id="selectImages" parameterType="int"
 		resultType="String">

@@ -155,10 +155,25 @@ main {
 	margin-bottom: 10px;
 }
 
+#status-price {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	justify-content: flex-start;
+	margin-bottom: 25px;
+}
+
+.status {
+	margin-right: 10px;
+	color: white;
+	font-size: 12pt;
+	border-radius: 5px;
+	padding: 3px 6px 3px 6px;
+}
+
 #price {
 	font-size: 14pt;
 	font-weight: bold;
-	margin-bottom: 25px;
 }
 
 #description {

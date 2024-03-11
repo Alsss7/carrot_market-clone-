@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mycompany.carrotMarket.article.dao.ArticleDAO;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
+import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 
@@ -86,6 +87,16 @@ public class ArticleServiceImpl implements ArticleService {
 			article.setFilesName(imageList);
 		}
 		return article;
+	}
+
+	@Override
+	public boolean updateArticleStatus(UpdateStatusDTO updateStatusDTO) throws DataAccessException {
+		int result = articleDAO.updateArticleStatus(updateStatusDTO);
+		if (result != 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override

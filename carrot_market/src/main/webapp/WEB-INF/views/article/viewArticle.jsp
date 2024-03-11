@@ -111,17 +111,27 @@
 							·
 							<span id="created-at"></span>
 						</div>
-						<div id="price">
-							<c:set var="productPrice" value="${article.price }" />
+						<div id="status-price">
 							<c:choose>
-								<c:when test="${productPrice == 0 }">
+								<c:when test="${article.status == 'Booking' }">
+									<span class="status" style="background-color: green;">예약 중</span>
+								</c:when>
+								<c:when test="${article.status == 'Sold' }">
+									<span class="status" style="background-color: black;">거래완료</span>
+								</c:when>
+							</c:choose>
+							<div id="price">
+								<c:set var="productPrice" value="${article.price }" />
+								<c:choose>
+									<c:when test="${productPrice == 0 }">
 									나눔
 								</c:when>
-								<c:otherwise>
-									<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
+									<c:otherwise>
+										<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
 									${formattedPrice }원
 								</c:otherwise>
-							</c:choose>
+								</c:choose>
+							</div>
 						</div>
 						<div id="description">${article.description }</div>
 						<div id="count">

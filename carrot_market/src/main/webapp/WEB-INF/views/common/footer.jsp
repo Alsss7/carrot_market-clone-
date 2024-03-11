@@ -60,6 +60,8 @@
 		<br>
 		<a href="https://www.flaticon.com/kr/free-icons/" title="쇼핑 아이콘">쇼핑 아이콘 제작자: laterunlabs -
 			Flaticon</a>
+		<br>
+		<a href="https://www.flaticon.com/kr/free-icons/" title="더 아이콘">더 아이콘 제작자: Google - Flaticon</a>
 	</div>
 </body>
 </html>
