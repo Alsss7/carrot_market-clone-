@@ -39,6 +39,7 @@
 			view_count AS viewCount,
 			status
 		FROM products
+		WHERE status IN ('Active' ,'Booking', 'Sold')
 		ORDER BY created_at DESC
 	</select>
 	
@@ -114,12 +115,24 @@
 		SET status = #{status}
 		WHERE product_id = #{productId}
 	</update>
+	
+	<delete id="deleteArticleById" parameterType="int">
+		DELETE 
+		FROM products
+		WHERE product_id = #{value}
+	</delete>
 
 	<select id="selectImages" parameterType="int"
 		resultType="String">
 		SELECT image_file_name FROM product_images
 		WHERE product_id = #{value}
 	</select>
+	
+	<delete id="deleteImagesById" parameterType="int">
+		DELETE 
+		FROM product_images
+		WHERE product_id = #{value}
+	</delete>
 	
 	<select id="selectLikeList" parameterType="String" resultType="likeDTO">
 		SELECT
@@ -160,6 +173,12 @@
 		SET LIKE_COUNT = LIKE_COUNT - 1
 		WHERE PRODUCT_ID = #{value}
 	</update>
+	
+	<delete id="deleteLikesById" parameterType="int">
+		DELETE
+		FROM likes
+		WHERE product_id = #{value}
+	</delete>
 	
 	<update id="increaseView" parameterType="int">
 		UPDATE products

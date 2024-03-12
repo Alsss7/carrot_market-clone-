@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="${contextPath }/resources/css/fleamarket.css" />
+<link rel="stylesheet" href="${contextPath }/resources/css/article/fleamarket.css" />
 <c:if test="${not empty result }">
 	<script>
 		var message = "${result}";
@@ -53,18 +53,28 @@
 								</c:otherwise>
 							</c:choose>
 							<div class="article-title">${article.title }</div>
-							<c:choose>
-								<c:when test="${article.price == 0 }">
-									<div class="price">나눔</div>
-								</c:when>
-								<c:otherwise>
-									<div class="price">
-										<c:set var="productPrice" value="${article.price }" />
-										<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
-										${formattedPrice }원
-									</div>
-								</c:otherwise>
-							</c:choose>
+							<div id="status-price">
+								<c:choose>
+									<c:when test="${article.status == 'Booking' }">
+										<span class="status" style="background-color: green;">예약 중</span>
+									</c:when>
+									<c:when test="${article.status == 'Sold' }">
+										<span class="status" style="background-color: black;">거래완료</span>
+									</c:when>
+								</c:choose>
+								<c:choose>
+									<c:when test="${article.price == 0 }">
+										<div class="price">나눔</div>
+									</c:when>
+									<c:otherwise>
+										<div class="price">
+											<c:set var="productPrice" value="${article.price }" />
+											<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
+											${formattedPrice }원
+										</div>
+									</c:otherwise>
+								</c:choose>
+							</div>
 							<div class="region">${article.region }</div>
 							<div class="like-and-chat">
 								<span class="">관심 ${article.likeCount}</span>

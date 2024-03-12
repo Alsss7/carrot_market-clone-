@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
 	isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="${contextPath }/resources/css/hot_article.css" />
+<link rel="stylesheet" href="${contextPath }/resources/css/article/hot_article.css" />
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
@@ -45,7 +46,28 @@
 							</c:otherwise>
 						</c:choose>
 						<div class="article_title">${article.title }</div>
-						<div class="price">${article.price }원</div>
+						<div id="status-price">
+							<c:choose>
+								<c:when test="${article.status == 'Booking' }">
+									<span class="status" style="background-color: green;">예약 중</span>
+								</c:when>
+								<c:when test="${article.status == 'Sold' }">
+									<span class="status" style="background-color: black;">거래완료</span>
+								</c:when>
+							</c:choose>
+							<c:choose>
+								<c:when test="${article.price == 0 }">
+									<div class="price">나눔</div>
+								</c:when>
+								<c:otherwise>
+									<div class="price">
+										<c:set var="productPrice" value="${article.price }" />
+										<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
+										${formattedPrice }원
+									</div>
+								</c:otherwise>
+							</c:choose>
+						</div>
 						<div class="region">${article.region }</div>
 						<div class="likeAndChat">
 							<span class="">관심 ${article.likeCount}</span>

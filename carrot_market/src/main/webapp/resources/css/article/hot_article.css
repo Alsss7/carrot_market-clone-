@@ -5,57 +5,22 @@ body {
 	overflow-x: hidden;
 }
 
-#introduce {
-	width: 100%;
-	height: 100%;
-	background-color: #FDF1B2;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-#intro-left {
-	display: flex;
-	flex-flow: column;
-	width: 420px;
-	height: 100%;
-	justify-content: center;
-	margin-bottom: 50px;
-	margin-right: 20px;
-}
-
-#intro-right {
-	width: 420px;
-	height: 100%;
-}
-
-#intro-right img {
-	width: 100%;
-	height: 100%;
-}
-
-.comment1 {
-	padding-left: 20%;
-	font-size: 24pt;
-	font-weight: bold;
-	margin-bottom: 10px;
-}
-
-.comment2 {
-	margin-top: 5px;
-	padding-left: 20%;
-	font-size: 13pt;
-}
-
 .subject {
 	margin-top: 60px;
 	margin-bottom: 20px;
 	text-align: center;
 }
 
-#item-wrap {
+#select-region {
+	text-align: right;
 	width: 757px;
+	margin: 50px auto;
+}
+
+#item-wrap {
+	width: 1000px;
 	margin: 0 auto;
+	margin-bottom: 100px;
 }
 
 #item-list {
@@ -77,10 +42,25 @@ body {
 	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
 }
 
-.article-title {
+.article_title {
 	font-size: 13pt;
 	padding-top: 2px;
 	padding-bottom: 2px;
+}
+
+#status-price {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.status {
+	padding: 2px 5px 2px 5px;
+	border-radius: 5px;
+	margin-right: 5px;
+	color: white;
+	font-size: 10pt;
 }
 
 .price {
@@ -96,7 +76,7 @@ body {
 	padding-bottom: 2px;
 }
 
-.like-and-chat {
+.likeAndChat {
 	font-size: 10pt;
 	color: gray;
 	padding-top: 2px;
@@ -106,14 +86,6 @@ body {
 a {
 	text-decoration: none;
 	color: black;
-}
-
-#more-item {
-	text-align: center;
-	font-weight: bold;
-	text-decoration: underline;
-	margin-top: 70px;
-	margin-bottom: 70px;
 }
 
 .register-item {

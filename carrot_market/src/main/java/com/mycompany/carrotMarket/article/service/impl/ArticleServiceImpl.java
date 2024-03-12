@@ -100,6 +100,20 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	@Transactional
+	public boolean deleteArticleById(int productId) throws DataAccessException {
+		int result1 = articleDAO.deleteImagesById(productId);
+		int result2 = articleDAO.deleteLikesById(productId);
+		// int result4 = articleDAO.deleteChatsById(productId);
+		int result3 = articleDAO.deleteArticleById(productId);
+		if (result1 != 0 && result2 != 0 && result3 != 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public List<LikeDTO> selectLikeList(String loginId) throws DataAccessException {
 		List<LikeDTO> likeList = articleDAO.selectLikeList(loginId);
 		return likeList;

@@ -20,11 +20,15 @@ public interface ArticleDAO {
 
 	public List<ArticleVO> selectArticlesByUserIdAndStat(SalesDTO salesDTO) throws DataAccessException;
 
+	public ArticleVO selectArticle(int productId) throws DataAccessException;
+
 	public int updateArticleStatus(UpdateStatusDTO updateStatusDTO) throws DataAccessException;
+
+	public int deleteArticleById(int productId) throws DataAccessException;
 
 	public List<String> selectImages(int productId) throws DataAccessException;
 
-	public ArticleVO selectArticle(int productId) throws DataAccessException;
+	public int deleteImagesById(int productId) throws DataAccessException;
 
 	public List<LikeDTO> selectLikeList(String loginId) throws DataAccessException;
 
@@ -37,6 +41,8 @@ public interface ArticleDAO {
 	public int removeLike(LikeDTO likeDTO) throws DataAccessException;
 
 	public int decreaseLike(int productId) throws DataAccessException;
+
+	public int deleteLikesById(int productId) throws DataAccessException;
 
 	public void increaseView(int productId) throws DataAccessException;
 }

@@ -21,6 +21,8 @@ public interface ArticleService {
 	public ArticleVO selectArticle(int productId) throws DataAccessException;
 
 	public boolean updateArticleStatus(UpdateStatusDTO updateStatusDTO) throws DataAccessException;
+	
+	public boolean deleteArticleById(int productId) throws DataAccessException;
 
 	public List<LikeDTO> selectLikeList(String loginId) throws DataAccessException;
 

@@ -50,8 +50,20 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
+	public ArticleVO selectArticle(int productId) throws DataAccessException {
+		ArticleVO article = sqlSession.selectOne("mappers.article.selectArticle", productId);
+		return article;
+	}
+
+	@Override
 	public int updateArticleStatus(UpdateStatusDTO updateStatusDTO) throws DataAccessException {
 		int result = sqlSession.update("mappers.article.updateArticleStatus", updateStatusDTO);
+		return result;
+	}
+
+	@Override
+	public int deleteArticleById(int productId) throws DataAccessException {
+		int result = sqlSession.delete("mappers.article.deleteArticleById", productId);
 		return result;
 	}
 
@@ -62,9 +74,9 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public ArticleVO selectArticle(int productId) throws DataAccessException {
-		ArticleVO article = sqlSession.selectOne("mappers.article.selectArticle", productId);
-		return article;
+	public int deleteImagesById(int productId) throws DataAccessException {
+		int result = sqlSession.delete("mappers.article.deleteImagesById", productId);
+		return result;
 	}
 
 	@Override
@@ -104,6 +116,12 @@ public class ArticleDAOImpl implements ArticleDAO {
 	@Override
 	public int decreaseLike(int productId) throws DataAccessException {
 		int result = sqlSession.update("mappers.article.decreaseLike", productId);
+		return result;
+	}
+
+	@Override
+	public int deleteLikesById(int productId) throws DataAccessException {
+		int result = sqlSession.delete("mappers.article.deleteLikesById", productId);
 		return result;
 	}
 

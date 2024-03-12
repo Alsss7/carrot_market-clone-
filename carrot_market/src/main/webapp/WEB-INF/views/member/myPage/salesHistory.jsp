@@ -16,9 +16,23 @@
 		}
 	</script>
 </c:if>
-<script>
-	
-</script>
+
+<c:choose>
+	<c:when test="${deleteMsg == 'success' }">
+		<script>
+			window.onload = function() {
+				alert('삭제 성공!');
+			}
+		</script>
+	</c:when>
+	<c:when test="${deleteMsg == 'failed' }">
+		<script>
+			window.onload = function() {
+				alert('삭제 실패!');
+			}
+		</script>
+	</c:when>
+</c:choose>
 </head>
 <body>
 	<main>
@@ -110,7 +124,7 @@
 									<c:when test="${article.status == 'Booking' }">
 										<div id="booking" class="options">
 											<a
-												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Active">판매중</a>
+												href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Active">판매중</a>
 										</div>
 										<div id="line"></div>
 										<div id="modify" class="options">
@@ -120,7 +134,7 @@
 									<c:when test="${article.status == 'Sold' }">
 										<div id="booking" class="options">
 											<a
-												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Active">판매중</a>
+												href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Active">판매중</a>
 										</div>
 										<div id="line"></div>
 										<div id="modify" class="options">
@@ -129,17 +143,17 @@
 										<div id="line"></div>
 										<div id="hidden" class="options">
 											<a
-												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Hide">숨기기</a>
+												href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Hide">숨기기</a>
 										</div>
 										<div id="line"></div>
 										<div id="delete" class="options">
-											<a href="">삭제</a>
+											<a href="" onclick="confirmDelete(${article.productId})">삭제</a>
 										</div>
 									</c:when>
 									<c:when test="${article.status == 'Hide' }">
 										<div id="booking" class="options">
 											<a
-												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Active">숨기기
+												href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Active">숨기기
 												해제</a>
 										</div>
 										<div id="line"></div>
@@ -148,18 +162,18 @@
 										</div>
 										<div id="line"></div>
 										<div id="delete" class="options">
-											<a href="">삭제</a>
+											<a href="" onclick="confirmDelete(${article.productId})">삭제</a>
 										</div>
 									</c:when>
 									<c:otherwise>
 										<div id="booking" class="options">
 											<a
-												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Booking">예약중</a>
+												href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Booking">예약중</a>
 										</div>
 										<div id="line"></div>
 										<div id="complete" class="options">
 											<a
-												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Sold">거래완료</a>
+												href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Sold">거래완료</a>
 										</div>
 										<div id="line"></div>
 										<div id="modify" class="options">
@@ -168,11 +182,11 @@
 										<div id="line"></div>
 										<div id="hidden" class="options">
 											<a
-												href="${contextPath }/member/myPage/salesHistory/update/${article.productId}?status=Hide">숨기기</a>
+												href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Hide">숨기기</a>
 										</div>
 										<div id="line"></div>
 										<div id="delete" class="options">
-											<a href="">삭제</a>
+											<a href="" onclick="confirmDelete(${article.productId})">삭제</a>
 										</div>
 									</c:otherwise>
 								</c:choose>
@@ -196,6 +210,9 @@
 			</c:otherwise>
 		</c:choose>
 	</main>
+	<script>
+		var contextPath = "${contextPath}";
+	</script>
 	<script src="${contextPath }/resources/js/member/myPage/salesHistory.js"></script>
 </body>
 </html>

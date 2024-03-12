@@ -29,7 +29,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
-import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 import com.mycompany.carrotMarket.member.dto.IdDTO;
@@ -180,24 +179,6 @@ public class MemberController {
 		mav.addObject("articles", articleList);
 		mav.addObject("status", status);
 		mav.setViewName("salesHistory");
-		return mav;
-	}
-
-	@RequestMapping(value = "/myPage/salesHistory/update/{productId}", method = RequestMethod.GET)
-	public ModelAndView updateSalesHistory(@PathVariable int productId, @RequestParam("status") String status,
-			RedirectAttributes attributes) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		boolean result = articleService.updateArticleStatus(new UpdateStatusDTO(productId, status));
-		if (result == true) {
-			attributes.addFlashAttribute("result", "상태가 변경되었습니다.");
-		} else {
-			attributes.addFlashAttribute("result", "변경에 실패했습니다.");
-		}
-		if(status.equals("Booking")) {
-			mav.setViewName("redirect:/member/myPage/salesHistory?status=Active");
-		} else {
-			mav.setViewName("redirect:/member/myPage/salesHistory?status=" + status);
-		}
 		return mav;
 	}
 

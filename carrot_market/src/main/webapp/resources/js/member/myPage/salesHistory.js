@@ -38,3 +38,10 @@ function closeModal(event, productId) {
         modalContainer.style.display = 'none';
     }
 }
+
+function confirmDelete(productId) {
+    var isConfirmed = confirm("정말로 삭제하시겠습니까?");
+    if(isConfirmed) {
+        window.location.href = contextPath + "/article/delete/" + productId + "/salesHistory";
+    }
+}
