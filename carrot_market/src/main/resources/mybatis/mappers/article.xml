@@ -8,8 +8,8 @@
 	<insert id="insertArticle" parameterType="articleVO"
 		useGeneratedKeys="true" keyProperty="productId">
 		<![CDATA[
-			INSERT INTO products(user_id, title, description, sellOrShare, price, category, region, place)
-			VALUES(#{userId}, #{title}, #{description, jdbcType=CLOB},#{sellOrShare}, #{price}, #{category}, #{region}, #{place})
+			INSERT INTO products(product_id, user_id, title, description, sell_or_share, price, category, region, place)
+			VALUES(product_seq.NEXTVAL, #{userId}, #{title}, #{description, jdbcType=CLOB},#{sellOrShare}, #{price}, #{category}, #{region}, #{place})
 		]]>
 
 		<selectKey keyProperty="productId" resultType="int"
@@ -19,12 +19,10 @@
 	</insert>
 
 	<update id="insertProductImages" parameterType="articleVO">
-		<foreach collection="filesName" item="file" separator=" "
-			open="INSERT ALL" close="SELECT * FROM DUAL">
-			INTO product_images(product_id, image_file_name)
-			VALUES
-			(#{productId}, #{file, jdbcType=VARCHAR})
-		</foreach>
+		<foreach collection="filesName" item="file" open="INSERT ALL" close="SELECT * FROM DUAL" separator="">
+        	INTO product_images(product_id, image_file_name)
+        	VALUES (#{productId}, #{file, jdbcType=VARCHAR})
+        </foreach>
 	</update>
 
 	<select id="selectArticles" resultType="articleVO">
@@ -39,7 +37,7 @@
 			view_count AS viewCount,
 			status
 		FROM products
-		WHERE status IN ('Active' ,'Booking', 'Sold')
+		WHERE status IN ('Active' ,'Booking', 'Sold') and hidden = 0	
 		ORDER BY created_at DESC
 	</select>
 	
@@ -76,9 +74,10 @@
 			like_count AS likeCount,
 			chat_count AS chatCount,
 			view_count AS viewCount,
-			status
+			status,
+			hidden
 		FROM products
-		WHERE user_id = #{userId}
+		WHERE user_id = #{userId} and hidden = 0
 		<choose>
         	<when test="status == 'Active'">
             	AND status IN (#{status}, 'Booking')
@@ -88,6 +87,22 @@
         	</otherwise>
     	</choose>
 	</select>
+	
+	<select id="selectArticlesByHidden" parameterType="String" resultType="articleVO">
+		SELECT
+			product_id AS productId,
+			user_id AS userId,
+			title,
+			price,
+			region,
+			like_count AS likeCount,
+			chat_count AS chatCount,
+			view_count AS viewCount,
+			status,
+			hidden
+		FROM products
+		WHERE user_id = #{value} and hidden = 1
+	</select>
 
 	<select id="selectArticle" parameterType="int"
 		resultType="articleVO">
@@ -96,7 +111,7 @@
 			user_id AS userId,
 			title,
 			description,
-			sellOrShare,
+			sell_or_share AS sellOrShare,
 			price,
 			category,
 			status,
@@ -110,9 +125,25 @@
 		WHERE product_id = #{productId}
 	</select>
 	
+	<update id="updateArticle" parameterType="articleVO">
+		UPDATE products
+		SET title = #{title}, 
+			description = #{description}, 
+			sell_or_share = #{sellOrShare},
+			price = #{price},
+			place = #{place}
+		WHERE product_id = #{productId}
+	</update>
+	
 	<update id="updateArticleStatus" parameterType="updateStatusDTO">
 		UPDATE products
 		SET status = #{status}
+		WHERE product_id = #{productId}
+	</update>
+	
+	<update id="updateArticleHidden" parameterType="updateHiddenDTO">
+		UPDATE products
+		SET hidden = #{hidden}
 		WHERE product_id = #{productId}
 	</update>
 	
@@ -153,8 +184,8 @@
 	</select>
 	
 	<insert id="addLike" parameterType="likeDTO">
-		INSERT INTO LIKES(user_id, product_id)
-		VALUES(#{userId}, #{productId})
+		INSERT INTO LIKES(like_id, user_id, product_id)
+		VALUES(like_seq.NEXTVAL, #{userId}, #{productId})
 	</insert>
 	
 	<update id="increaseLike" parameterType="int">

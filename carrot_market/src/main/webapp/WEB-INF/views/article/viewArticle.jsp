@@ -38,6 +38,20 @@
 		</c:otherwise>
 	</c:choose>
 </c:if>
+<c:if test="${modifyResult }">
+	<c:choose>
+		<c:when test="${modifyResult == true }">
+			<script>
+				alert('수정 성공!');
+			</script>
+		</c:when>
+		<c:otherwise>
+			<script>
+				alert('수정 실패!');
+			</script>
+		</c:otherwise>
+	</c:choose>
+</c:if>
 <c:if test="${loginFirst == 'loginFirst' }">
 	<script>
 		window.onload = function() {

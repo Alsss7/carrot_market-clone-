@@ -182,6 +182,22 @@ public class MemberController {
 		return mav;
 	}
 
+	@RequestMapping(value = "/myPage/salesHistory/hidden", method = RequestMethod.GET)
+	public ModelAndView getSalesHidden() throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+		List<ArticleVO> articleList = articleService.selectArticlesByHidden(loginId);
+		mav.addObject("articles", articleList);
+		if (articleList.size() != 0) {
+			mav.addObject("hidden", 1);
+		} else {
+			mav.addObject("hidden", 0);
+		}
+		mav.setViewName("salesHistory");
+		return mav;
+	}
+
 	/*
 	 * 회원가입 메서드
 	 */

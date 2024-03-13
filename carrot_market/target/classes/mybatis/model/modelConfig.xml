@@ -17,5 +17,8 @@
 		<typeAlias
 			type="com.mycompany.carrotMarket.article.dto.UpdateStatusDTO"
 			alias="updateStatusDTO" />
+		<typeAlias
+			type="com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO"
+			alias="updateHiddenDTO" />
 	</typeAliases>
 </configuration>

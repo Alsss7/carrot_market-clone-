@@ -13,12 +13,10 @@ function tradeStyleChange(e) {
 }
 
 function numberFormat(e) {
-    e.value = e.value.replace(/[^0-9]/gi, "");
+    e.value = e.value.replace(/[^0-9]/gi, '');
 
     var number = e.value.replace(/,/g, '');
-
     var formattedNumber = new Intl.NumberFormat().format(number);
-
     e.value = formattedNumber;
 }
 
@@ -61,20 +59,12 @@ function validateForm() {
     return true;
 }
 
-document.getElementById("image-input").addEventListener("change", function(event) {
-    var previewImageDiv = document.getElementById("preview-image");
-    previewImageDiv.innerHTML = "";
+document.addEventListener("DOMContentLoaded", function() {
+    var categoryElement = document.getElementById("category");
+    var tradeStyleElement = document.getElementById("trade-style");
+    var textareaElement = document.getElementById("description");
 
-    var files = event.target.files;
-    for(var i = 0; i < files.length; i++) {
-        var file = files[i];
-
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var imageElement = document.createElement("img");
-            imageElement.src = e.target.result;
-            previewImageDiv.appendChild(imageElement);
-        };
-        reader.readAsDataURL(file);
-    }
+    categoryElement.value = category;
+    tradeStyleElement.value = tradeStyle;
+    textareaElement.value = description;
 });

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mycompany.carrotMarket.article.dao.ArticleDAO;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
+import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
@@ -80,6 +81,19 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	@Transactional
+	public List<ArticleVO> selectArticlesByHidden(String userId) throws DataAccessException {
+		List<ArticleVO> articleList = articleDAO.selectArticlesByHidden(userId);
+		if (articleList.size() > 0) {
+			for (ArticleVO article : articleList) {
+				List<String> imageList = articleDAO.selectImages(article.getProductId());
+				article.setFilesName(imageList);
+			}
+		}
+		return articleList;
+	}
+
+	@Override
+	@Transactional
 	public ArticleVO selectArticle(int productId) throws DataAccessException {
 		ArticleVO article = articleDAO.selectArticle(productId);
 		if (article != null) {
@@ -90,8 +104,28 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public boolean updateArticle(ArticleVO articleVO) throws DataAccessException {
+		int result = articleDAO.updateArticle(articleVO);
+		if (result != 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public boolean updateArticleStatus(UpdateStatusDTO updateStatusDTO) throws DataAccessException {
 		int result = articleDAO.updateArticleStatus(updateStatusDTO);
+		if (result != 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean updateArticleHidden(UpdateHiddenDTO updateHiddenDTO) throws DataAccessException {
+		int result = articleDAO.updateArticleHidden(updateHiddenDTO);
 		if (result != 0) {
 			return true;
 		} else {

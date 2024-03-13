@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.mycompany.carrotMarket.article.dao.ArticleDAO;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
+import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 
@@ -50,14 +51,32 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
+	public List<ArticleVO> selectArticlesByHidden(String userId) throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesByHidden", userId);
+		return list;
+	}
+
+	@Override
 	public ArticleVO selectArticle(int productId) throws DataAccessException {
 		ArticleVO article = sqlSession.selectOne("mappers.article.selectArticle", productId);
 		return article;
 	}
 
 	@Override
+	public int updateArticle(ArticleVO articleVO) throws DataAccessException {
+		int result = sqlSession.update("mappers.article.updateArticle", articleVO);
+		return result;
+	}
+
+	@Override
 	public int updateArticleStatus(UpdateStatusDTO updateStatusDTO) throws DataAccessException {
 		int result = sqlSession.update("mappers.article.updateArticleStatus", updateStatusDTO);
+		return result;
+	}
+
+	@Override
+	public int updateArticleHidden(UpdateHiddenDTO updateHiddenDTO) throws DataAccessException {
+		int result = sqlSession.update("mappers.article.updateArticleHidden", updateHiddenDTO);
 		return result;
 	}
 

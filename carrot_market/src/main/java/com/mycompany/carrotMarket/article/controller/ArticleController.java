@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
+import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
@@ -70,6 +71,38 @@ public class ArticleController {
 		MemberVO member = memberService.findById(loginId);
 		mav.addObject("region", member.getRegion1());
 		mav.setViewName("articleForm");
+		return mav;
+	}
+
+	@RequestMapping(value = "/modify/{productId}", method = RequestMethod.GET)
+	public ModelAndView modifyArticleForm(@PathVariable int productId) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+		ArticleVO article = articleService.selectArticle(productId);
+		if (loginId.equals(article.getUserId())) {
+			mav.addObject("article", article);
+			mav.setViewName("modifyArticleForm");
+		} else {
+			mav.setViewName("redirect:/article/" + productId);
+		}
+		return mav;
+	}
+
+	@RequestMapping(value = "/modify/{productId}", method = RequestMethod.POST)
+	public ModelAndView modifyArticle(@PathVariable int productId, @ModelAttribute("article") ArticleVO articleVO,
+			RedirectAttributes attributes) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		boolean result = articleService.updateArticle(articleVO);
+		if (result) {
+			ArticleVO article = articleService.selectArticle(productId);
+			attributes.addFlashAttribute("modifyResult", true);
+			attributes.addFlashAttribute("article", article);
+			mav.setViewName("redirect:/article/" + productId);
+		} else {
+			attributes.addFlashAttribute("modifyResult", false);
+			mav.setViewName("redirect:/article/modify/" + productId);
+		}
 		return mav;
 	}
 
@@ -169,12 +202,11 @@ public class ArticleController {
 		ModelAndView mav = new ModelAndView();
 		boolean result = articleService.deleteArticleById(productId);
 		if (result) {
-			attributes.addFlashAttribute("deleteMsg", "success");
+			attributes.addFlashAttribute("deleteResult", true);
 		} else {
-			attributes.addFlashAttribute("deleteMsg", "failed");
+			attributes.addFlashAttribute("deleteResult", false);
 		}
 
-		attributes.addFlashAttribute("refresh", true);
 		if (preUri.equals("viewArticle")) {
 			mav.setViewName("redirect:/article/fleamarket");
 		} else if (preUri.equals("salesHistory")) {
@@ -183,22 +215,8 @@ public class ArticleController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/modify/{productId}", method = RequestMethod.GET)
-	public ModelAndView modifyArticleForm(@PathVariable int productId) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("modifyForm");
-		return mav;
-	}
-
-	@RequestMapping(value = "/modify/{productId}", method = RequestMethod.POST)
-	public ModelAndView modifyArticle(@PathVariable int ProductId, @ModelAttribute("article") ArticleVO articleVO)
-			throws Exception {
-		ModelAndView mav = new ModelAndView();
-		return mav;
-	}
-
 	@RequestMapping(value = "/updateStat/{productId}/{preUri}", method = RequestMethod.GET)
-	public ModelAndView updateStatus(@PathVariable int productId, @PathVariable String preUri,
+	public ModelAndView updateArticleStatus(@PathVariable int productId, @PathVariable String preUri,
 			@RequestParam("status") String status, RedirectAttributes attributes) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		boolean result = articleService.updateArticleStatus(new UpdateStatusDTO(productId, status));
@@ -214,6 +232,30 @@ public class ArticleController {
 				mav.setViewName("redirect:/member/myPage/salesHistory?status=Active");
 			} else {
 				mav.setViewName("redirect:/member/myPage/salesHistory?status=" + status);
+			}
+		}
+		return mav;
+	}
+
+	@RequestMapping(value = "/updateHidden/{productId}/{preUri}", method = RequestMethod.GET)
+	public ModelAndView updateArticleHidden(@PathVariable int productId, @PathVariable String preUri,
+			@RequestParam(value = "hide", required = false) int hidden, RedirectAttributes attributes)
+			throws Exception {
+		ModelAndView mav = new ModelAndView();
+		boolean result = articleService.updateArticleHidden(new UpdateHiddenDTO(productId, hidden));
+		if (result == true) {
+			attributes.addFlashAttribute("result", "상태가 변경되었습니다.");
+		} else {
+			attributes.addFlashAttribute("result", "변경에 실패했습니다.");
+		}
+		if (preUri.equals("viewArticle")) {
+			mav.setViewName("redirect:/article/fleamarket");
+		} else if (preUri.equals("salesHistory")) {
+			ArticleVO article = articleService.selectArticle(productId);
+			if (hidden == 1) {
+				mav.setViewName("redirect:/member/myPage/salesHistory/hidden");
+			} else {
+				mav.setViewName("redirect:/member/myPage/salesHistory?status=" + article.getStatus());
 			}
 		}
 		return mav;

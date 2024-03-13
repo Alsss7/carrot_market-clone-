@@ -11,18 +11,18 @@
 </head>
 <body>
 	<div id="article-div">
-		<form action="${contextPath }/article/register" method="post" id="article-form"
-			enctype="multipart/form-data" onsubmit="return validateForm()">
+		<form action="${contextPath }/article/modify/${article.productId}" method="post"
+			id="article-form" enctype="multipart/form-data" onsubmit="return validateForm()">
 			<div>
 				<div id="input-photo">
-					<div id="preview-image"></div>
-					<input type="file" id="image-input" name="files" accept="image/*" multiple />
+					<input type="file" name="files" accept="image/*" multiple />
 				</div>
+				<div id="preview-image"></div>
 			</div>
 			<div>
 				<div class="label">제목</div>
 				<div id="input-title">
-					<input type="text" id="title" name="title" />
+					<input type="text" id="title" name="title" value="${article.title }" />
 				</div>
 			</div>
 			<div>
@@ -62,7 +62,8 @@
 				</div>
 				<div id="input-price">
 					<input type="text" id="price" name="price" placeholder="가격을 입력해주세요."
-						oninput="numberFormat(this)" onclick="numberFormat(this)" onblur="removeCommas(this)" />
+						oninput="numberFormat(this)" onclick="numberFormat(this)" onblur="removeCommas(this)"
+						value="${article.price }" />
 					<span id="won">원</span>
 				</div>
 			</div>
@@ -76,16 +77,21 @@
 			<div>
 				<div class="label">거래 희망 장소</div>
 				<div id="input-place">
-					<input type="text" id="place" name="place" />
+					<input type="text" id="place" name="place" value="${article.place }" />
 				</div>
 			</div>
 			<div id="article_bt">
-				<button type="submit">작성 완료</button>
+				<button type="submit">수정 완료</button>
 			</div>
 			<input type="hidden" name="userId" value="<sec:authentication property="principal.username" />" />
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 	</div>
-	<script src="${contextPath }/resources/js/article/articleForm.js"></script>
+	<script>
+		var category = "${article.category}";
+		var tradeStyle = "${article.sellOrShare}";
+		var description = "${article.description}";
+	</script>
+	<script src="${contextPath }/resources/js/article/modifyArticleForm.js"></script>
 </body>
 </html>

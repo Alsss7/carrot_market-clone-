@@ -38,6 +38,8 @@ public class ArticleVO {
 
 	private Date createdAt;
 
+	private int hidden;
+
 	public int getProductId() {
 		return productId;
 	}
@@ -164,6 +166,14 @@ public class ArticleVO {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public int getHidden() {
+		return hidden;
+	}
+
+	public void setHidden(int hidden) {
+		this.hidden = hidden;
 	}
 
 	@Override

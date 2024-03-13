@@ -8,7 +8,7 @@ if(currentURL == "?status=Active") {
     document.getElementById('sold').style.fontWeight = 'bold';
     document.getElementById('active').style.fontWeight = 'normal';
     document.getElementById('hide').style.fontWeight = 'normal';
-} else if(currentURL == "?status=Hide") {
+} else {
     document.getElementById('hide').style.fontWeight = 'bold';
     document.getElementById('active').style.fontWeight = 'normal';
     document.getElementById('sold').style.fontWeight = 'normal';
