@@ -226,7 +226,7 @@ public class ArticleController {
 			attributes.addFlashAttribute("result", "변경에 실패했습니다.");
 		}
 		if (preUri.equals("viewArticle")) {
-			mav.setViewName("redirect:/article/fleamarket");
+			mav.setViewName("redirect:/article/" + productId);
 		} else if (preUri.equals("salesHistory")) {
 			if (status.equals("Booking")) {
 				mav.setViewName("redirect:/member/myPage/salesHistory?status=Active");

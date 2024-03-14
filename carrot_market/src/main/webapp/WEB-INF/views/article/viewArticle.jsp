@@ -118,6 +118,23 @@
 					<div id="line"></div>
 				</div>
 				<div id="details">
+					<sec:authorize access="isAuthenticated()">
+						<c:set var="writerId" value="${member.id }" />
+						<c:choose>
+							<c:when test="${loginId == writerId}">
+								<form id="statusForm" method="get"
+									action="${contextPath }/article/updateStat/${article.productId}/viewArticle">
+									<select id="status-select" name="status" onchange="submitForm()">
+										<option value="Active">판매중</option>
+										<option value="Booking">예약중</option>
+										<option value="Sold">거래완료</option>
+									</select>
+								</form>
+							</c:when>
+							<c:otherwise>
+							</c:otherwise>
+						</c:choose>
+					</sec:authorize>
 					<div>
 						<div id="title">${article.title }</div>
 						<div id="category-date">
@@ -192,6 +209,9 @@
 	</main>
 	<script>
 		var timeDiff = "${timeDiff}";
+		var contextPath = "${contextPath}";
+		var productId = "${article.productId}";
+		var productStatus = "${article.status}";
 	</script>
 	<script src="${contextPath }/resources/js/article/viewArticle.js"></script>
 </body>

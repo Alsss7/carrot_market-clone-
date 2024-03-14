@@ -44,3 +44,13 @@ function formattimeDiff(timeDiff) {
 var formattedtimeDiff = formattimeDiff(timeDiff);
 var dateSpan = document.getElementById('created-at');
 dateSpan.innerHTML = formattedtimeDiff;
+
+
+var statusFormElement = document.getElementById('statusForm');
+var statusSelectElement = document.getElementById('status-select');
+statusSelectElement.value = productStatus;
+
+function submitForm() {
+    console.log(statusFormElement.action);
+    statusFormElement.submit();
+}
