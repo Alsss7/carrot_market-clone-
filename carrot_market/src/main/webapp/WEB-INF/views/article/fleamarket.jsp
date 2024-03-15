@@ -16,6 +16,24 @@
 		}
 	</script>
 </c:if>
+<c:if test="${not empty deleteMsg }">
+	<c:choose>
+		<c:when test="${deleteMsg == true }">
+			<script>
+				window.onload = function() {
+					alert("삭제 성공");
+				}
+			</script>
+		</c:when>
+		<c:otherwise>
+			<script>
+				window.onload = function() {
+					alert("삭제 실패");
+				}
+			</script>
+		</c:otherwise>
+	</c:choose>
+</c:if>
 </head>
 <body>
 	<main>

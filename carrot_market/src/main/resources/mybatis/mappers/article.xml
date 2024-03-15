@@ -120,7 +120,8 @@
 			like_count AS likeCount,
 			chat_count AS chatCount,
 			view_count AS viewCount,
-			created_at AS createdAt
+			created_at AS createdAt,
+			hidden
 		FROM products
 		WHERE product_id = #{productId}
 	</select>

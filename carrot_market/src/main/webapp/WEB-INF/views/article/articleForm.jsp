@@ -15,8 +15,10 @@
 			enctype="multipart/form-data" onsubmit="return validateForm()">
 			<div>
 				<div id="input-photo">
-					<div id="preview-image"></div>
-					<input type="file" id="image-input" name="files" accept="image/*" multiple />
+					<label class="input-file-button" for="image-input">업로드</label>
+					<input type="file" id="image-input" name="files" accept="image/*" multiple
+						style="display: none;" />
+					<div class="preview-container" id="preview-container"></div>
 				</div>
 			</div>
 			<div>

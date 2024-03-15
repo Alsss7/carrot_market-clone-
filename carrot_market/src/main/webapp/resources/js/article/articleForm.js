@@ -61,19 +61,41 @@ function validateForm() {
     return true;
 }
 
-document.getElementById("image-input").addEventListener("change", function(event) {
-    var previewImageDiv = document.getElementById("preview-image");
-    previewImageDiv.innerHTML = "";
 
-    var files = event.target.files;
-    for(var i = 0; i < files.length; i++) {
-        var file = files[i];
+document.getElementById("image-input").addEventListener('change', function(event) {
+    const previewContainer = document.getElementById('preview-container');
+    previewContainer.innerHTML = '';
 
-        var reader = new FileReader();
+    const files = event.target.files;
+    for(let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        const reader = new FileReader();
         reader.onload = function(e) {
-            var imageElement = document.createElement("img");
+            const previewImage = document.createElement('div');
+            previewImage.classList.add('preview-image');
+
+            const imageElement = document.createElement('img');
             imageElement.src = e.target.result;
-            previewImageDiv.appendChild(imageElement);
+
+            const deleteButton = document.createElement('a');
+            deleteButton.classList.add('delete-button');
+            deleteButton.innerHTML = 'X';
+
+            deleteButton.addEventListener('click', function() {
+                previewImage.remove();
+
+                const imageInputElement = document.getElementById('image-input');
+                const newFiles = Array.from(imageInputElement.files).filter(f => f !== file);
+
+                const dt = new DataTransfer();
+                newFiles.forEach(f => dt.items.add(f));
+                imageInputElement.files = dt.files;
+            });
+
+            previewImage.appendChild(imageElement);
+            previewImage.appendChild(deleteButton);
+            previewContainer.appendChild(previewImage);
         };
         reader.readAsDataURL(file);
     }

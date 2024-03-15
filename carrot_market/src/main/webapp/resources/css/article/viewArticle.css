@@ -35,11 +35,11 @@ main {
 }
 
 .slide {
-	display: none; /* 슬라이드 감추기 */
+	display: none;
 }
 
 .slide.active {
-	display: block; /* 활성 슬라이드 보이기 */
+	display: block;
 }
 
 #images {
@@ -129,8 +129,8 @@ main {
 	width: 88%;
 	padding-top: 0px;
 	margin-top: 0px;
-	border: 0.1px solid #ccc; /* 회색 선의 두께와 색상 설정 */
-	opacity: 0.5; /* 투명도 설정 */
+	border: 0.1px solid #ccc;
+	opacity: 0.5;
 	display: block;
 }
 
@@ -215,4 +215,57 @@ progress {
 	border: 0;
 	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
 	padding: 13px 150px 13px 150px;
+	margin-right: 15px;
+}
+
+#indicator {
+	background-color: lightgray;
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
+	width: 30px;
+	height: 30px;
+	padding: 15px;
+}
+
+#indicator:hover {
+	cursor: pointer;
+}
+
+#indicator img {
+	width: 20px;
+	height: 20px;
+}
+
+.modal-container {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5); /* 배경 어두운 색 */
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	z-index: 1;
+}
+
+.modal {
+	background-color: #fff;
+	padding: 10px 20px 10px 20px;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	z-index: 2;
+}
+
+.options {
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+#delete a {
+	color: red;
 }

@@ -15,9 +15,11 @@
 			id="article-form" enctype="multipart/form-data" onsubmit="return validateForm()">
 			<div>
 				<div id="input-photo">
-					<input type="file" name="files" accept="image/*" multiple />
+					<label class="input-file-button" for="image-input">업로드</label>
+					<input type="file" id="image-input" name="files" accept="image/*" multiple
+						style="display: none;" />
+					<div class="preview-container" id="preview-container"></div>
 				</div>
-				<div id="preview-image"></div>
 			</div>
 			<div>
 				<div class="label">제목</div>
@@ -91,6 +93,7 @@
 		var category = "${article.category}";
 		var tradeStyle = "${article.sellOrShare}";
 		var description = "${article.description}";
+		var filesName = "${article.filesName}";
 	</script>
 	<script src="${contextPath }/resources/js/article/modifyArticleForm.js"></script>
 </body>

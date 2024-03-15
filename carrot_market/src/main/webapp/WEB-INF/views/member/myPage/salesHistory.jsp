@@ -140,7 +140,7 @@
 									<c:otherwise>
 										<c:choose>
 											<c:when test="${article.status == 'Booking' }">
-												<div id="booking" class="options">
+												<div id="active" class="options">
 													<a
 														href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Active">판매중</a>
 												</div>
@@ -150,7 +150,7 @@
 												</div>
 											</c:when>
 											<c:when test="${article.status == 'Sold' }">
-												<div id="booking" class="options">
+												<div id="active" class="options">
 													<a
 														href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Active">판매중</a>
 												</div>

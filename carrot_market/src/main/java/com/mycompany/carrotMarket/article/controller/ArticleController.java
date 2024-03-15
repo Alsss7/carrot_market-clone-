@@ -128,7 +128,7 @@ public class ArticleController {
 			articleVO.setFilesName(filesName);
 		}
 		boolean result = articleService.addArticle(articleVO);
-		imageFileUpload(articleVO.getProductId(), files, request);
+		imageFileUpload(articleVO.getProductId(), files);
 		if (result) {
 			uploadResult = "등록 성공";
 		} else {
@@ -201,11 +201,11 @@ public class ArticleController {
 			throws Exception {
 		ModelAndView mav = new ModelAndView();
 		boolean result = articleService.deleteArticleById(productId);
+		System.out.println("deleteResult: " + result);
 		if (result) {
-			attributes.addFlashAttribute("deleteResult", true);
-		} else {
-			attributes.addFlashAttribute("deleteResult", false);
+			deleteImageFile(productId);
 		}
+		attributes.addFlashAttribute("deleteResult", result);
 
 		if (preUri.equals("viewArticle")) {
 			mav.setViewName("redirect:/article/fleamarket");
@@ -261,13 +261,15 @@ public class ArticleController {
 		return mav;
 	}
 
-	private void imageFileUpload(int productId, List<MultipartFile> files, HttpServletRequest request) {
+	private void imageFileUpload(int productId, List<MultipartFile> files) {
 		for (MultipartFile file : files) {
 			if (!file.isEmpty()) {
 				try {
 					String uploadDir = servletContext.getRealPath("/resources/image/product_image/" + productId);
 					String fileName = file.getOriginalFilename();
 					String filePath = uploadDir + "\\" + fileName;
+
+					System.out.println(filePath);
 
 					// 디렉토리가 존재하지 않으면 생성
 					File directory = new File(uploadDir);
@@ -280,6 +282,18 @@ public class ArticleController {
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+
+	private void deleteImageFile(int productId) {
+		String uploadDir = servletContext.getRealPath("/resources/image/product_image/" + productId);
+		File directory = new File(uploadDir);
+		if (directory.exists()) {
+			File[] files = directory.listFiles();
+			for (File file : files) {
+				file.delete();
+			}
+			directory.delete();
 		}
 	}
 

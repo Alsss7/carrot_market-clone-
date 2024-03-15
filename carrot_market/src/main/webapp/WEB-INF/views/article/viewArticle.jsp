@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="${contextPath }/resources/css/article/view-article.css" />
+<link rel="stylesheet" href="${contextPath }/resources/css/article/viewArticle.css" />
 <c:if test="${addResult }">
 	<c:choose>
 		<c:when test="${addResult == true }">
@@ -191,6 +191,9 @@
 						<c:choose>
 							<c:when test="${loginId == writerId}">
 								<button class="chat">대화 중인 채팅방</button>
+								<div id="indicator" onclick="openModal(this)">
+									<img src="${contextPath }/resources/image/myPage/indicator.png" />
+								</div>
 							</c:when>
 							<c:otherwise>
 								<button class="chat">채팅하기</button>
@@ -206,6 +209,64 @@
 				<h1>게시글이 존재하지 않습니다!</h1>
 			</c:otherwise>
 		</c:choose>
+
+		<div class="modal-container" id="modalContainer">
+			<div id="modal" class="modal">
+				<div class="modal-content">
+					<c:choose>
+						<c:when test="${article.hidden == 1 }">
+							<div id="booking" class="options">
+								<a href="${contextPath }/article/updateHidden/${article.productId}/viewArticle?hide=0">숨기기
+									해제</a>
+							</div>
+							<div id="line"></div>
+							<div id="modify" class="options">
+								<a href="${contextPath }/article/modify/${article.productId}">게시글 수정</a>
+							</div>
+							<div id="line"></div>
+							<div id="delete" class="options">
+								<a href="" onclick="confirmDelete(${article.productId})">삭제</a>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<c:choose>
+								<c:when test="${article.status == 'Booking' }">
+									<div id="modify" class="options">
+										<a href="${contextPath }/article/modify/${article.productId}">게시글 수정</a>
+									</div>
+								</c:when>
+								<c:when test="${article.status == 'Sold' }">
+									<div id="modify" class="options">
+										<a href="${contextPath }/article/modify/${article.productId}">게시글 수정</a>
+									</div>
+									<div id="line"></div>
+									<div id="hidden" class="options">
+										<a href="${contextPath }/article/updateHidden/${article.productId}/viewArticle?hide=1">숨기기</a>
+									</div>
+									<div id="line"></div>
+									<div id="delete" class="options">
+										<a href="" onclick="confirmDelete(${article.productId})">삭제</a>
+									</div>
+								</c:when>
+								<c:otherwise>
+									<div id="modify" class="options">
+										<a href="${contextPath }/article/modify/${article.productId}">게시글 수정</a>
+									</div>
+									<div id="line"></div>
+									<div id="hidden" class="options">
+										<a href="${contextPath }/article/updateHidden/${article.productId}/viewArticle?hide=1">숨기기</a>
+									</div>
+									<div id="line"></div>
+									<div id="delete" class="options">
+										<a href="" onclick="confirmDelete(${article.productId})">삭제</a>
+									</div>
+								</c:otherwise>
+							</c:choose>
+						</c:otherwise>
+					</c:choose>
+				</div>
+			</div>
+		</div>
 	</main>
 	<script>
 		var timeDiff = "${timeDiff}";

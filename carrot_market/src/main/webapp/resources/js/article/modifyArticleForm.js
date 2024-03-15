@@ -68,3 +68,42 @@ document.addEventListener("DOMContentLoaded", function() {
     tradeStyleElement.value = tradeStyle;
     textareaElement.value = description;
 });
+
+document.getElementById("image-input").addEventListener('change', function(event) {
+    const previewContainer = document.getElementById('preview-container');
+    previewContainer.innerHTML = '';
+
+    const files = event.target.files;
+    for(let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const previewImage = document.createElement('div');
+            previewImage.classList.add('preview-image');
+
+            const imageElement = document.createElement('img');
+            imageElement.src = e.target.result;
+
+            const deleteButton = document.createElement('a');
+            deleteButton.classList.add('delete-button');
+            deleteButton.innerHTML = 'X';
+
+            deleteButton.addEventListener('click', function() {
+                previewImage.remove();
+
+                const imageInputElement = document.getElementById('image-input');
+                const newFiles = Array.from(imageInputElement.files).filter(f => f !== file);
+
+                const dt = new DataTransfer();
+                newFiles.forEach(f => dt.items.add(f));
+                imageInputElement.files = dt.files;
+            });
+
+            previewImage.appendChild(imageElement);
+            previewImage.appendChild(deleteButton);
+            previewContainer.appendChild(previewImage);
+        };
+        reader.readAsDataURL(file);
+    }
+});

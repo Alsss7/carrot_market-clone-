@@ -22,13 +22,58 @@ body {
 }
 
 #input-photo {
-	
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	justify-content: flex-start;
 }
 
-#preview-image img {
+.input-file-button {
+	width: 100px;
+	height: 100px;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #FF6600;
+	border-radius: 4px;
+	color: black;
+	cursor: pointer;
+	margin-right: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.preview-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.preview-image {
+	position: relative;
+}
+
+.preview-image img {
 	height: 100px;
 	width: 100px;
 	object-fit: cover;
 	border-radius: 5px;
 	margin-right: 10px;
+}
+
+.preview-image .delete-button {
+	position: absolute;
+	top: 3px;
+	right: 5px;
+	background-color: red;
+	color: white;
+	border: none;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	font-size: 12px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
