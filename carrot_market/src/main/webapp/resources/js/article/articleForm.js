@@ -61,42 +61,63 @@ function validateForm() {
     return true;
 }
 
+var fileCount = 1;
 
-document.getElementById("image-input").addEventListener('change', function(event) {
-    const previewContainer = document.getElementById('preview-container');
-    previewContainer.innerHTML = '';
+function addFile() {
+    var imageContainer = document.getElementById('input-file-preview');
+    var inputFile = document.createElement('input');
+    inputFile.type = 'file';
+    inputFile.name = 'files';
+    inputFile.id = 'fileInput' + fileCount;
+    inputFile.style.display = 'none';
+    fileCount++;
 
-    const files = event.target.files;
-    for(let i = 0; i < files.length; i++) {
-        const file = files[i];
+    var inputLabel = document.createElement('label');
+    inputLabel.htmlFor = inputFile.id;
+    inputLabel.classList.add('input-image');
+    inputLabel.textContent = '선택';
 
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const previewImage = document.createElement('div');
-            previewImage.classList.add('preview-image');
+    var inputAndPreview =  document.createElement('div');
+    inputAndPreview.classList.add('input-and-preview');
+    inputAndPreview.appendChild(inputFile);
+    inputAndPreview.appendChild(inputLabel);
 
-            const imageElement = document.createElement('img');
-            imageElement.src = e.target.result;
+    inputFile.addEventListener('change', function(event) {
+        handleFileSelect(event, inputFile, inputLabel, inputAndPreview);
+    });
 
-            const deleteButton = document.createElement('a');
-            deleteButton.classList.add('delete-button');
-            deleteButton.innerHTML = 'X';
+    imageContainer.appendChild(inputAndPreview);
+}
 
-            deleteButton.addEventListener('click', function() {
-                previewImage.remove();
+function handleFileSelect(event, inputFile, inputLabel, inputAndPreview) {
+    var file = event.target.files[0];
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var previewImage = document.createElement('div');
+        previewImage.classList.add('preview-image');
 
-                const imageInputElement = document.getElementById('image-input');
-                const newFiles = Array.from(imageInputElement.files).filter(f => f !== file);
+        var imageElement = document.createElement('img');
+        imageElement.src = e.target.result;
+        
+        var deleteButton = document.createElement('a');
+        deleteButton.classList.add('delete-button');
+        deleteButton.innerHTML = 'X';
 
-                const dt = new DataTransfer();
-                newFiles.forEach(f => dt.items.add(f));
-                imageInputElement.files = dt.files;
-            });
+        deleteButton.addEventListener('click', function() {
+            inputFile.value = null;
+            var parentNode = previewImage.parentNode;
+            if (parentNode) {
+                parentNode.removeChild(previewImage);
+            }
+            // inputAndPreview에서 inputFile을 삭제합니다.
+            inputAndPreview.removeChild(inputFile);
+            inputAndPreview.removeChild(inputLabel);
+        });
 
-            previewImage.appendChild(imageElement);
-            previewImage.appendChild(deleteButton);
-            previewContainer.appendChild(previewImage);
-        };
-        reader.readAsDataURL(file);
+        previewImage.appendChild(imageElement);
+        previewImage.appendChild(deleteButton);
+
+        inputAndPreview.insertBefore(previewImage, inputAndPreview.firstChild);
     }
-});
+    reader.readAsDataURL(file);
+}

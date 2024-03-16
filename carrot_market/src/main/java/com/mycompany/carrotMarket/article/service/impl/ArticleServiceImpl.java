@@ -139,11 +139,14 @@ public class ArticleServiceImpl implements ArticleService {
 		ArticleVO article = selectArticle(productId);
 
 		if (article.getFilesName().size() > 0) {
-			articleDAO.deleteImagesById(productId);
+			int result = articleDAO.deleteImagesById(productId);
+			System.out.println(result);
 		}
 
 		if (selectLike(new LikeDTO(article.getUserId(), productId))) {
-			articleDAO.deleteLikesById(productId);
+			System.out.println("deleteLikesById ½ÇÇà");
+			int result = articleDAO.deleteLikesById(productId);
+			System.out.println(result);
 		}
 		// articleDAO.deleteChatsById(productId);
 		int result = articleDAO.deleteArticleById(productId);
@@ -162,8 +165,12 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public boolean selectLike(LikeDTO likeDTO) throws DataAccessException {
-		boolean result = articleDAO.selectLike(likeDTO);
-		return result;
+		int result = articleDAO.selectLike(likeDTO);
+		if (result == 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override

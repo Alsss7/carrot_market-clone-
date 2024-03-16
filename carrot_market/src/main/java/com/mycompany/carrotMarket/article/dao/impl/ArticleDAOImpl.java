@@ -105,13 +105,9 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public boolean selectLike(LikeDTO likeDTO) throws DataAccessException {
+	public int selectLike(LikeDTO likeDTO) throws DataAccessException {
 		int result = sqlSession.selectOne("mappers.article.selectLike", likeDTO);
-		if (result == 1) {
-			return true;
-		} else {
-			return false;
-		}
+		return result;
 	}
 
 	@Override

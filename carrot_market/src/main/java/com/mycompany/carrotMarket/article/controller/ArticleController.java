@@ -201,17 +201,22 @@ public class ArticleController {
 			throws Exception {
 		ModelAndView mav = new ModelAndView();
 		boolean result = articleService.deleteArticleById(productId);
-		System.out.println("deleteResult: " + result);
 		if (result) {
 			deleteImageFile(productId);
 		}
-		attributes.addFlashAttribute("deleteResult", result);
-
+		
 		if (preUri.equals("viewArticle")) {
 			mav.setViewName("redirect:/article/fleamarket");
 		} else if (preUri.equals("salesHistory")) {
-			mav.setViewName("redirect:/member/myPage/salesHistory?status=" + status);
+			if (status == null) {
+				mav.setViewName("redirect:/member/myPage/salesHistory/hidden");
+			} else {
+				mav.setViewName("redirect:/member/myPage/salesHistory?status=" + status);
+			}
+		} else {
+			mav.setViewName("redirect:/home");
 		}
+		attributes.addFlashAttribute("deleteResult", result);
 		return mav;
 	}
 
@@ -286,6 +291,7 @@ public class ArticleController {
 	}
 
 	private void deleteImageFile(int productId) {
+		System.out.println("이미지 삭제 실행");
 		String uploadDir = servletContext.getRealPath("/resources/image/product_image/" + productId);
 		File directory = new File(uploadDir);
 		if (directory.exists()) {
@@ -295,6 +301,7 @@ public class ArticleController {
 			}
 			directory.delete();
 		}
+		System.out.println("이미지 삭제 끝");
 	}
 
 	private void increaseView(HttpServletRequest req, HttpServletResponse res, int productId) {

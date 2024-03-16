@@ -16,9 +16,9 @@
 		}
 	</script>
 </c:if>
-<c:if test="${not empty deleteMsg }">
+<c:if test="${not empty deleteResult }">
 	<c:choose>
-		<c:when test="${deleteMsg == true }">
+		<c:when test="${deleteResult == true }">
 			<script>
 				window.onload = function() {
 					alert("삭제 성공");

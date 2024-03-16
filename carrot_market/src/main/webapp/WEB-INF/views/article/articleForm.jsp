@@ -13,13 +13,9 @@
 	<div id="article-div">
 		<form action="${contextPath }/article/register" method="post" id="article-form"
 			enctype="multipart/form-data" onsubmit="return validateForm()">
-			<div>
-				<div id="input-photo">
-					<label class="input-file-button" for="image-input">업로드</label>
-					<input type="file" id="image-input" name="files" accept="image/*" multiple
-						style="display: none;" />
-					<div class="preview-container" id="preview-container"></div>
-				</div>
+			<div id="input-file-container">
+				<label class="input-file-button" onclick="addFile()">이미지 추가</label>
+				<div id="input-file-preview"></div>
 			</div>
 			<div>
 				<div class="label">제목</div>

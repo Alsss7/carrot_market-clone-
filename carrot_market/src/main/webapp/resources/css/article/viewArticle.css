@@ -118,6 +118,11 @@ main {
 	margin-right: 20px;
 }
 
+#manner-image img {
+	width: 30px;
+	hieght: 30px;
+}
+
 #manner-temperature {
 	font-size: 10pt;
 	color: gray;

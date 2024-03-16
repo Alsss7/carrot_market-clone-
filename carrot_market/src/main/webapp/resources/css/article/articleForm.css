@@ -28,6 +28,11 @@ body {
 	justify-content: flex-start;
 }
 
+#input-file-container {
+	display: flex;
+	align-items: center;
+}
+
 .input-file-button {
 	width: 100px;
 	height: 100px;
@@ -43,19 +48,37 @@ body {
 	justify-content: center;
 }
 
-.preview-container {
+.input-image {
+	width: 100px;
+	padding: 5px;
+	cursor: pointer;
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+	text-align: center;
+	margin-right: 10px;
+	border-radius: 10px;
+}
+
+#input-file-preview {
 	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
+	align-items: center;
+}
+
+.input-and-preview {
+	display: flex;
+	flex-flow: column;
+	align-items: center;
 }
 
 .preview-image {
 	position: relative;
+	padding-left: 8px;
 }
 
 .preview-image img {
-	height: 100px;
-	width: 100px;
+	height: 150px;
+	width: 150px;
 	object-fit: cover;
 	border-radius: 5px;
 	margin-right: 10px;

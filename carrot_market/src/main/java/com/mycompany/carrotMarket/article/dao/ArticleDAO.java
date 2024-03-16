@@ -39,7 +39,7 @@ public interface ArticleDAO {
 
 	public List<LikeDTO> selectLikeList(String loginId) throws DataAccessException;
 
-	public boolean selectLike(LikeDTO likeDTO) throws DataAccessException;
+	public int selectLike(LikeDTO likeDTO) throws DataAccessException;
 
 	public int addLike(LikeDTO likeDTO) throws DataAccessException;
 

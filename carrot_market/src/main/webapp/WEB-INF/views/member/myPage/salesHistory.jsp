@@ -17,22 +17,22 @@
 	</script>
 </c:if>
 
-<c:if test="${deleteResult }">
+<c:if test="${not empty deleteResult }">
 	<c:choose>
 		<c:when test="${deleteResult == true }">
 			<script>
 			window.onload = function() {
-				alert('삭제 성공!');
+				alert('삭제 성공');
 			}
 		</script>
 		</c:when>
-		<c:when test="${deleteMsg == false }">
+		<c:otherwise>
 			<script>
 			window.onload = function() {
-				alert('삭제 실패!');
+				alert('삭제 실패');
 			}
 		</script>
-		</c:when>
+		</c:otherwise>
 	</c:choose>
 </c:if>
 </head>
@@ -134,7 +134,8 @@
 										</div>
 										<div id="line"></div>
 										<div id="delete" class="options">
-											<a href="" onclick="confirmDelete(${article.productId})">삭제</a>
+											<a href="${contextPath }/article/delete/${article.productId}/salesHistory"
+														onclick="return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
 										</div>
 									</c:when>
 									<c:otherwise>
@@ -165,7 +166,8 @@
 												</div>
 												<div id="line"></div>
 												<div id="delete" class="options">
-													<a href="" onclick="confirmDelete(${article.productId})">삭제</a>
+													<a href="${contextPath }/article/delete/${article.productId}/salesHistory?status=Sold"
+														onclick="return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
 												</div>
 											</c:when>
 											<c:otherwise>
@@ -189,7 +191,8 @@
 												</div>
 												<div id="line"></div>
 												<div id="delete" class="options">
-													<a href="" onclick="confirmDelete(${article.productId})">삭제</a>
+													<a href="${contextPath }/article/delete/${article.productId}/salesHistory?status=Active"
+														onclick="return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
 												</div>
 											</c:otherwise>
 										</c:choose>
