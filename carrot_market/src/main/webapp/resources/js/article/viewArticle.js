@@ -48,7 +48,9 @@ dateSpan.innerHTML = formattedtimeDiff;
 
 var statusFormElement = document.getElementById('statusForm');
 var statusSelectElement = document.getElementById('status-select');
-statusSelectElement.value = productStatus;
+if(statusSelectElement !== null) {
+    statusSelectElement.value = productStatus;
+}
 
 function submitForm() {
     console.log(statusFormElement.action);

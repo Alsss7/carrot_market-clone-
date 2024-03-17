@@ -11,9 +11,11 @@ import com.mycompany.carrotMarket.article.dao.ArticleDAO;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
+import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
+import com.mycompany.carrotMarket.article.vo.ImageVO;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -25,11 +27,6 @@ public class ArticleServiceImpl implements ArticleService {
 	@Transactional
 	public boolean addArticle(ArticleVO articleVO) throws DataAccessException {
 		int result = articleDAO.insertArticle(articleVO);
-		System.out.println("productId : " + articleVO.getProductId());
-		System.out.print("filesName : ");
-		for (String filename : articleVO.getFilesName()) {
-			System.out.println(filename);
-		}
 		if (articleVO.getFilesName() != null && articleVO.getFilesName().size() != 0) {
 			articleDAO.insertImageFiles(articleVO);
 		}
@@ -46,7 +43,7 @@ public class ArticleServiceImpl implements ArticleService {
 		List<ArticleVO> articleList = articleDAO.selectArticles();
 		if (articleList.size() > 0) {
 			for (ArticleVO article : articleList) {
-				List<String> imageList = articleDAO.selectImages(article.getProductId());
+				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
 				article.setFilesName(imageList);
 			}
 		}
@@ -59,7 +56,7 @@ public class ArticleServiceImpl implements ArticleService {
 		List<ArticleVO> articleList = articleDAO.selectArticlesByProductIdList(productIdList);
 		if (articleList.size() > 0) {
 			for (ArticleVO article : articleList) {
-				List<String> imageList = articleDAO.selectImages(article.getProductId());
+				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
 				article.setFilesName(imageList);
 			}
 		}
@@ -72,7 +69,7 @@ public class ArticleServiceImpl implements ArticleService {
 		List<ArticleVO> articleList = articleDAO.selectArticlesByUserIdAndStat(salesDTO);
 		if (articleList.size() > 0) {
 			for (ArticleVO article : articleList) {
-				List<String> imageList = articleDAO.selectImages(article.getProductId());
+				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
 				article.setFilesName(imageList);
 			}
 		}
@@ -85,7 +82,7 @@ public class ArticleServiceImpl implements ArticleService {
 		List<ArticleVO> articleList = articleDAO.selectArticlesByHidden(userId);
 		if (articleList.size() > 0) {
 			for (ArticleVO article : articleList) {
-				List<String> imageList = articleDAO.selectImages(article.getProductId());
+				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
 				article.setFilesName(imageList);
 			}
 		}
@@ -97,15 +94,28 @@ public class ArticleServiceImpl implements ArticleService {
 	public ArticleVO selectArticle(int productId) throws DataAccessException {
 		ArticleVO article = articleDAO.selectArticle(productId);
 		if (article != null) {
-			List<String> imageList = articleDAO.selectImages(productId);
+			List<String> imageList = articleDAO.selectImagesName(productId);
 			article.setFilesName(imageList);
 		}
 		return article;
 	}
 
 	@Override
-	public boolean updateArticle(ArticleVO articleVO) throws DataAccessException {
+	@Transactional
+	public boolean updateArticle(UpdateImagesDTO updateImagesDTO, ArticleVO articleVO) throws DataAccessException {
 		int result = articleDAO.updateArticle(articleVO);
+
+		List<Integer> keepImages = updateImagesDTO.getKeepImages();
+		if (keepImages != null && keepImages.size() != 0) {
+			articleDAO.updateImages(updateImagesDTO);
+		} else {
+			articleDAO.deleteImagesById(articleVO.getProductId());
+		}
+
+		if (articleVO.getFilesName() != null && articleVO.getFilesName().size() != 0) {
+			articleDAO.insertImageFiles(articleVO);
+		}
+		
 		if (result != 0) {
 			return true;
 		} else {
@@ -144,9 +154,7 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 
 		if (selectLike(new LikeDTO(article.getUserId(), productId))) {
-			System.out.println("deleteLikesById ½ÇÇà");
-			int result = articleDAO.deleteLikesById(productId);
-			System.out.println(result);
+			articleDAO.deleteLikesById(productId);
 		}
 		// articleDAO.deleteChatsById(productId);
 		int result = articleDAO.deleteArticleById(productId);
@@ -155,6 +163,12 @@ public class ArticleServiceImpl implements ArticleService {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public List<ImageVO> selectArticleImages(int productId) throws DataAccessException {
+		List<ImageVO> list = articleDAO.selectArticleImages(productId);
+		return list;
 	}
 
 	@Override

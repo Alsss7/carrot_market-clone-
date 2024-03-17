@@ -7,8 +7,10 @@ import org.springframework.dao.DataAccessException;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
+import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
+import com.mycompany.carrotMarket.article.vo.ImageVO;
 
 public interface ArticleDAO {
 	public int insertArticle(ArticleVO articleVO) throws DataAccessException;
@@ -24,8 +26,10 @@ public interface ArticleDAO {
 	public List<ArticleVO> selectArticlesByHidden(String userId) throws DataAccessException;
 
 	public ArticleVO selectArticle(int productId) throws DataAccessException;
-	
+
 	public int updateArticle(ArticleVO articleVO) throws DataAccessException;
+
+	public int updateImages(UpdateImagesDTO updateImagesDTO) throws DataAccessException;
 
 	public int updateArticleStatus(UpdateStatusDTO updateStatusDTO) throws DataAccessException;
 
@@ -33,7 +37,9 @@ public interface ArticleDAO {
 
 	public int deleteArticleById(int productId) throws DataAccessException;
 
-	public List<String> selectImages(int productId) throws DataAccessException;
+	public List<String> selectImagesName(int productId) throws DataAccessException;
+
+	public List<ImageVO> selectArticleImages(int productId) throws DataAccessException;
 
 	public int deleteImagesById(int productId) throws DataAccessException;
 

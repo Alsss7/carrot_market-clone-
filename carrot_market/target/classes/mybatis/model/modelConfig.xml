@@ -10,6 +10,8 @@
 			type="com.mycompany.carrotMarket.article.vo.ArticleVO"
 			alias="articleVO" />
 		<typeAlias
+			type="com.mycompany.carrotMarket.article.vo.ImageVO" alias="imageVO" />
+		<typeAlias
 			type="com.mycompany.carrotMarket.article.dto.LikeDTO" alias="likeDTO" />
 		<typeAlias
 			type="com.mycompany.carrotMarket.article.dto.SalesDTO"
@@ -20,5 +22,8 @@
 		<typeAlias
 			type="com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO"
 			alias="updateHiddenDTO" />
+		<typeAlias
+			type="com.mycompany.carrotMarket.article.dto.UpdateImagesDTO"
+			alias="updateImagesDTO" />
 	</typeAliases>
 </configuration>

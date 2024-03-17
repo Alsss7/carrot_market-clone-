@@ -13,12 +13,19 @@
 	<div id="article-div">
 		<form action="${contextPath }/article/modify/${article.productId}" method="post"
 			id="article-form" enctype="multipart/form-data" onsubmit="return validateForm()">
-			<div>
-				<div id="input-photo">
-					<label class="input-file-button" for="image-input">업로드</label>
-					<input type="file" id="image-input" name="files" accept="image/*" multiple
-						style="display: none;" />
-					<div class="preview-container" id="preview-container"></div>
+			<div id="input-file-container">
+				<label class="input-file-button" onclick="addFile()">이미지 추가</label>
+				<div id="input-file-preview">
+					<c:forEach var="image" items="${images }">
+						<div class="input-and-preview" id="inputAndPreview${image.imageId}">
+							<div class="preview-image" id="previewImage${image.imageId}">
+								<img
+									src="${contextPath }/resources/image/product_image/${article.productId}/${image.imageFileName}" />
+								<a class="delete-button" onclick="deleteImage(${image.imageId})">X</a>
+							</div>
+							<input type="hidden" name="image${image.imageId }" value="true" />
+						</div>
+					</c:forEach>
 				</div>
 			</div>
 			<div>

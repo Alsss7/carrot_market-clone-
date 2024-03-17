@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -26,9 +27,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
+import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
+import com.mycompany.carrotMarket.article.vo.ImageVO;
 import com.mycompany.carrotMarket.member.service.MemberService;
 import com.mycompany.carrotMarket.member.vo.MemberVO;
 
@@ -80,8 +83,10 @@ public class ArticleController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String loginId = authentication.getName();
 		ArticleVO article = articleService.selectArticle(productId);
+		List<ImageVO> images = articleService.selectArticleImages(productId);
 		if (loginId.equals(article.getUserId())) {
 			mav.addObject("article", article);
+			mav.addObject("images", images);
 			mav.setViewName("modifyArticleForm");
 		} else {
 			mav.setViewName("redirect:/article/" + productId);
@@ -91,11 +96,41 @@ public class ArticleController {
 
 	@RequestMapping(value = "/modify/{productId}", method = RequestMethod.POST)
 	public ModelAndView modifyArticle(@PathVariable int productId, @ModelAttribute("article") ArticleVO articleVO,
-			RedirectAttributes attributes) throws Exception {
+			HttpServletRequest request, RedirectAttributes attributes) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		boolean result = articleService.updateArticle(articleVO);
+
+		List<MultipartFile> files = articleVO.getFiles();
+		List<String> filesName = new ArrayList<String>();
+		if (files != null && !files.isEmpty()) {
+			for (MultipartFile file : files) {
+				if (!file.isEmpty()) {
+					String fileName = file.getOriginalFilename();
+					filesName.add(fileName);
+				}
+			}
+			articleVO.setFilesName(filesName);
+		}
+
+		List<Integer> keepImages = new ArrayList<Integer>();
+		Enumeration<String> parameterNames = request.getParameterNames();
+		while (parameterNames.hasMoreElements()) {
+			String paramName = parameterNames.nextElement();
+			if (!paramName.startsWith("image")) {
+				continue;
+			} else {
+				int imageId = Integer.parseInt(paramName.replace("image", ""));
+				String paramValue = request.getParameter(paramName);
+				if (paramValue.equals("true")) {
+					keepImages.add(imageId);
+				}
+			}
+		}
+		
+		boolean result = articleService.updateArticle(new UpdateImagesDTO(productId, keepImages), articleVO);
+
 		if (result) {
 			ArticleVO article = articleService.selectArticle(productId);
+			updateImageFile(article, files);
 			attributes.addFlashAttribute("modifyResult", true);
 			attributes.addFlashAttribute("article", article);
 			mav.setViewName("redirect:/article/" + productId);
@@ -128,13 +163,12 @@ public class ArticleController {
 			articleVO.setFilesName(filesName);
 		}
 		boolean result = articleService.addArticle(articleVO);
-		imageFileUpload(articleVO.getProductId(), files);
 		if (result) {
+			imageFileUpload(articleVO.getProductId(), files);
 			uploadResult = "등록 성공";
 		} else {
 			uploadResult = "등록 실패";
 		}
-		System.out.println(uploadResult);
 		attributes.addFlashAttribute("result", uploadResult);
 		mav.setViewName("redirect:/article/fleamarket");
 		return mav;
@@ -175,7 +209,6 @@ public class ArticleController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String loginId = authentication.getName();
 		ModelAndView mav = new ModelAndView();
-		System.out.println(productId + " " + loginId);
 
 		if (loginId.equals("anonymousUser")) {
 			attributes.addFlashAttribute("loginFirst", "loginFirst");
@@ -204,7 +237,7 @@ public class ArticleController {
 		if (result) {
 			deleteImageFile(productId);
 		}
-		
+
 		if (preUri.equals("viewArticle")) {
 			mav.setViewName("redirect:/article/fleamarket");
 		} else if (preUri.equals("salesHistory")) {
@@ -274,8 +307,6 @@ public class ArticleController {
 					String fileName = file.getOriginalFilename();
 					String filePath = uploadDir + "\\" + fileName;
 
-					System.out.println(filePath);
-
 					// 디렉토리가 존재하지 않으면 생성
 					File directory = new File(uploadDir);
 					if (!directory.exists()) {
@@ -291,7 +322,6 @@ public class ArticleController {
 	}
 
 	private void deleteImageFile(int productId) {
-		System.out.println("이미지 삭제 실행");
 		String uploadDir = servletContext.getRealPath("/resources/image/product_image/" + productId);
 		File directory = new File(uploadDir);
 		if (directory.exists()) {
@@ -301,7 +331,28 @@ public class ArticleController {
 			}
 			directory.delete();
 		}
-		System.out.println("이미지 삭제 끝");
+	}
+
+	private void updateImageFile(ArticleVO article, List<MultipartFile> files) {
+		String uploadDir = servletContext.getRealPath("/resources/image/product_image/" + article.getProductId());
+		File directory = new File(uploadDir);
+		if (directory.exists()) {
+			File[] existFiles = directory.listFiles();
+			for (File file : existFiles) {
+				boolean isFileExists = false;
+				for (String fileName : article.getFilesName()) {
+					if (file.getName().equals(fileName)) {
+						isFileExists = true;
+					}
+				}
+				if (!isFileExists) {
+					file.delete();
+				}
+			}
+		}
+		if (files != null && files.size() != 0) {
+			imageFileUpload(article.getProductId(), files);
+		}
 	}
 
 	private void increaseView(HttpServletRequest req, HttpServletResponse res, int productId) {

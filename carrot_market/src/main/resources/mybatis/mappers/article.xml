@@ -130,11 +130,22 @@
 		UPDATE products
 		SET title = #{title}, 
 			description = #{description}, 
+			category = #{category},
 			sell_or_share = #{sellOrShare},
 			price = #{price},
 			place = #{place}
 		WHERE product_id = #{productId}
 	</update>
+	
+	<delete id="updateImages" parameterType="updateImagesDTO">
+		DELETE
+		FROM product_images
+		WHERE image_id NOT IN 
+		<foreach collection="keepImages" item="image" open="(" close=")" separator=",">
+			#{image}
+		</foreach>
+		AND product_id = #{productId}
+	</delete>
 	
 	<update id="updateArticleStatus" parameterType="updateStatusDTO">
 		UPDATE products
@@ -154,10 +165,21 @@
 		WHERE product_id = #{value}
 	</delete>
 
-	<select id="selectImages" parameterType="int"
+	<select id="selectImagesName" parameterType="int"
 		resultType="String">
 		SELECT image_file_name FROM product_images
 		WHERE product_id = #{value}
+		ORDER BY image_id
+	</select>
+	
+	<select id="selectArticleImages" parameterType="int" resultType="imageVO">
+		SELECT
+			image_id AS imageId,
+			product_id AS productId,
+			image_file_name AS imageFileName
+		FROM product_images
+		WHERE product_id = #{value}
+		ORDER BY image_id
 	</select>
 	
 	<delete id="deleteImagesById" parameterType="int">

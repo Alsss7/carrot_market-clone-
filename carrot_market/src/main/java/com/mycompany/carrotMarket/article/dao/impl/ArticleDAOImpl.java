@@ -11,8 +11,10 @@ import com.mycompany.carrotMarket.article.dao.ArticleDAO;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
+import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
+import com.mycompany.carrotMarket.article.vo.ImageVO;
 
 @Repository
 public class ArticleDAOImpl implements ArticleDAO {
@@ -69,6 +71,12 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
+	public int updateImages(UpdateImagesDTO updateImagesDTO) throws DataAccessException {
+		int result = sqlSession.update("mappers.article.updateImages", updateImagesDTO);
+		return result;
+	}
+
+	@Override
 	public int updateArticleStatus(UpdateStatusDTO updateStatusDTO) throws DataAccessException {
 		int result = sqlSession.update("mappers.article.updateArticleStatus", updateStatusDTO);
 		return result;
@@ -87,8 +95,14 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public List<String> selectImages(int productId) throws DataAccessException {
-		List<String> list = sqlSession.selectList("mappers.article.selectImages", productId);
+	public List<String> selectImagesName(int productId) throws DataAccessException {
+		List<String> list = sqlSession.selectList("mappers.article.selectImagesName", productId);
+		return list;
+	}
+
+	@Override
+	public List<ImageVO> selectArticleImages(int productId) throws DataAccessException {
+		List<ImageVO> list = sqlSession.selectList("mappers.article.selectArticleImages", productId);
 		return list;
 	}
 
