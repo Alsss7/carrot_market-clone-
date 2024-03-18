@@ -10,12 +10,13 @@
 <meta charset="UTF-8">
 </head>
 <body>
-	<div id="article-div">
+	<div id="article-form-container">
 		<form action="${contextPath }/article/register" method="post" id="article-form"
 			enctype="multipart/form-data" onsubmit="return validateForm()">
-			<div id="input-file-container">
-				<label class="input-file-button" onclick="addFile()">이미지 추가</label>
-				<div id="input-file-preview"></div>
+			<div id="image-upload-wrapper">
+				<label class="upload-button" onclick="addFile()"><img
+					src="${contextPath }/resources/image/camera.png" /></label>
+				<div id="image-preview-container"></div>
 			</div>
 			<div>
 				<div class="label">제목</div>
@@ -27,7 +28,7 @@
 				<div class="label">카테고리</div>
 				<div id="select-category">
 					<select name="category" id="category">
-						<option value="" selected disabled hidden>선택해주세요</option>
+						<option value="" selected disabled>선택해주세요</option>
 						<option value="디지털기기">디지털기기</option>
 						<option value="생활가전">생활가전</option>
 						<option value="가구/인테리어">가구/인테리어</option>
@@ -67,7 +68,7 @@
 			<div>
 				<div class="label">자세한 설명</div>
 				<div id="input-explain">
-					<textarea rows="4" cols="50" id="description" name="description"
+					<textarea id="description" name="description"
 						placeholder="${region }에 올릴 게시글 내용을 작성해 주세요.(판매 금지 물품은 게시가 제한될 수 있어요.) 신뢰할 수 있는 거래를 위해 자세히 적어주세요."></textarea>
 				</div>
 			</div>
@@ -77,8 +78,8 @@
 					<input type="text" id="place" name="place" />
 				</div>
 			</div>
-			<div id="article_bt">
-				<button type="submit">작성 완료</button>
+			<div id="article-bt">
+				<button type="submit" id="submit-bt">작성 완료</button>
 			</div>
 			<input type="hidden" name="userId" value="<sec:authentication property="principal.username" />" />
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

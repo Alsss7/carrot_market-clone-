@@ -122,7 +122,7 @@
 						<c:set var="writerId" value="${member.id }" />
 						<c:choose>
 							<c:when test="${loginId == writerId}">
-								<form id="statusForm" method="get"
+								<form id="status-form" method="get"
 									action="${contextPath }/article/updateStat/${article.productId}/viewArticle">
 									<select id="status-select" name="status" onchange="submitForm()">
 										<option value="Active">판매중</option>

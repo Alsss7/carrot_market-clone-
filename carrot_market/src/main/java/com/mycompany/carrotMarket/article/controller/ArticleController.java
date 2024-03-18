@@ -125,7 +125,7 @@ public class ArticleController {
 				}
 			}
 		}
-		
+
 		boolean result = articleService.updateArticle(new UpdateImagesDTO(productId, keepImages), articleVO);
 
 		if (result) {
@@ -151,7 +151,6 @@ public class ArticleController {
 
 		List<MultipartFile> files = articleVO.getFiles();
 		List<String> filesName = new ArrayList<String>();
-		String uploadResult;
 
 		if (files != null && !files.isEmpty()) {
 			for (MultipartFile file : files) {
@@ -162,6 +161,8 @@ public class ArticleController {
 			}
 			articleVO.setFilesName(filesName);
 		}
+
+		String uploadResult;
 		boolean result = articleService.addArticle(articleVO);
 		if (result) {
 			imageFileUpload(articleVO.getProductId(), files);

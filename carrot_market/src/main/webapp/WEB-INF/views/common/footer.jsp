@@ -62,6 +62,9 @@
 			Flaticon</a>
 		<br>
 		<a href="https://www.flaticon.com/kr/free-icons/" title="더 아이콘">더 아이콘 제작자: Google - Flaticon</a>
+		<br>
+		<a href="https://www.flaticon.com/kr/free-icons/" title="카메라 아이콘">카메라 아이콘 제작자: Good Ware -
+			Flaticon</a>
 	</div>
 </body>
 </html>

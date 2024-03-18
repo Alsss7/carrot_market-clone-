@@ -148,6 +148,17 @@ main {
 	height: auto;
 }
 
+#status-form {
+	margin-bottom: 10px;
+}
+
+#status-select {
+	width: 90px;
+	height: 30px;
+	font-size: 11pt;
+	border-radius: 5px;
+}
+
 #title {
 	font-size: 15pt;
 	font-weight: bold;

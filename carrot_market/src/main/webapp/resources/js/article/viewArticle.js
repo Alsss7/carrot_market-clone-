@@ -46,7 +46,7 @@ var dateSpan = document.getElementById('created-at');
 dateSpan.innerHTML = formattedtimeDiff;
 
 
-var statusFormElement = document.getElementById('statusForm');
+var statusFormElement = document.getElementById('status-form');
 var statusSelectElement = document.getElementById('status-select');
 if(statusSelectElement !== null) {
     statusSelectElement.value = productStatus;

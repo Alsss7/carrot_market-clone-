@@ -64,60 +64,60 @@ function validateForm() {
 var fileCount = 1;
 
 function addFile() {
-    var imageContainer = document.getElementById('input-file-preview');
+    var previewContainer = document.getElementById('image-preview-container');
     var inputFile = document.createElement('input');
     inputFile.type = 'file';
     inputFile.name = 'files';
-    inputFile.id = 'fileInput' + fileCount;
+    inputFile.id = 'imageFileInput' + fileCount;
     inputFile.style.display = 'none';
     fileCount++;
 
-    var inputLabel = document.createElement('label');
-    inputLabel.htmlFor = inputFile.id;
-    inputLabel.classList.add('input-image');
-    inputLabel.textContent = '선택';
+    var uploadLabel = document.createElement('label');
+    uploadLabel.htmlFor = inputFile.id;
+    uploadLabel.classList.add('upload-label');
+    uploadLabel.textContent = '이미지 선택';
 
-    var inputAndPreview =  document.createElement('div');
-    inputAndPreview.classList.add('input-and-preview');
-    inputAndPreview.appendChild(inputFile);
-    inputAndPreview.appendChild(inputLabel);
+    var previewWrapper = document.createElement('div');
+    previewWrapper.classList.add('image-preview-wrapper');
+    previewWrapper.appendChild(inputFile);
+    previewWrapper.appendChild(uploadLabel);
 
     inputFile.addEventListener('change', function(event) {
-        handleFileSelect(event, inputFile, inputLabel, inputAndPreview);
+        handleFileSelect(event, inputFile, uploadLabel, previewWrapper);
     });
 
-    imageContainer.appendChild(inputAndPreview);
+    previewContainer.appendChild(previewWrapper);
 }
 
-function handleFileSelect(event, inputFile, inputLabel, inputAndPreview) {
+function handleFileSelect(event, inputFile, uploadLabel, previewWrapper) {
     var file = event.target.files[0];
     var reader = new FileReader();
     reader.onload = function(e) {
-        var previewImage = document.createElement('div');
-        previewImage.classList.add('preview-image');
+        var imagePreview = document.createElement('div');
+        imagePreview.classList.add('image-preview');
 
         var imageElement = document.createElement('img');
         imageElement.src = e.target.result;
-        
+
         var deleteButton = document.createElement('a');
         deleteButton.classList.add('delete-button');
         deleteButton.innerHTML = 'X';
 
         deleteButton.addEventListener('click', function() {
             inputFile.value = null;
-            var parentNode = previewImage.parentNode;
+            var parentNode = imagePreview.parentNode;
             if (parentNode) {
-                parentNode.removeChild(previewImage);
+                parentNode.removeChild(imagePreview);
             }
-            // inputAndPreview에서 inputFile을 삭제합니다.
-            inputAndPreview.removeChild(inputFile);
-            inputAndPreview.removeChild(inputLabel);
+            // previewWrapper에서 inputFile을 삭제합니다.
+            previewWrapper.removeChild(inputFile);
+            previewWrapper.removeChild(uploadLabel);
         });
 
-        previewImage.appendChild(imageElement);
-        previewImage.appendChild(deleteButton);
+        imagePreview.appendChild(imageElement);
+        imagePreview.appendChild(deleteButton);
 
-        inputAndPreview.insertBefore(previewImage, inputAndPreview.firstChild);
-    }
+        previewWrapper.insertBefore(imagePreview, previewWrapper.firstChild);
+    };
     reader.readAsDataURL(file);
 }

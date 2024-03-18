@@ -4,16 +4,40 @@ body {
 	overflow-x: hidden;
 }
 
-#article-div {
+#article-form-container {
 	padding-top: 70px;
 	flex-flow: column;
 	display: flex;
 	align-items: center;
 }
 
+#article-form-container input[type="text"] {
+	width: 300px;
+	height: 25px;
+	border-radius: 5px;
+	margin-top: 10px;
+	font-size: 12pt;
+}
+
+#article-form-container select {
+	width: 120px;
+	height: 25px;
+	border-radius: 5px;
+	margin-top: 10px;
+	font-size: 12pt;
+}
+
+#article-form-container textarea {
+	resize: none;
+	width: 300px;
+	height: 200px;
+	font-size: 11pt;
+}
+
 #article-form {
 	display: flex;
 	flex-flow: column;
+	align: center;
 }
 
 #article-form>div {
@@ -21,26 +45,24 @@ body {
 	margin-bottom: 10px;
 }
 
-#input-photo {
-	display: flex;
-	flex-flow: row;
-	align-items: center;
-	justify-content: flex-start;
+.label {
+	font-size: 15pt;
+	font-weight: bold;
 }
 
-#input-file-container {
+#image-upload-wrapper {
 	display: flex;
 	align-items: center;
+	height: 130px;
 }
 
-.input-file-button {
-	width: 100px;
-	height: 100px;
+.upload-button {
+	width: 50px;
+	height: 50px;
 	border-width: 2px;
 	border-style: solid;
 	border-color: #FF6600;
 	border-radius: 4px;
-	color: black;
 	cursor: pointer;
 	margin-right: 10px;
 	display: flex;
@@ -48,9 +70,24 @@ body {
 	justify-content: center;
 }
 
-.input-image {
+.upload-button img {
+	width: 30px;
+	height: 30px;
+}
+
+#image-preview-container {
+	display: flex;
+	align-items: center;
+}
+
+.image-preview-wrapper {
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+}
+
+.upload-label {
 	width: 100px;
-	padding: 5px;
 	cursor: pointer;
 	border-width: 1px;
 	border-style: solid;
@@ -60,31 +97,19 @@ body {
 	border-radius: 10px;
 }
 
-#input-file-preview {
-	display: flex;
-	align-items: center;
-}
-
-.input-and-preview {
-	display: flex;
-	flex-flow: column;
-	align-items: center;
-}
-
-.preview-image {
+.image-preview {
 	position: relative;
-	padding-left: 8px;
 }
 
-.preview-image img {
-	height: 150px;
-	width: 150px;
+.image-preview img {
+	height: 100px;
+	width: 100px;
 	object-fit: cover;
 	border-radius: 5px;
 	margin-right: 10px;
 }
 
-.preview-image .delete-button {
+.image-preview .delete-button {
 	position: absolute;
 	top: 3px;
 	right: 5px;
@@ -99,4 +124,15 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+#submit-bt {
+	width: 307px;
+	height: 35px;
+	background-color: orange;
+	color: white;
+	font-size: 13pt;
+	border-radius: 5px;
+	border-width: 0;
+	cursor: pointer;
 }

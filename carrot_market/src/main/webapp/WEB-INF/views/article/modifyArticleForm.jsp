@@ -10,15 +10,16 @@
 <meta charset="UTF-8">
 </head>
 <body>
-	<div id="article-div">
+	<div id="article-form-container">
 		<form action="${contextPath }/article/modify/${article.productId}" method="post"
 			id="article-form" enctype="multipart/form-data" onsubmit="return validateForm()">
-			<div id="input-file-container">
-				<label class="input-file-button" onclick="addFile()">이미지 추가</label>
-				<div id="input-file-preview">
+			<div id="image-upload-wrapper">
+				<label class="upload-button" onclick="addFile()"><img
+					src="${contextPath }/resources/image/camera.png" /></label>
+				<div id="image-preview-container">
 					<c:forEach var="image" items="${images }">
-						<div class="input-and-preview" id="inputAndPreview${image.imageId}">
-							<div class="preview-image" id="previewImage${image.imageId}">
+						<div class="image-preview-wrapper" id="imagePreviewWrapper${image.imageId}">
+							<div class="image-preview">
 								<img
 									src="${contextPath }/resources/image/product_image/${article.productId}/${image.imageFileName}" />
 								<a class="delete-button" onclick="deleteImage(${image.imageId})">X</a>
@@ -89,8 +90,8 @@
 					<input type="text" id="place" name="place" value="${article.place }" />
 				</div>
 			</div>
-			<div id="article_bt">
-				<button type="submit">수정 완료</button>
+			<div id="article-bt">
+				<button type="submit" id="submit-bt">수정 완료</button>
 			</div>
 			<input type="hidden" name="userId" value="<sec:authentication property="principal.username" />" />
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
