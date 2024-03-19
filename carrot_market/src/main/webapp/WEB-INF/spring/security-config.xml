@@ -63,6 +63,9 @@
 		<security:intercept-url
 			pattern="/article/like/*" access="hasAuthority('USER')" />
 
+		<security:intercept-url pattern="/chat/*"
+			access="hasAuthority('USER')" />
+
 
 		<security:form-login login-page="/login"
 			default-target-url="/home"

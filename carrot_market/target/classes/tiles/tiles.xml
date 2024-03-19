@@ -62,27 +62,33 @@
 	</definition>
 
 	<definition name="hotArticle" extends="default">
-		<put-attribute name="title" value="클론 마켓 - 인기 매물" />
+		<put-attribute name="title" value="클론 당근 - 인기 매물" />
 		<put-attribute name="body"
 			value="/WEB-INF/views/article/hotArticle.jsp" />
 	</definition>
 
 	<definition name="articleForm" extends="default">
-		<put-attribute name="title" value="클론 마켓 - 내 물건 팔기" />
+		<put-attribute name="title" value="클론 당근 - 내 물건 팔기" />
 		<put-attribute name="body"
 			value="/WEB-INF/views/article/articleForm.jsp" />
 	</definition>
 
 	<definition name="modifyArticleForm" extends="default">
-		<put-attribute name="title" value="클론 마켓 - 내 물건 팔기" />
+		<put-attribute name="title" value="클론 당근 - 내 물건 팔기" />
 		<put-attribute name="body"
 			value="/WEB-INF/views/article/modifyArticleForm.jsp" />
 	</definition>
 
 	<definition name="article" extends="default">
-		<put-attribute name="title" value="클론 마켓" />
+		<put-attribute name="title" value="클론 당근" />
 		<put-attribute name="body"
 			value="/WEB-INF/views/article/viewArticle.jsp" />
+	</definition>
+
+	<definition name="chat" extends="default">
+		<put-attribute name="title" value="클론 당근 - 채팅" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/chat/chat.jsp" />
 	</definition>
 
 </tiles-definitions>

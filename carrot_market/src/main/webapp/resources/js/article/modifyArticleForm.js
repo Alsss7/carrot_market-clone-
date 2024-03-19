@@ -131,5 +131,5 @@ function handleFileSelect(event, inputFile, uploadLabel, previewWrapper) {
 }
 
 function deleteImage(index) {
-    document.getElementById('inputAndPreview' + index).remove();
+    document.getElementById('imagePreviewWrapper' + index).remove();
 }

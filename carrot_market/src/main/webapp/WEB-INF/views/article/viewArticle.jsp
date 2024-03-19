@@ -131,8 +131,6 @@
 									</select>
 								</form>
 							</c:when>
-							<c:otherwise>
-							</c:otherwise>
 						</c:choose>
 					</sec:authorize>
 					<div>
@@ -196,12 +194,12 @@
 								</div>
 							</c:when>
 							<c:otherwise>
-								<button class="chat">채팅하기</button>
+								<a href="${contextPath }/chat/${article.productId}" class="chat">채팅하기</a>
 							</c:otherwise>
 						</c:choose>
 					</sec:authorize>
 					<sec:authorize access="!isAuthenticated()">
-						<button class="chat">로그인 후 채팅하기</button>
+						<a href="${contextPath }/chat/${article.productId}" class="chat">로그인 후 채팅하기</a>
 					</sec:authorize>
 				</div>
 			</c:when>
