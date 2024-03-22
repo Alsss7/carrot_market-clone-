@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.chat">
+	<select id="selectChat" parameterType="chatDTO" resultType="chatVO">
+		SELECT
+			chat_id AS chatId,
+			product_id AS productId,
+			seller_id AS sellerId,
+			buyer_id AS buyerId,
+			created_at AS createdAt
+		FROM CHATS
+		WHERE seller_id = #{sellerId} AND buyer_id = #{buyerId} AND product_id = #{productId}
+	</select>
+	
+	<insert id="insertChat" parameterType="chatVO">
+		INSERT INTO chats(chat_id, product_id, seller_id, buyer_id)
+		VALUES (chat_seq.NEXTVAL, #{productId}, #{sellerId}, #{buyerId})
+	</insert>
+	
+	<select id="selectChatListByProductId" parameterType="int" resultType="chatVO">
+		SELECT
+			chat_id AS chatId,
+			product_id AS productId,
+			seller_id AS sellerId,
+			buyer_id AS buyerId,
+			created_at AS createdAt
+		FROM CHATS
+		WHERE product_id = #{value}
+	</select>
+	
+	<select id="selectMessagesByChatId" parameterType="int" resultType="messageVO">
+		SELECT
+			message_id as messageId,
+			chat_id as chatId,
+			sender,
+			content,
+			sent_at as sentAt
+		FROM MESSAGES
+		WHERE chat_id = #{value}
+	</select>
+	
+	<insert id="insertMessage" parameterType="messageVO">
+		INSERT INTO messages(message_id, chat_id, sender, content)
+		VALUES (message_seq.NEXTVAL, #{chatId}, #{sender}, #{content})
+	</insert>
+</mapper>

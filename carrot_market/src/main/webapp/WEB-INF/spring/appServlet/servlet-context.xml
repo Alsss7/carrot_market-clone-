@@ -52,9 +52,10 @@
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	</beans:bean>
 
-	<websocket:handlers>
+	<websocket:handlers allowed-origins="*">
 		<websocket:mapping handler="chatHandler"
 			path="/chatting" />
+		<websocket:sockjs websocket-enabled="true" />
 	</websocket:handlers>
 
 	<beans:bean id="chatHandler"

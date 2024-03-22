@@ -1,10 +1,15 @@
 package com.mycompany.carrotMarket.chat.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +18,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
+import com.mycompany.carrotMarket.chat.dto.ChatDTO;
+import com.mycompany.carrotMarket.chat.service.ChatService;
+import com.mycompany.carrotMarket.chat.vo.ChatVO;
+import com.mycompany.carrotMarket.chat.vo.MessageVO;
 import com.mycompany.carrotMarket.member.service.MemberService;
 import com.mycompany.carrotMarket.member.vo.MemberVO;
 
@@ -29,33 +38,90 @@ public class ChatController {
 	@Autowired
 	private MemberService memberService;
 
+	@Autowired
+	private ChatService chatService;
+
+	@RequestMapping(value = "/chatList/{productId}", method = RequestMethod.GET)
+	public ModelAndView getChatList(@PathVariable int productId) throws Exception {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+
+		ModelAndView mav = new ModelAndView();
+		ArticleVO article = articleService.selectArticle(productId);
+		if (article != null) {
+			if (article.getUserId().equals(loginId)) {
+				List<ChatVO> chats = chatService.selectChatListByProductId(productId);
+				List<MemberVO> members = new ArrayList<MemberVO>();
+				List<String> lastMessages = new ArrayList<String>();
+				List<Long> timeDiffs = new ArrayList<Long>();
+				Date currentTime = new Date();
+				for (ChatVO chat : chats) {
+					members.add(memberService.findById(chat.getBuyerId()));
+					List<MessageVO> messages = chatService.selectMessagesByChatId(chat.getChatId());
+					lastMessages.add(messages.get(messages.size() - 1).getContent());
+					long timeDiff = currentTime.getTime() - messages.get(messages.size() - 1).getSentAt().getTime();
+					timeDiffs.add(timeDiff);
+				}
+				for (ChatVO chat : chats) {
+					logger.info(String.valueOf(chat.getChatId()));
+				}
+				for (MemberVO member : members) {
+					logger.info(member.getId());
+				}
+				for (long value : timeDiffs) {
+					logger.info(String.valueOf(value));
+				}
+				for (String value : lastMessages) {
+					logger.info(value);
+				}
+				logger.info(article.getTitle());
+				mav.addObject("chats", chats);
+				mav.addObject("members", members);
+				mav.addObject("lastMessages", lastMessages);
+				mav.addObject("timeDiffs", timeDiffs);
+				mav.addObject("article", article);
+			} else {
+				mav.addObject("msg", "잘못된 접근입니다.");
+			}
+		} else {
+			mav.addObject("msg", "존재하지 않는 게시글입니다.");
+		}
+		mav.setViewName("chatList");
+		return mav;
+	}
+
+	@RequestMapping(value = "/{productId}", method = RequestMethod.POST)
+	public ModelAndView getChatting(@ModelAttribute ChatDTO chatDTO) throws Exception {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+
+		ModelAndView mav = new ModelAndView();
+
+		ChatVO chat = chatService.selectChat(chatDTO);
+		if (chat != null) {
+			List<MessageVO> messages = chatService.selectMessagesByChatId(chat.getChatId());
+			mav.addObject("messages", messages);
+		}
+
+		MemberVO seller = memberService.findById(chatDTO.getSellerId());
+		MemberVO buyer = memberService.findById(chatDTO.getBuyerId());
+		if (loginId.equals(seller.getId())) {
+			mav.addObject("target", buyer);
+		} else {
+			mav.addObject("target", seller);
+		}
+
+		ArticleVO article = articleService.selectArticle(chatDTO.getProductId());
+		mav.addObject("article", article);
+
+		mav.addObject("sellerId", seller.getId());
+		mav.addObject("buyerId", buyer.getId());
+		mav.setViewName("chat");
+		return mav;
+	}
+
 	public static void main(String[] args) {
 		logger.info("ChatController");
 		fileLogger.info("fileLogger logger point");
-	}
-
-	@RequestMapping(value = "/chatList", method = RequestMethod.GET)
-	public ModelAndView getChatList() throws Exception {
-		ModelAndView mav = new ModelAndView();
-
-		return mav;
-	}
-
-	@RequestMapping(value = "/{productId}", method = RequestMethod.GET)
-	public ModelAndView getChatting(@PathVariable int productId) throws Exception {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
-		ModelAndView mav = new ModelAndView();
-
-		ArticleVO article = articleService.selectArticle(productId);
-		MemberVO member = memberService.findById(article.getUserId());
-		mav.addObject("article", article);
-		mav.addObject("member", member);
-
-		logger.info("==================================");
-		logger.info("@ChatController, GET Chat / Username : " + loginId);
-
-		mav.setViewName("chat");
-		return mav;
 	}
 }

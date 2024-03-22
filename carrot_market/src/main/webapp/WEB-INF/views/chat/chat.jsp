@@ -2,19 +2,23 @@
 	isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
-
+<c:set var="loginId" value="${pageContext.request.userPrincipal.name }" />
 <!DOCTYPE html>
 <html>
 <head>
 <link rel="stylesheet" href="${contextPath }/resources/css/chat/chat.css" />
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <meta charset="UTF-8">
 </head>
 <body>
 	<div class="chat-container">
 		<div class="user-wrapper">
-			<div class="user-id">${member.id }</div>
-			<div class="manner-temperature">${member.manner }&#8451;</div>
+
+			<div class="user-id">${target.id }</div>
+			<div class="manner-temperature">${target.manner }&#8451;</div>
 		</div>
 		<div class="line"></div>
 		<div class="product-wrapper">
@@ -53,12 +57,34 @@
 		</div>
 		<div class="line"></div>
 		<div class="chat-wrapper">
-			<div class="chat-content"></div>
+			<div class="message-area" id="message-area">
+				<c:forEach var="message" items="${messages }">
+					<c:choose>
+						<c:when test="${message.sender == loginId }">
+							<div class="my-message-wrapper">
+								<div class="my-message">${message.content }</div>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<div class="your-message-wrapper">
+								<div class="your-message">${message.content }</div>
+							</div>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+			</div>
 			<form action="${contextPath }/chat" method="POST" id="message-form" class="message-form">
 				<input type="text" name="message" id="input-message" />
-				<input type="submit" value="보내기" id="submit-message" />
+				<input type="button" value="보내기" id="send-message" />
 			</form>
 		</div>
 	</div>
+	<script>
+		var productId = '${article.productId}';
+		var sellerId = '${sellerId}';
+		var buyerId = '${buyerId}';
+		var loginId = '${loginId}';
+	</script>
+	<script src="${contextPath }/resources/js/chat/chat.js"></script>
 </body>
 </html>

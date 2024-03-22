@@ -188,18 +188,25 @@
 						<c:set var="writerId" value="${member.id }" />
 						<c:choose>
 							<c:when test="${loginId == writerId}">
-								<button class="chat">대화 중인 채팅방</button>
+								<a href="${contextPath }/chat/chatList/${article.productId}" class="chat">대화 중인 채팅방</a>
 								<div id="indicator" onclick="openModal(this)">
 									<img src="${contextPath }/resources/image/myPage/indicator.png" />
 								</div>
 							</c:when>
 							<c:otherwise>
-								<a href="${contextPath }/chat/${article.productId}" class="chat">채팅하기</a>
+								<form action="${contextPath }/chat/${article.productId}" method="post">
+									<input type="hidden" value="${article.productId }" name="productId" />
+									<input type="hidden" value="${article.userId }" name="sellerId" />
+									<input type="hidden" value="${loginId }" name="buyerId" />
+									<input type="submit" value="채팅하기" class="chat" />
+								</form>
 							</c:otherwise>
 						</c:choose>
 					</sec:authorize>
 					<sec:authorize access="!isAuthenticated()">
-						<a href="${contextPath }/chat/${article.productId}" class="chat">로그인 후 채팅하기</a>
+						<form action="${contextPath }/chat/${article.productId}" method="post">
+							<input type="submit" value="로그인 후 채팅하기" class="chat" />
+						</form>
 					</sec:authorize>
 				</div>
 			</c:when>

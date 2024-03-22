@@ -30,7 +30,6 @@
 <body>
 	<main>
 		<h2 style="text-align: center">관심목록</h2>
-		<div id="line"></div>
 		<c:choose>
 			<c:when test="${articles.size() != 0 }">
 				<c:forEach var="article" items="${articles }">
@@ -81,7 +80,7 @@
 							</div>
 						</div>
 					</div>
-					<div id="line"></div>
+					<div class="line"></div>
 				</c:forEach>
 			</c:when>
 			<c:otherwise>

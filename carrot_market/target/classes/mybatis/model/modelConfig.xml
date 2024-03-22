@@ -6,6 +6,8 @@
 	<typeAliases>
 		<typeAlias
 			type="com.mycompany.carrotMarket.member.vo.MemberVO" alias="memberVO" />
+
+
 		<typeAlias
 			type="com.mycompany.carrotMarket.article.vo.ArticleVO"
 			alias="articleVO" />
@@ -25,5 +27,13 @@
 		<typeAlias
 			type="com.mycompany.carrotMarket.article.dto.UpdateImagesDTO"
 			alias="updateImagesDTO" />
+
+
+		<typeAlias type="com.mycompany.carrotMarket.chat.vo.ChatVO"
+			alias="chatVO" />
+		<typeAlias
+			type="com.mycompany.carrotMarket.chat.dto.ChatDTO" alias="chatDTO" />
+		<typeAlias
+			type="com.mycompany.carrotMarket.chat.vo.MessageVO" alias="messageVO" />
 	</typeAliases>
 </configuration>

@@ -91,4 +91,10 @@
 			value="/WEB-INF/views/chat/chat.jsp" />
 	</definition>
 
+	<definition name="chatList" extends="default">
+		<put-attribute name="title" value="클론 당근 - 채팅목록" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/chat/chatList.jsp" />
+	</definition>
+
 </tiles-definitions>
