@@ -1,7 +1,7 @@
 package com.mycompany.carrotMarket.handler;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class ChatHandler extends TextWebSocketHandler {
 	private static final Logger logger = LoggerFactory.getLogger(ChatHandler.class);
 	private static final Logger fileLogger = LoggerFactory.getLogger("fileLogger");
 
-	private List<WebSocketSession> sessionList = new ArrayList<WebSocketSession>();
+	private Map<String, WebSocketSession> sessionMap = new HashMap<String, WebSocketSession>();
 
 	@Autowired
 	private ChatService chatService;
@@ -30,8 +30,9 @@ public class ChatHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		logger.info("#ChatHandler, afterConnectionEstablished");
-		sessionList.add(session);
-		logger.info(session.getPrincipal().getName() + "´ÔÀÌ ÀÔÀåÇÏ¼Ì½À´Ï´Ù.");
+		String loginId = session.getPrincipal().getName();
+		sessionMap.put(loginId, session);
+		logger.info(loginId + "´ÔÀÌ ÀÔÀåÇÏ¼Ì½À´Ï´Ù.");
 	}
 
 	@Override
@@ -52,12 +53,8 @@ public class ChatHandler extends TextWebSocketHandler {
 			targetId = buyerId;
 		}
 
-		for (WebSocketSession s : sessionList) {
-			if (s.getPrincipal().getName().equals(targetId)) {
-				s.sendMessage(new TextMessage(loginId + ":" + msg));
-			} else {
-				continue;
-			}
+		if (sessionMap.get(targetId) != null) {
+			sessionMap.get(targetId).sendMessage(new TextMessage(loginId + ":" + msg));
 		}
 
 		ChatDTO chatDTO = new ChatDTO(sellerId, buyerId, productId);
@@ -102,8 +99,9 @@ public class ChatHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		logger.info("#ChattingHandler, afterConnectionClosed");
-		sessionList.remove(session);
-		logger.info(session.getPrincipal().getName() + "´ÔÀÌ ÅðÀåÇÏ¼Ì½À´Ï´Ù.");
+		String loginId = session.getPrincipal().getName();
+		sessionMap.remove(loginId);
+		logger.info(loginId + "´ÔÀÌ ÅðÀåÇÏ¼Ì½À´Ï´Ù.");
 	}
 
 	public static void main(String[] args) {

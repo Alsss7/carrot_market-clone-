@@ -58,33 +58,48 @@
 		<div class="line"></div>
 		<div class="chat-wrapper">
 			<div class="message-area" id="message-area">
+				<c:set var="previousDate" value="" />
 				<c:forEach var="message" items="${messages }">
+					<fmt:formatDate value="${message.sentAt }" pattern="yyyy. MM. dd. (E)" var="sentDate" />
+					<c:if test="${previousDate != sentDate }">
+						<div class="sent-date" style="text-align: center;">${sentDate }</div>
+					</c:if>
+					<c:set var="previousDate" value="${sentDate }" />
+
+					<fmt:formatDate value="${message.sentAt }" pattern="a hh:mm" var="sentTime" />
 					<c:choose>
 						<c:when test="${message.sender == loginId }">
 							<div class="my-message-wrapper">
+								<div class="sent-time">${sentTime }</div>
 								<div class="my-message">${message.content }</div>
 							</div>
 						</c:when>
 						<c:otherwise>
 							<div class="your-message-wrapper">
 								<div class="your-message">${message.content }</div>
+								<div class="sent-time">${sentTime }</div>
 							</div>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>
 			</div>
-			<form action="${contextPath }/chat" method="POST" id="message-form" class="message-form">
-				<input type="text" name="message" id="input-message" />
-				<input type="button" value="보내기" id="send-message" />
-			</form>
+			<div id="message-form" class="message-form">
+				<input type="text" name="message" id="input-message" autofocus="autofocus" />
+				<input type="submit" value="보내기" id="send-message" />
+			</div>
 		</div>
 	</div>
+	<fmt:formatDate value="${messages[messages.size() - 1].sentAt }" pattern="yyyy. MM. dd. (E)"
+		var="lastSentDate" />
 	<script>
 		var productId = '${article.productId}';
 		var sellerId = '${sellerId}';
 		var buyerId = '${buyerId}';
 		var loginId = '${loginId}';
+
+		var lastSentDate = '${lastSentDate}';
 	</script>
 	<script src="${contextPath }/resources/js/chat/chat.js"></script>
 </body>
 </html>
+

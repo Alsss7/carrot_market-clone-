@@ -5,6 +5,7 @@ body {
 	display: flex;
 	flex-flow: column;
 	align-items: center;
+	overflow-x: hidden;
 }
 
 .line {
@@ -87,12 +88,14 @@ body {
 
 .message-area {
 	width: 600px;
-	height: 700px;
+	height: 500px;
+	overflow: auto;
 }
 
 .my-message-wrapper {
 	display: flex;
 	justify-content: flex-end;
+	margin-left: 50px;
 }
 
 .my-message {
@@ -106,6 +109,7 @@ body {
 .your-message-wrapper {
 	display: flex;
 	justify-content: flex-start;
+	margin-right: 50px;
 }
 
 .your-message {
@@ -114,6 +118,21 @@ body {
 	border-radius: 15px;
 	margin: 10px 5px;
 	padding: 5px 10px;
+}
+
+.sent-date {
+	color: gray;
+	font-size: 9pt;
+	margin: 5px;
+}
+
+.sent-time {
+	display: flex;
+	flex-flow: column;
+	justify-content: flex-end;
+	margin-bottom: 10px;
+	font-size: 9pt;
+	color: gray;
 }
 
 #input-message {
