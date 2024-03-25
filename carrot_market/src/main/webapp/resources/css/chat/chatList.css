@@ -94,7 +94,7 @@ main {
 	font-size: 10pt;
 }
 
-#sent-at {
+.sent-at {
 	color: gray;
 	font-size: 10pt;
 }

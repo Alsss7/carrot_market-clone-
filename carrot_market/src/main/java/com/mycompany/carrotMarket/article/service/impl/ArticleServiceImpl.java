@@ -212,6 +212,18 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public int increaseChat(int productId) throws DataAccessException {
+		int result = articleDAO.increaseChat(productId);
+		return result;
+	}
+
+	@Override
+	public int decreaseChat(int productId) throws DataAccessException {
+		int result = articleDAO.decreaseChat(productId);
+		return result;
+	}
+
+	@Override
 	public void increaseView(int productId) throws DataAccessException {
 		articleDAO.increaseView(productId);
 	}

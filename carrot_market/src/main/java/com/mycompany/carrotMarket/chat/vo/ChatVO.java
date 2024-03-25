@@ -13,6 +13,17 @@ public class ChatVO {
 
 	private Date createdAt;
 
+	public ChatVO() {
+
+	}
+
+	public ChatVO(int productId, String sellerId, String buyerId) {
+		super();
+		this.productId = productId;
+		this.sellerId = sellerId;
+		this.buyerId = buyerId;
+	}
+
 	public int getChatId() {
 		return chatId;
 	}
@@ -51,6 +62,11 @@ public class ChatVO {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	@Override
+	public String toString() {
+		return "ChatVO [productId=" + productId + ", sellerId=" + sellerId + ", buyerId=" + buyerId + "]";
 	}
 
 }

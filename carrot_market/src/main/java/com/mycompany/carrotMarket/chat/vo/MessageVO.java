@@ -13,6 +13,16 @@ public class MessageVO {
 
 	private Date sentAt;
 
+	public MessageVO() {
+
+	}
+
+	public MessageVO(int chatId, String sender, String content) {
+		this.chatId = chatId;
+		this.sender = sender;
+		this.content = content;
+	}
+
 	public int getMessageId() {
 		return messageId;
 	}
@@ -51,6 +61,11 @@ public class MessageVO {
 
 	public void setSentAt(Date sentAt) {
 		this.sentAt = sentAt;
+	}
+
+	@Override
+	public String toString() {
+		return "MessageVO [chatId=" + chatId + ", sender=" + sender + ", content=" + content + "]";
 	}
 
 }

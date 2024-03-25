@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.chat.dao.ChatDAO;
 import com.mycompany.carrotMarket.chat.dto.ChatDTO;
 import com.mycompany.carrotMarket.chat.service.ChatService;
@@ -19,6 +20,9 @@ public class ChatServiceImpl implements ChatService {
 	@Autowired
 	private ChatDAO chatDAO;
 
+	@Autowired
+	private ArticleService articleService;
+
 	@Override
 	public ChatVO selectChat(ChatDTO chatDTO) throws DataAccessException {
 		ChatVO chat = chatDAO.selectChat(chatDTO);
@@ -29,7 +33,8 @@ public class ChatServiceImpl implements ChatService {
 	@Transactional
 	public boolean insertChat(ChatVO chatVO) throws DataAccessException {
 		int result1 = chatDAO.insertChat(chatVO);
-		if (result1 != 0) {
+		int result2 = articleService.increaseChat(chatVO.getProductId());
+		if (result1 != 0 && result2 != 0) {
 			return true;
 		} else {
 			return false;

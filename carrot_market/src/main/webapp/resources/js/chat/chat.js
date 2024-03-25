@@ -15,6 +15,7 @@ $('#input-message').on('keypress', function(e) {
 })
 
 var sock = new SockJS('http://localhost:8090/carrotMarket/chatting');
+
 sock.onmessage = onMessage;
 sock.onclose = onClose;
 sock.onopen = onOpen;
@@ -28,8 +29,6 @@ function sendMessage() {
     };
     var jsonData = JSON.stringify(msg);
 	sock.send(jsonData);
-
-    location.reload();
 }
 //서버에서 메시지를 받았을 때
 function onMessage(msg) {
@@ -61,7 +60,8 @@ function onMessage(msg) {
     timeDiv.innerHTML = formattedTime;
     var innerDiv = document.createElement('div');
 
-    if(lastSentDate != formattedDate) {
+    console.log(isFirstMessage);
+    if(lastSentDate != formattedDate || isFirstMessage) {
         var sentDateDiv = document.createElement('div');
         div.classList.add('sent-date');
         document.getElementById('message-area').appendChild(sentDateDiv);

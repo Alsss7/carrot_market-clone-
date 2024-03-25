@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,9 @@ public class ChatController {
 	@Autowired
 	private ChatService chatService;
 
+	@Autowired
+	private HttpSession httpSession;
+
 	@RequestMapping(value = "/chatList/{productId}", method = RequestMethod.GET)
 	public ModelAndView getChatList(@PathVariable int productId) throws Exception {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -62,19 +67,6 @@ public class ChatController {
 					long timeDiff = currentTime.getTime() - messages.get(messages.size() - 1).getSentAt().getTime();
 					timeDiffs.add(timeDiff);
 				}
-				for (ChatVO chat : chats) {
-					logger.info(String.valueOf(chat.getChatId()));
-				}
-				for (MemberVO member : members) {
-					logger.info(member.getId());
-				}
-				for (long value : timeDiffs) {
-					logger.info(String.valueOf(value));
-				}
-				for (String value : lastMessages) {
-					logger.info(value);
-				}
-				logger.info(article.getTitle());
 				mav.addObject("chats", chats);
 				mav.addObject("members", members);
 				mav.addObject("lastMessages", lastMessages);
@@ -116,6 +108,7 @@ public class ChatController {
 
 		mav.addObject("sellerId", seller.getId());
 		mav.addObject("buyerId", buyer.getId());
+		httpSession.setAttribute("chatId", chat.getChatId());
 		mav.setViewName("chat");
 		return mav;
 	}

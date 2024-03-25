@@ -57,5 +57,9 @@ public interface ArticleDAO {
 
 	public int deleteLikesById(int productId) throws DataAccessException;
 
+	public int increaseChat(int productId) throws DataAccessException;
+
+	public int decreaseChat(int productId) throws DataAccessException;
+
 	public void increaseView(int productId) throws DataAccessException;
 }

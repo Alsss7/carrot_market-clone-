@@ -57,7 +57,7 @@
 				<a href="${contextPath }/member/myPage/salesHistory/hidden">숨김</a>
 			</span>
 		</div>
-		<div id="line"></div>
+		<div class="line"></div>
 		<c:choose>
 			<c:when test="${articles.size() != 0 }">
 				<c:forEach var="article" items="${articles }">
@@ -105,18 +105,22 @@
 							</div>
 						</a>
 						<div id="like-chat">
-							<div id="indicator" onclick="openModal(this, ${article.productId})">
-								<img src="${contextPath }/resources/image/myPage/indicator.png" />
+							<div id="indicator-wrapper">
+								<div id="indicator" onclick="openModal(this, ${article.productId})">
+									<img src="${contextPath }/resources/image/myPage/indicator.png" />
+								</div>
 							</div>
-							<div>
+							<div id="like-chat-count">
 								<c:if test="${article.chatCount != 0 }">
-									<div id="chat-count">${article.chatCount }</div>
+									<div id="chat-count">☏&nbsp;${article.chatCount }</div>
 								</c:if>
-								<div id="like-count">♡&nbsp;${article.likeCount}</div>
+								<c:if test="${article.likeCount != 0 }">
+									<div id="like-count">♡&nbsp;${article.likeCount}</div>
+								</c:if>
 							</div>
 						</div>
 					</div>
-					<div id="line"></div>
+					<div class="line"></div>
 
 
 					<div class="modal-container" id="modalContainer${article.productId }">
@@ -128,14 +132,14 @@
 											<a href="${contextPath }/article/updateHidden/${article.productId}/salesHistory?hide=0">숨기기
 												해제</a>
 										</div>
-										<div id="line"></div>
+										<div class="line"></div>
 										<div id="modify" class="options">
 											<a href="${contextPath }/article/modify/${article.productId}">게시글 수정</a>
 										</div>
-										<div id="line"></div>
+										<div class="line"></div>
 										<div id="delete" class="options">
 											<a href="${contextPath }/article/delete/${article.productId}/salesHistory"
-														onclick="return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
+												onclick="return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
 										</div>
 									</c:when>
 									<c:otherwise>
@@ -145,7 +149,7 @@
 													<a
 														href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Active">판매중</a>
 												</div>
-												<div id="line"></div>
+												<div class="line"></div>
 												<div id="modify" class="options">
 													<a href="${contextPath }/article/modify/${article.productId}">게시글 수정</a>
 												</div>
@@ -155,16 +159,16 @@
 													<a
 														href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Active">판매중</a>
 												</div>
-												<div id="line"></div>
+												<div class="line"></div>
 												<div id="modify" class="options">
 													<a href="${contextPath }/article/modify/${article.productId}">게시글 수정</a>
 												</div>
-												<div id="line"></div>
+												<div class="line"></div>
 												<div id="hidden" class="options">
 													<a
 														href="${contextPath }/article/updateHidden/${article.productId}/salesHistory?hide=1">숨기기</a>
 												</div>
-												<div id="line"></div>
+												<div class="line"></div>
 												<div id="delete" class="options">
 													<a href="${contextPath }/article/delete/${article.productId}/salesHistory?status=Sold"
 														onclick="return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
@@ -175,23 +179,24 @@
 													<a
 														href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Booking">예약중</a>
 												</div>
-												<div id="line"></div>
+												<div class="line"></div>
 												<div id="complete" class="options">
 													<a
 														href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Sold">거래완료</a>
 												</div>
-												<div id="line"></div>
+												<div class="line"></div>
 												<div id="modify" class="options">
 													<a href="${contextPath }/article/modify/${article.productId}">게시글 수정</a>
 												</div>
-												<div id="line"></div>
+												<div class="line"></div>
 												<div id="hidden" class="options">
 													<a
 														href="${contextPath }/article/updateHidden/${article.productId}/salesHistory?hide=1">숨기기</a>
 												</div>
-												<div id="line"></div>
+												<div class="line"></div>
 												<div id="delete" class="options">
-													<a href="${contextPath }/article/delete/${article.productId}/salesHistory?status=Active"
+													<a
+														href="${contextPath }/article/delete/${article.productId}/salesHistory?status=Active"
 														onclick="return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
 												</div>
 											</c:otherwise>

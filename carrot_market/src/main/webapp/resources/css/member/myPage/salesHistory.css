@@ -12,13 +12,12 @@ h2 {
 	margin-bottom: 30px;
 }
 
-#line {
+.line {
 	width: 100%;
-	padding-top: 0px;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	border: 0.1px solid #ccc; /* 회색 선의 두께와 색상 설정 */
-	opacity: 0.5; /* 투명도 설정 */
+	border: 0.1px solid #ccc;
+	opacity: 0.5;
 	display: block;
 }
 
@@ -54,7 +53,7 @@ main {
 #product-wrapper {
 	display: flex;
 	flex-flow: row;
-	margin-top: 20px;
+	margin: 5px;
 	justify-content: space-between;
 }
 
@@ -136,6 +135,20 @@ main {
 #indicator img {
 	width: 15px;
 	height: 15px;
+}
+
+#indicator-wrapper {
+	display: flex;
+	justify-content: flex-end;
+}
+
+#like-chat-count {
+	display: flex;
+	align-items: center;
+}
+
+#chat-count {
+	margin-right: 10px;
 }
 
 .modal-container {

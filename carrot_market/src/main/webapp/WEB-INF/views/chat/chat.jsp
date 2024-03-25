@@ -9,7 +9,8 @@
 <html>
 <head>
 <link rel="stylesheet" href="${contextPath }/resources/css/chat/chat.css" />
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+</head>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <meta charset="UTF-8">
 </head>
@@ -89,16 +90,29 @@
 			</div>
 		</div>
 	</div>
-	<fmt:formatDate value="${messages[messages.size() - 1].sentAt }" pattern="yyyy. MM. dd. (E)"
-		var="lastSentDate" />
 	<script>
 		var productId = '${article.productId}';
 		var sellerId = '${sellerId}';
 		var buyerId = '${buyerId}';
 		var loginId = '${loginId}';
-
-		var lastSentDate = '${lastSentDate}';
+		var lastSentDate;
+		var isFirstMessage = false;
 	</script>
+	<c:choose>
+		<c:when test="${not empty messages }">
+			<c:set var="size" value="${messages.size() }" />
+			<fmt:formatDate value="${messages[size - 1].sentAt }" pattern="yyyy. MM. dd. (E)"
+				var="lastSentDate" />
+			<script>
+				lastSentDate = '${lastSentDate}';
+			</script>
+		</c:when>
+		<c:otherwise>
+			<script>
+				isFirstMessage = true;
+			</script>
+		</c:otherwise>
+	</c:choose>
 	<script src="${contextPath }/resources/js/chat/chat.js"></script>
 </body>
 </html>

@@ -234,6 +234,18 @@
 		WHERE product_id = #{value}
 	</delete>
 	
+	<update id="increaseChat">
+		UPDATE PRODUCTS
+		SET CHAT_COUNT = CHAT_COUNT + 1
+		WHERE PRODUCT_ID = #{value}
+	</update>
+	
+	<update id="decreaseChat">
+		UPDATE PRODUCTS
+		SET CHAT_COUNT = CHAT_COUNT - 1
+		WHERE PRODUCT_ID = #{value}
+	</update>
+	
 	<update id="increaseView" parameterType="int">
 		UPDATE products
 		SET VIEW_COUNT = VIEW_COUNT + 1

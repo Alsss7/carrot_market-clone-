@@ -155,6 +155,18 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
+	public int increaseChat(int productId) throws DataAccessException {
+		int result = sqlSession.update("mappers.article.increaseChat", productId);
+		return result;
+	}
+
+	@Override
+	public int decreaseChat(int productId) throws DataAccessException {
+		int result = sqlSession.update("mappers.article.decreaseChat", productId);
+		return result;
+	}
+
+	@Override
 	public void increaseView(int productId) throws DataAccessException {
 		sqlSession.update("mappers.article.increaseView", productId);
 	}

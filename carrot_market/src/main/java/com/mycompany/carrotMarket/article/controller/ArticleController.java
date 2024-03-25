@@ -112,6 +112,8 @@ public class ArticleController {
 		}
 
 		List<Integer> keepImages = new ArrayList<Integer>();
+
+		@SuppressWarnings("unchecked")
 		Enumeration<String> parameterNames = request.getParameterNames();
 		while (parameterNames.hasMoreElements()) {
 			String paramName = parameterNames.nextElement();

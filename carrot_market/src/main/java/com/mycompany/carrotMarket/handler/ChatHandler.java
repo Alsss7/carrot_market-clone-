@@ -1,7 +1,9 @@
 package com.mycompany.carrotMarket.handler;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -18,11 +20,10 @@ import com.mycompany.carrotMarket.chat.vo.ChatVO;
 import com.mycompany.carrotMarket.chat.vo.MessageVO;
 
 public class ChatHandler extends TextWebSocketHandler {
-
 	private static final Logger logger = LoggerFactory.getLogger(ChatHandler.class);
 	private static final Logger fileLogger = LoggerFactory.getLogger("fileLogger");
 
-	private Map<String, WebSocketSession> sessionMap = new HashMap<String, WebSocketSession>();
+	private final Map<Integer, Set<WebSocketSession>> chatRoomSessionMap = new HashMap<Integer, Set<WebSocketSession>>();
 
 	@Autowired
 	private ChatService chatService;
@@ -30,9 +31,24 @@ public class ChatHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		logger.info("#ChatHandler, afterConnectionEstablished");
-		String loginId = session.getPrincipal().getName();
-		sessionMap.put(loginId, session);
-		logger.info(loginId + "님이 입장하셨습니다.");
+		int chatId = (Integer) session.getAttributes().get("chatId");
+		if (!chatRoomSessionMap.containsKey(chatId)) {
+			chatRoomSessionMap.put(chatId, new HashSet<WebSocketSession>());
+		}
+		Set<WebSocketSession> chatRoomSessions = chatRoomSessionMap.get(chatId);
+
+		if (!chatRoomSessions.contains(session)) {
+			chatRoomSessions.add(session);
+		}
+
+		for (int key : chatRoomSessionMap.keySet()) {
+			logger.info("----------------------------");
+			logger.info("chatId : {}", key);
+			logger.info("----------참가자 목록----------");
+			for (WebSocketSession s : chatRoomSessionMap.get(key)) {
+				logger.info("{}", s.getPrincipal().getName());
+			}
+		}
 	}
 
 	@Override
@@ -46,29 +62,21 @@ public class ChatHandler extends TextWebSocketHandler {
 		String sellerId = object.getString("sellerId");
 		String msg = object.getString("msg");
 
-		String targetId = null;
-		if (loginId.equals(buyerId)) {
-			targetId = sellerId;
-		} else {
-			targetId = buyerId;
-		}
+		int chatId = (Integer) session.getAttributes().get("chatId");
 
-		if (sessionMap.get(targetId) != null) {
-			sessionMap.get(targetId).sendMessage(new TextMessage(loginId + ":" + msg));
+		Set<WebSocketSession> chatRoomSessions = chatRoomSessionMap.get(chatId);
+		for (WebSocketSession wsSession : chatRoomSessions) {
+			logger.info("message send to {}", wsSession.getPrincipal().getName());
+			wsSession.sendMessage(new TextMessage(loginId + ":" + msg));
 		}
 
 		ChatDTO chatDTO = new ChatDTO(sellerId, buyerId, productId);
 		ChatVO chat = chatService.selectChat(chatDTO);
 		if (chat == null) {
 			logger.info("chat이 존재하지 않습니다. 새로운 chat을 생성합니다.");
-			ChatVO newChat = new ChatVO();
+			ChatVO newChat = new ChatVO(productId, sellerId, buyerId);
 			logger.info("새로운 chat 생성");
-			newChat.setProductId(productId);
-			newChat.setSellerId(sellerId);
-			newChat.setBuyerId(buyerId);
-			logger.info("newChat productId: " + newChat.getProductId());
-			logger.info("newChat sellerId: " + newChat.getSellerId());
-			logger.info("newChat buyerId: " + newChat.getBuyerId());
+			logger.info("newChat : " + newChat.toString());
 			boolean result = chatService.insertChat(newChat);
 			if (result) {
 				logger.info("새로운 채팅이 생성되었습니다.");
@@ -80,14 +88,9 @@ public class ChatHandler extends TextWebSocketHandler {
 			logger.info("chat이 존재합니다. 메시지 생성으로 넘어갑니다.");
 		}
 
-		MessageVO msgVO = new MessageVO();
+		MessageVO msgVO = new MessageVO(chat.getChatId(), loginId, msg);
 		logger.info("새로운 message 생성");
-		msgVO.setChatId(chat.getChatId());
-		msgVO.setSender(loginId);
-		msgVO.setContent(msg);
-		logger.info("message chatId: " + msgVO.getChatId());
-		logger.info("message senderId: " + msgVO.getSender());
-		logger.info("message content: " + msgVO.getContent());
+		logger.info("message : " + msgVO.toString());
 		boolean result = chatService.insertMessage(msgVO);
 		if (result) {
 			logger.info("메시지가 저장되었습니다.");
@@ -99,9 +102,15 @@ public class ChatHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		logger.info("#ChattingHandler, afterConnectionClosed");
-		String loginId = session.getPrincipal().getName();
-		sessionMap.remove(loginId);
-		logger.info(loginId + "님이 퇴장하셨습니다.");
+		int chatId = (Integer) session.getAttributes().get("chatId");
+		if (chatRoomSessionMap.containsKey(chatId)) {
+			chatRoomSessionMap.get(chatId).remove(session);
+			logger.info("{}님이 퇴장하였습니다.", session.getPrincipal().getName());
+		}
+		if (chatRoomSessionMap.get(chatId).size() == 0) {
+			chatRoomSessionMap.remove(chatId);
+			logger.info("{}채팅방의 참가자가 모두 퇴장하여 채팅방을 삭제합니다.", chatId);
+		}
 	}
 
 	public static void main(String[] args) {
