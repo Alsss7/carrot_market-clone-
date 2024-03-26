@@ -70,6 +70,11 @@ body {
 	align-items: center;
 }
 
+#status-select {
+	border-style: none;
+	font-size: 11pt;
+}
+
 .stat {
 	font-weight: bold;
 	margin-right: 5px;
@@ -146,4 +151,13 @@ body {
 	height: 30px;
 	border-radius: 10px;
 	border-width: 0;
+	background-color: orange;
+}
+
+#send-message:disabled {
+	width: 100px;
+	height: 30px;
+	border-radius: 10px;
+	border-width: 0;
+	background-color: lightgray;
 }

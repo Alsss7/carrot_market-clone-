@@ -1,5 +1,7 @@
 package com.mycompany.carrotMarket.chat.controller;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -93,6 +95,9 @@ public class ChatController {
 		if (chat != null) {
 			List<MessageVO> messages = chatService.selectMessagesByChatId(chat.getChatId());
 			mav.addObject("messages", messages);
+			Date date = messages.get(messages.size() - 1).getSentAt();
+			LocalDate lastMessageDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			mav.addObject("lastMsgDate", lastMessageDate);
 		}
 
 		MemberVO seller = memberService.findById(chatDTO.getSellerId());
@@ -109,6 +114,7 @@ public class ChatController {
 		mav.addObject("sellerId", seller.getId());
 		mav.addObject("buyerId", buyer.getId());
 		httpSession.setAttribute("chatId", chat.getChatId());
+
 		mav.setViewName("chat");
 		return mav;
 	}

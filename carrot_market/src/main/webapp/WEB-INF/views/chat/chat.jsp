@@ -30,14 +30,28 @@
 			<div class="product-content">
 				<div class="stat-and-title">
 					<c:choose>
-						<c:when test="${article.status == 'Booking' }">
-							<span class="stat" style="background-color: green;">예약 중</span>
-						</c:when>
-						<c:when test="${article.status == 'Sold' }">
-							<span class="stat" style="background-color: black;">거래완료</span>
+						<c:when test="${loginId == article.userId}">
+							<form id="status-form" method="get"
+								action="${contextPath }/article/updateStat/${article.productId}/viewArticle?buyerId=${target.id }">
+								<select id="status-select" name="status" onchange="submitForm()">
+									<option value="Active">판매중</option>
+									<option value="Booking">예약중</option>
+									<option value="Sold">거래완료</option>
+								</select>
+							</form>
 						</c:when>
 						<c:otherwise>
-							<span class="stat">판매중</span>
+							<c:choose>
+								<c:when test="${article.status == 'Booking' }">
+									<span class="stat" style="background-color: green;">예약 중</span>
+								</c:when>
+								<c:when test="${article.status == 'Sold' }">
+									<span class="stat" style="background-color: black;">거래완료</span>
+								</c:when>
+								<c:otherwise>
+									<span class="stat">판매중</span>
+								</c:otherwise>
+							</c:choose>
 						</c:otherwise>
 					</c:choose>
 					<div class="title">${article.title }</div>
@@ -86,7 +100,7 @@
 			</div>
 			<div id="message-form" class="message-form">
 				<input type="text" name="message" id="input-message" autofocus="autofocus" />
-				<input type="submit" value="보내기" id="send-message" />
+				<input type="submit" value="보내기" id="send-message" disabled />
 			</div>
 		</div>
 	</div>
@@ -95,24 +109,10 @@
 		var sellerId = '${sellerId}';
 		var buyerId = '${buyerId}';
 		var loginId = '${loginId}';
-		var lastSentDate;
-		var isFirstMessage = false;
+		var productStatus = "${article.status}";
+
+		var lastMsgDate = '${lastMsgDate}';
 	</script>
-	<c:choose>
-		<c:when test="${not empty messages }">
-			<c:set var="size" value="${messages.size() }" />
-			<fmt:formatDate value="${messages[size - 1].sentAt }" pattern="yyyy. MM. dd. (E)"
-				var="lastSentDate" />
-			<script>
-				lastSentDate = '${lastSentDate}';
-			</script>
-		</c:when>
-		<c:otherwise>
-			<script>
-				isFirstMessage = true;
-			</script>
-		</c:otherwise>
-	</c:choose>
 	<script src="${contextPath }/resources/js/chat/chat.js"></script>
 </body>
 </html>
