@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -13,13 +15,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,6 +37,9 @@ import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 import com.mycompany.carrotMarket.article.vo.ImageVO;
+import com.mycompany.carrotMarket.chat.service.ChatService;
+import com.mycompany.carrotMarket.chat.vo.ChatVO;
+import com.mycompany.carrotMarket.chat.vo.MessageVO;
 import com.mycompany.carrotMarket.member.service.MemberService;
 import com.mycompany.carrotMarket.member.vo.MemberVO;
 
@@ -44,6 +52,9 @@ public class ArticleController {
 
 	@Autowired
 	MemberService memberService;
+
+	@Autowired
+	ChatService chatService;
 
 	@Autowired
 	private ServletContext servletContext;
@@ -231,75 +242,104 @@ public class ArticleController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/delete/{productId}/{preUri}", method = RequestMethod.GET)
-	public ModelAndView deleteArticle(@PathVariable int productId, @PathVariable String preUri,
-			@RequestParam(value = "status", required = false) String status, RedirectAttributes attributes)
-			throws Exception {
-		ModelAndView mav = new ModelAndView();
-		boolean result = articleService.deleteArticleById(productId);
+	@ResponseBody
+	@RequestMapping(value = "/delete/{productId}", method = RequestMethod.DELETE)
+	public ResponseEntity<Map<String, String>> deleteArticle(@PathVariable int productId) throws Exception {
+		Map<String, String> response = new HashMap<String, String>();
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+		ArticleVO article = articleService.selectArticle(productId);
+		boolean result = false;
+		if (loginId.equals(article.getUserId())) {
+			result = articleService.deleteArticleById(productId);
+			response.put("msg", "success");
+		} else {
+			response.put("msg", "not valid");
+		}
+
 		if (result) {
 			deleteImageFile(productId);
 		}
+		response.put("result", String.valueOf(result));
 
-		if (preUri.equals("viewArticle")) {
-			mav.setViewName("redirect:/article/fleamarket");
-		} else if (preUri.equals("salesHistory")) {
-			if (status == null) {
-				mav.setViewName("redirect:/member/myPage/salesHistory/hidden");
+		return ResponseEntity.ok(response);
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/updateStat/{productId}", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, String>> updateArticleStatus(@PathVariable int productId,
+			@RequestBody Map<String, String> requestBody) throws Exception {
+		String status = requestBody.get("status");
+		String buyerId = requestBody.get("buyerId");
+
+		Map<String, String> response = new HashMap<String, String>();
+		if (status.equals("Active")) {
+			buyerId = "";
+		}
+
+		boolean result = articleService.updateArticleStatus(new UpdateStatusDTO(productId, status, buyerId));
+		response.put("result", String.valueOf(result));
+		response.put("buyerId", buyerId);
+
+		return ResponseEntity.ok(response);
+	}
+
+	@RequestMapping(value = "/updateStat/{productId}/selectBuyer", method = RequestMethod.GET)
+	public ModelAndView selectBuyer(@PathVariable int productId, @RequestParam("status") String status,
+			@RequestParam("pre") String pre) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+
+		ArticleVO article = articleService.selectArticle(productId);
+		if (article != null) {
+			if (article.getUserId().equals(loginId)) {
+				List<ChatVO> chats = chatService.selectChatListByProductId(productId);
+				List<MemberVO> members = new ArrayList<MemberVO>();
+				List<String> lastMessages = new ArrayList<String>();
+				List<Long> timeDiffs = new ArrayList<Long>();
+				Date currentTime = new Date();
+				for (ChatVO chat : chats) {
+					members.add(memberService.findById(chat.getBuyerId()));
+					List<MessageVO> messages = chatService.selectMessagesByChatId(chat.getChatId());
+					lastMessages.add(messages.get(messages.size() - 1).getContent());
+					long timeDiff = currentTime.getTime() - messages.get(messages.size() - 1).getSentAt().getTime();
+					timeDiffs.add(timeDiff);
+				}
+				mav.addObject("chats", chats);
+				mav.addObject("members", members);
+				mav.addObject("lastMessages", lastMessages);
+				mav.addObject("timeDiffs", timeDiffs);
+				mav.addObject("article", article);
+				mav.addObject("preStatus", article.getStatus());
 			} else {
-				mav.setViewName("redirect:/member/myPage/salesHistory?status=" + status);
+				mav.addObject("msg", "잘못된 접근입니다.");
 			}
 		} else {
-			mav.setViewName("redirect:/home");
+			mav.addObject("msg", "존재하지 않는 게시글입니다.");
 		}
-		attributes.addFlashAttribute("deleteResult", result);
+		mav.addObject("preUri", pre);
+		mav.addObject("productStatus", status);
+		mav.setViewName("buyerList");
 		return mav;
 	}
 
-	@RequestMapping(value = "/updateStat/{productId}/{preUri}", method = RequestMethod.GET)
-	public ModelAndView updateArticleStatus(@PathVariable int productId, @PathVariable String preUri,
-			@RequestParam("status") String status, RedirectAttributes attributes) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		boolean result = articleService.updateArticleStatus(new UpdateStatusDTO(productId, status));
-		if (result == true) {
-			attributes.addFlashAttribute("result", "상태가 변경되었습니다.");
-		} else {
-			attributes.addFlashAttribute("result", "변경에 실패했습니다.");
-		}
-		if (preUri.equals("viewArticle")) {
-			mav.setViewName("redirect:/article/" + productId);
-		} else if (preUri.equals("salesHistory")) {
-			if (status.equals("Booking")) {
-				mav.setViewName("redirect:/member/myPage/salesHistory?status=Active");
-			} else {
-				mav.setViewName("redirect:/member/myPage/salesHistory?status=" + status);
-			}
-		}
-		return mav;
-	}
-
-	@RequestMapping(value = "/updateHidden/{productId}/{preUri}", method = RequestMethod.GET)
-	public ModelAndView updateArticleHidden(@PathVariable int productId, @PathVariable String preUri,
-			@RequestParam(value = "hide", required = false) int hidden, RedirectAttributes attributes)
-			throws Exception {
-		ModelAndView mav = new ModelAndView();
+	@ResponseBody
+	@RequestMapping(value = "/updateHidden/{productId}", method = RequestMethod.POST)
+	public ResponseEntity<Map<String, String>> updateArticleHidden(@PathVariable int productId,
+			@RequestBody Map<String, Integer> requestBody) throws Exception {
+		int hidden = requestBody.get("hide");
+		Map<String, String> response = new HashMap<String, String>();
 		boolean result = articleService.updateArticleHidden(new UpdateHiddenDTO(productId, hidden));
-		if (result == true) {
-			attributes.addFlashAttribute("result", "상태가 변경되었습니다.");
+		response.put("result", String.valueOf(result));
+		if (hidden == 0) {
+			response.put("hidden", "show");
 		} else {
-			attributes.addFlashAttribute("result", "변경에 실패했습니다.");
+			response.put("hidden", "hide");
 		}
-		if (preUri.equals("viewArticle")) {
-			mav.setViewName("redirect:/article/fleamarket");
-		} else if (preUri.equals("salesHistory")) {
-			ArticleVO article = articleService.selectArticle(productId);
-			if (hidden == 1) {
-				mav.setViewName("redirect:/member/myPage/salesHistory/hidden");
-			} else {
-				mav.setViewName("redirect:/member/myPage/salesHistory?status=" + article.getStatus());
-			}
-		}
-		return mav;
+
+		return ResponseEntity.ok(response);
 	}
 
 	private void imageFileUpload(int productId, List<MultipartFile> files) {

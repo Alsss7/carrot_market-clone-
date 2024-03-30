@@ -8,6 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath }/resources/css/member/myPage/salesHistory.css" />
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <c:if test="${not empty result}">
 	<script>
 		var result = "${result}";
@@ -129,8 +130,7 @@
 								<c:choose>
 									<c:when test="${article.hidden == 1 }">
 										<div id="booking" class="options">
-											<a href="${contextPath }/article/updateHidden/${article.productId}/salesHistory?hide=0">숨기기
-												해제</a>
+											<a onclick="updateHidden(0, '${article.productId}')">숨기기 해제</a>
 										</div>
 										<div class="line"></div>
 										<div id="modify" class="options">
@@ -138,16 +138,14 @@
 										</div>
 										<div class="line"></div>
 										<div id="delete" class="options">
-											<a href="${contextPath }/article/delete/${article.productId}/salesHistory"
-												onclick="return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
+											<a onclick="deleteArticle('${article.productId}'); return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
 										</div>
 									</c:when>
 									<c:otherwise>
 										<c:choose>
 											<c:when test="${article.status == 'Booking' }">
 												<div id="active" class="options">
-													<a
-														href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Active">판매중</a>
+													<a onclick="updateStat(this, 'Active', '${article.productId}')">판매중</a>
 												</div>
 												<div class="line"></div>
 												<div id="modify" class="options">
@@ -156,8 +154,7 @@
 											</c:when>
 											<c:when test="${article.status == 'Sold' }">
 												<div id="active" class="options">
-													<a
-														href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Active">판매중</a>
+													<a onclick="updateStat(this, 'Active', '${article.productId}')">판매중</a>
 												</div>
 												<div class="line"></div>
 												<div id="modify" class="options">
@@ -165,24 +162,20 @@
 												</div>
 												<div class="line"></div>
 												<div id="hidden" class="options">
-													<a
-														href="${contextPath }/article/updateHidden/${article.productId}/salesHistory?hide=1">숨기기</a>
+													<a onclick="updateHidden(1, '${article.productId}')">숨기기</a>
 												</div>
 												<div class="line"></div>
 												<div id="delete" class="options">
-													<a href="${contextPath }/article/delete/${article.productId}/salesHistory?status=Sold"
-														onclick="return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
+													<a onclick="deleteArticle('${article.productId}'); return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
 												</div>
 											</c:when>
 											<c:otherwise>
 												<div id="booking" class="options">
-													<a
-														href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Booking">예약중</a>
+													<a onclick="updateStat(this, 'Booking', '${article.productId}')">예약중</a>
 												</div>
 												<div class="line"></div>
 												<div id="complete" class="options">
-													<a
-														href="${contextPath }/article/updateStat/${article.productId}/salesHistory?status=Sold">거래완료</a>
+													<a onclick="updateStat(this, 'Sold', '${article.productId}')">거래완료</a>
 												</div>
 												<div class="line"></div>
 												<div id="modify" class="options">
@@ -190,14 +183,11 @@
 												</div>
 												<div class="line"></div>
 												<div id="hidden" class="options">
-													<a
-														href="${contextPath }/article/updateHidden/${article.productId}/salesHistory?hide=1">숨기기</a>
+													<a onclick="updateHidden(1, '${article.productId}')">숨기기</a>
 												</div>
 												<div class="line"></div>
 												<div id="delete" class="options">
-													<a
-														href="${contextPath }/article/delete/${article.productId}/salesHistory?status=Active"
-														onclick="return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
+													<a onclick="deleteArticle('${article.productId}');return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
 												</div>
 											</c:otherwise>
 										</c:choose>

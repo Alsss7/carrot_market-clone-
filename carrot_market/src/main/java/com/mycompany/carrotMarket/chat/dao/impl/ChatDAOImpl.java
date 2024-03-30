@@ -31,6 +31,18 @@ public class ChatDAOImpl implements ChatDAO {
 	}
 
 	@Override
+	public int deleteChatByProductId(int productId) throws DataAccessException {
+		int result = sqlSession.delete("mappers.chat.deleteChatByProductId", productId);
+		return result;
+	}
+
+	@Override
+	public int deleteMsgByChatId(int chatId) throws DataAccessException {
+		int result = sqlSession.delete("mappers.chat.deleteMsgByChatId", chatId);
+		return result;
+	}
+
+	@Override
 	public List<ChatVO> selectChatListByProductId(int productId) throws DataAccessException {
 		List<ChatVO> list = sqlSession.selectList("mappers.chat.selectChatListByProductId", productId);
 		return list;

@@ -149,7 +149,7 @@
 	
 	<update id="updateArticleStatus" parameterType="updateStatusDTO">
 		UPDATE products
-		SET status = #{status}
+		SET status = #{status}, buyer_id = #{buyerId}
 		WHERE product_id = #{productId}
 	</update>
 	

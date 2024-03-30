@@ -10,6 +10,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath }/resources/css/article/viewArticle.css" />
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <c:if test="${addResult }">
 	<c:choose>
 		<c:when test="${addResult == true }">
@@ -122,14 +123,11 @@
 						<c:set var="writerId" value="${member.id }" />
 						<c:choose>
 							<c:when test="${loginId == writerId}">
-								<form id="status-form" method="get"
-									action="${contextPath }/article/updateStat/${article.productId}/viewArticle">
-									<select id="status-select" name="status" onchange="submitForm()">
-										<option value="Active">판매중</option>
-										<option value="Booking">예약중</option>
-										<option value="Sold">거래완료</option>
-									</select>
-								</form>
+								<select id="status-select" name="status" onchange="updateStatus()">
+									<option value="Active">판매중</option>
+									<option value="Booking">예약중</option>
+									<option value="Sold">거래완료</option>
+								</select>
 							</c:when>
 						</c:choose>
 					</sec:authorize>
@@ -221,8 +219,7 @@
 					<c:choose>
 						<c:when test="${article.hidden == 1 }">
 							<div id="booking" class="options">
-								<a href="${contextPath }/article/updateHidden/${article.productId}/viewArticle?hide=0">숨기기
-									해제</a>
+								<a onclick="updateHidden(0)">숨기기 해제</a>
 							</div>
 							<div id="line"></div>
 							<div id="modify" class="options">
@@ -230,8 +227,7 @@
 							</div>
 							<div id="line"></div>
 							<div id="delete" class="options">
-								<a href="${contextPath }/article/delete/${article.productId}/viewArticle"
-									onclick="return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
+								<a onclick="deleteArticle(); return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
 							</div>
 						</c:when>
 						<c:otherwise>
@@ -247,12 +243,11 @@
 									</div>
 									<div id="line"></div>
 									<div id="hidden" class="options">
-										<a href="${contextPath }/article/updateHidden/${article.productId}/viewArticle?hide=1">숨기기</a>
+										<a onclick="updateHidden(1)">숨기기</a>
 									</div>
 									<div id="line"></div>
 									<div id="delete" class="options">
-										<a href="${contextPath }/article/delete/${article.productId}/viewArticle"
-											onclick="return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
+										<a onclick="deleteArticle(); return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
 									</div>
 								</c:when>
 								<c:otherwise>
@@ -261,12 +256,11 @@
 									</div>
 									<div id="line"></div>
 									<div id="hidden" class="options">
-										<a href="${contextPath }/article/updateHidden/${article.productId}/viewArticle?hide=1">숨기기</a>
+										<a onclick="updateHidden(1)">숨기기</a>
 									</div>
 									<div id="line"></div>
 									<div id="delete" class="options">
-										<a href="${contextPath }/article/delete/${article.productId}/viewArticle"
-											onclick="return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
+										<a onclick="deleteArticle(); return confirm('정말로 삭제 하시겠습니까?')">삭제</a>
 									</div>
 								</c:otherwise>
 							</c:choose>
@@ -277,8 +271,8 @@
 		</div>
 	</main>
 	<script>
-		var timeDiff = "${timeDiff}";
 		var contextPath = "${contextPath}";
+		var timeDiff = "${timeDiff}";
 		var productId = "${article.productId}";
 		var productStatus = "${article.status}";
 	</script>

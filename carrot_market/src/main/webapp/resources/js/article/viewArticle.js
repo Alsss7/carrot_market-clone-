@@ -46,15 +46,45 @@ var dateSpan = document.getElementById('created-at');
 dateSpan.innerHTML = formattedtimeDiff;
 
 
-var statusFormElement = document.getElementById('status-form');
 var statusSelectElement = document.getElementById('status-select');
 if(statusSelectElement !== null) {
     statusSelectElement.value = productStatus;
 }
 
-function submitForm() {
-    console.log(statusFormElement.action);
-    statusFormElement.submit();
+function updateStatus() {
+    var status = statusSelectElement.value;
+
+    if(status == 'Active') {
+        $.ajax({
+            url: contextPath + '/article/updateStat/' + productId,
+            type: 'POST',
+            headers: {
+                "content-Type": 'application/json; charset=UTF-8'
+            },
+            data: JSON.stringify({
+                    status: status,
+                    buyerId: ''
+            }),
+            success: function(response) {
+                var result = response.result;
+                var buyerId = response.buyerId;
+    
+                if(result == 'true') {
+                    if(status == 'Active') {
+                        alert('판매중으로 변경되었습니다.');
+                    }
+                } else {
+                    alert('상태 변경에 실패했습니다.');
+                }
+                location.reload();
+            },
+            error: function(error) {
+                    
+            }
+        });
+    } else {
+        window.location.href = contextPath + '/article/updateStat/' + productId + '/selectBuyer?status=' + status + '&pre=viewArticle';
+    }
 }
 
 function openModal(clickedElement) {
@@ -80,4 +110,63 @@ function closeModal(event) {
         document.body.style.overflow = 'auto';
         modalContainer.style.display = 'none';
     }
+}
+
+function updateHidden(isHidden) {
+    $.ajax({
+        url: contextPath + '/article/updateHidden/' + productId,
+        type: 'POST',
+        headers: {
+             "content-Type": 'application/json; charset=UTF-8'
+        },
+        data: JSON.stringify({
+            hide: isHidden
+        }),
+        success: function(response) {
+            var result = response.result;
+            var hidden = response.hidden;
+
+            if(result == 'true') {
+                if(hidden == 'show') {
+                    alert('숨김 해제했습니다.');
+                } else {
+                    alert('상품을 숨겼습니다.');
+                }
+            } else {
+                alert('상태 변경에 실패했습니다.');
+            }
+            location.reload();
+        },
+        error: function(error) {
+            
+        }
+    });
+}
+
+function deleteArticle() {
+    $.ajax({
+        url: contextPath + '/article/delete/' + productId,
+        type: 'DELETE',
+        headers: {
+             "content-Type": 'application/json; charset=UTF-8'
+        },
+        success: function(response) {
+            var result = response.result;
+            var msg = response.msg;
+
+            if(result == 'true') {
+                alert('게시글이 삭제되었습니다.');
+            } else {
+                if(msg == 'not valid') {
+                    alert('잘못된 접근입니다!');
+                } else {
+                    alert('삭제에 실패했습니다.');
+                }
+            }
+            location.reload();
+        },
+        error: function(error) {
+            
+        }
+    });
 }

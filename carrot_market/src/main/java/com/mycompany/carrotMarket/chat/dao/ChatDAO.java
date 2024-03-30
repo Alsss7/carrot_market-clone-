@@ -12,7 +12,11 @@ public interface ChatDAO {
 	public ChatVO selectChat(ChatDTO chatDTO) throws DataAccessException;
 
 	public int insertChat(ChatVO chatVO) throws DataAccessException;
-	
+
+	public int deleteChatByProductId(int productId) throws DataAccessException;
+
+	public int deleteMsgByChatId(int chatId) throws DataAccessException;
+
 	public List<ChatVO> selectChatListByProductId(int productId) throws DataAccessException;
 
 	public List<MessageVO> selectMessagesByChatId(int chatId) throws DataAccessException;

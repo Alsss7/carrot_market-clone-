@@ -16,9 +16,13 @@ import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 import com.mycompany.carrotMarket.article.vo.ImageVO;
+import com.mycompany.carrotMarket.chat.service.ChatService;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
+
+	@Autowired
+	ChatService chatService;
 
 	@Autowired
 	ArticleDAO articleDAO;
@@ -115,7 +119,7 @@ public class ArticleServiceImpl implements ArticleService {
 		if (articleVO.getFilesName() != null && articleVO.getFilesName().size() != 0) {
 			articleDAO.insertImageFiles(articleVO);
 		}
-		
+
 		if (result != 0) {
 			return true;
 		} else {
@@ -153,11 +157,12 @@ public class ArticleServiceImpl implements ArticleService {
 			System.out.println(result);
 		}
 
-		if (selectLike(new LikeDTO(article.getUserId(), productId))) {
-			articleDAO.deleteLikesById(productId);
-		}
-		// articleDAO.deleteChatsById(productId);
+		articleDAO.deleteLikesById(productId);
+
+		chatService.deleteChatByProductId(productId);
+
 		int result = articleDAO.deleteArticleById(productId);
+
 		if (result != 0) {
 			return true;
 		} else {

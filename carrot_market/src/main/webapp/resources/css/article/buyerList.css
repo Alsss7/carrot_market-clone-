@@ -1,0 +1,106 @@
+@charset "UTF-8";
+
+body {
+	margin-top: 70px;
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+}
+
+h1 {
+	text-align: center;
+}
+
+.line {
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border: 0.1px solid #ccc;
+	opacity: 0.5;
+	display: block;
+}
+
+main {
+	display: flex;
+	flex-flow: column;
+	width: 700px;
+}
+
+.chat-wrapper {
+	display: flex;
+	align-items: center;
+	margin-top: 20px;
+	cursor: pointer;
+}
+
+.image-wrapper {
+	width: 80px;
+	height: 70px;
+	position: relative;
+	margin-right: 20px;
+}
+
+.image-wrapper img {
+	object-fit: cover;
+}
+
+#product-image {
+	width: 50px;
+	height: 50px;
+	border-radius: 10px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 0;
+	mix-blend-mode: normal;
+}
+
+#profile-image {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	z-index: 2;
+}
+
+.image-background {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	z-index: 1;
+	background-color: white; /* 배경색을 설정합니다. */
+}
+
+.user-wrapper {
+	display: flex;
+	flex-flow: column;
+}
+
+.user {
+	margin: 3px;
+}
+
+.target-id {
+	font-size: 13pt;
+	font-weight: bold;
+}
+
+.region {
+	color: gray;
+	font-size: 10pt;
+}
+
+.sent-at {
+	color: gray;
+	font-size: 10pt;
+}
+
+.last-message {
+	font-size: 13pt;
+	margin: 3px;
+}

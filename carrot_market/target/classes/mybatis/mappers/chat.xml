@@ -20,6 +20,18 @@
 		VALUES (chat_seq.NEXTVAL, #{productId}, #{sellerId}, #{buyerId})
 	</insert>
 	
+	<delete id="deleteChatByProductId" parameterType="int">
+		DELETE
+		FROM CHATS
+		WHERE product_id = #{value}
+	</delete>
+	
+	<delete id="deleteMsgByChatId" parameterType="int">
+		DELETE
+		FROM MESSAGES
+		WHERE chat_id = #{value}
+	</delete>
+	
 	<select id="selectChatListByProductId" parameterType="int" resultType="chatVO">
 		SELECT
 			chat_id AS chatId,

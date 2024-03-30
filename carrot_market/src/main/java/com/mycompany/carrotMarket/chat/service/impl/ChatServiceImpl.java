@@ -42,6 +42,23 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
+	@Transactional
+	public boolean deleteChatByProductId(int productId) throws DataAccessException {
+		List<ChatVO> chatList = chatDAO.selectChatListByProductId(productId);
+
+		for (ChatVO chat : chatList) {
+			chatDAO.deleteMsgByChatId(chat.getChatId());
+		}
+		int result = chatDAO.deleteChatByProductId(productId);
+
+		if (result != 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public List<ChatVO> selectChatListByProductId(int productId) throws DataAccessException {
 		List<ChatVO> list = chatDAO.selectChatListByProductId(productId);
 		return list;

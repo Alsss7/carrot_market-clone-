@@ -8,6 +8,10 @@ body {
 	flex-flow: column;
 }
 
+a {
+	cursor: pointer;
+}
+
 main {
 	width: 800px;
 	height: auto;

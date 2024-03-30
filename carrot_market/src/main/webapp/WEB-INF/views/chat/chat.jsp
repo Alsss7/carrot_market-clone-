@@ -10,8 +10,8 @@
 <head>
 <link rel="stylesheet" href="${contextPath }/resources/css/chat/chat.css" />
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
-</head>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+</head>
 <meta charset="UTF-8">
 </head>
 <body>
@@ -31,14 +31,11 @@
 				<div class="stat-and-title">
 					<c:choose>
 						<c:when test="${loginId == article.userId}">
-							<form id="status-form" method="get"
-								action="${contextPath }/article/updateStat/${article.productId}/viewArticle?buyerId=${target.id }">
-								<select id="status-select" name="status" onchange="submitForm()">
-									<option value="Active">판매중</option>
-									<option value="Booking">예약중</option>
-									<option value="Sold">거래완료</option>
-								</select>
-							</form>
+							<select id="status-select" name="status">
+								<option value="Active">판매중</option>
+								<option value="Booking">예약중</option>
+								<option value="Sold">거래완료</option>
+							</select>
 						</c:when>
 						<c:otherwise>
 							<c:choose>
@@ -105,6 +102,7 @@
 		</div>
 	</div>
 	<script>
+		var contextPath = '${contextPath}';
 		var productId = '${article.productId}';
 		var sellerId = '${sellerId}';
 		var buyerId = '${buyerId}';
