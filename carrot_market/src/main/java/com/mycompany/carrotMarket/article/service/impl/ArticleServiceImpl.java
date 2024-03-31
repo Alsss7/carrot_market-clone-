@@ -1,7 +1,11 @@
 package com.mycompany.carrotMarket.article.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,8 @@ import com.mycompany.carrotMarket.chat.service.ChatService;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
+
+	private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
 	@Autowired
 	ChatService chatService;
@@ -91,6 +97,20 @@ public class ArticleServiceImpl implements ArticleService {
 			}
 		}
 		return articleList;
+	}
+
+	@Override
+	public Map<String, Integer> selectArticlesCountByStatus(String userId) throws DataAccessException {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		int activeCount = articleDAO.selectArticlesCountByActive(userId);
+		int soldCount = articleDAO.selectArticlesCountBySold(userId);
+		int hiddenCount = articleDAO.selectArticlesCountByHidden(userId);
+
+		map.put("activeCount", activeCount);
+		map.put("soldCount", soldCount);
+		map.put("hiddenCount", hiddenCount);
+
+		return map;
 	}
 
 	@Override

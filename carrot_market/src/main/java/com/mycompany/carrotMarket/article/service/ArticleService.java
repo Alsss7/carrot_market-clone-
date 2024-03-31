@@ -1,6 +1,7 @@
 package com.mycompany.carrotMarket.article.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 
@@ -22,6 +23,8 @@ public interface ArticleService {
 	public List<ArticleVO> selectArticlesByUserIdAndStat(SalesDTO salesDTO) throws DataAccessException;
 
 	public List<ArticleVO> selectArticlesByHidden(String userId) throws DataAccessException;
+	
+	public Map<String, Integer> selectArticlesCountByStatus(String userId) throws DataAccessException;
 
 	public ArticleVO selectArticle(int productId) throws DataAccessException;
 

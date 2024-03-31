@@ -186,7 +186,8 @@
 						<c:set var="writerId" value="${member.id }" />
 						<c:choose>
 							<c:when test="${loginId == writerId}">
-								<a href="${contextPath }/chat/chatList/${article.productId}" class="chat">대화 중인 채팅방</a>
+								<a href="${contextPath }/chat/chatList/${article.productId}" class="chat">대화 중인
+									채팅방&nbsp;${article.chatCount }</a>
 								<div id="indicator" onclick="openModal(this)">
 									<img src="${contextPath }/resources/image/myPage/indicator.png" />
 								</div>

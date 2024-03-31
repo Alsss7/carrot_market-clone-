@@ -59,6 +59,24 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
+	public int selectArticlesCountByActive(String userId) throws DataAccessException {
+		int result = sqlSession.selectOne("mappers.article.selectArticlesCountByActive", userId);
+		return result;
+	}
+
+	@Override
+	public int selectArticlesCountBySold(String userId) throws DataAccessException {
+		int result = sqlSession.selectOne("mappers.article.selectArticlesCountBySold", userId);
+		return result;
+	}
+
+	@Override
+	public int selectArticlesCountByHidden(String userId) throws DataAccessException {
+		int result = sqlSession.selectOne("mappers.article.selectArticlesCountByHidden", userId);
+		return result;
+	}
+
+	@Override
 	public ArticleVO selectArticle(int productId) throws DataAccessException {
 		ArticleVO article = sqlSession.selectOne("mappers.article.selectArticle", productId);
 		return article;

@@ -77,7 +77,7 @@
 			status,
 			hidden
 		FROM products
-		WHERE user_id = #{userId} and hidden = 0
+		WHERE user_id = #{userId} AND hidden = 0
 		<choose>
         	<when test="status == 'Active'">
             	AND status IN (#{status}, 'Booking')
@@ -102,6 +102,27 @@
 			hidden
 		FROM products
 		WHERE user_id = #{value} and hidden = 1
+	</select>
+	
+	<select id="selectArticlesCountByActive" parameterType="String" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM PRODUCTS
+		WHERE USER_ID = #{value} AND status IN ('Active', 'Booking') AND HIDDEN = 0
+	</select>
+	
+	<select id="selectArticlesCountBySold" parameterType="String" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM PRODUCTS
+		WHERE USER_ID = #{value} AND status = 'Sold' AND HIDDEN = 0
+	</select>
+	
+	<select id="selectArticlesCountByHidden" parameterType="String" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM PRODUCTS
+		WHERE USER_ID = #{value} AND HIDDEN = 1
 	</select>
 
 	<select id="selectArticle" parameterType="int"

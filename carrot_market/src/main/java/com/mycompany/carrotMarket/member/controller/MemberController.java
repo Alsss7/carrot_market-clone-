@@ -176,8 +176,11 @@ public class MemberController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String loginId = authentication.getName();
 		List<ArticleVO> articleList = articleService.selectArticlesByUserIdAndStat(new SalesDTO(loginId, status));
+		Map<String, Integer> map = articleService.selectArticlesCountByStatus(loginId);
+
 		mav.addObject("articles", articleList);
 		mav.addObject("status", status);
+		mav.addObject("articleCount", map);
 		mav.setViewName("salesHistory");
 		return mav;
 	}
@@ -188,7 +191,10 @@ public class MemberController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String loginId = authentication.getName();
 		List<ArticleVO> articleList = articleService.selectArticlesByHidden(loginId);
+		Map<String, Integer> map = articleService.selectArticlesCountByStatus(loginId);
+
 		mav.addObject("articles", articleList);
+		mav.addObject("articleCount", map);
 		if (articleList.size() != 0) {
 			mav.addObject("hidden", 1);
 		} else {

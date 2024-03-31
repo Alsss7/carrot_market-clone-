@@ -25,6 +25,12 @@ public interface ArticleDAO {
 
 	public List<ArticleVO> selectArticlesByHidden(String userId) throws DataAccessException;
 
+	public int selectArticlesCountByActive(String userId) throws DataAccessException;
+
+	public int selectArticlesCountBySold(String userId) throws DataAccessException;
+
+	public int selectArticlesCountByHidden(String userId) throws DataAccessException;
+
 	public ArticleVO selectArticle(int productId) throws DataAccessException;
 
 	public int updateArticle(ArticleVO articleVO) throws DataAccessException;

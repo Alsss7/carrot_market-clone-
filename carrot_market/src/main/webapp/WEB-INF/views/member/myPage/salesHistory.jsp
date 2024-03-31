@@ -49,13 +49,28 @@
 		</div>
 		<div id="status-wrapper">
 			<span id="active">
-				<a href="${contextPath }/member/myPage/salesHistory?status=Active">판매 중</a>
+				<a href="${contextPath }/member/myPage/salesHistory?status=Active">
+					판매 중
+					<c:if test="${articleCount.activeCount != 0 }">
+						&nbsp;${articleCount.activeCount }
+					</c:if>
+				</a>
 			</span>
 			<span id="sold">
-				<a href="${contextPath }/member/myPage/salesHistory?status=Sold">거래 완료</a>
+				<a href="${contextPath }/member/myPage/salesHistory?status=Sold">
+					거래 완료
+					<c:if test="${articleCount.soldCount != 0 }">
+						&nbsp;${articleCount.soldCount }
+					</c:if>
+				</a>
 			</span>
 			<span id="hide">
-				<a href="${contextPath }/member/myPage/salesHistory/hidden">숨김</a>
+				<a href="${contextPath }/member/myPage/salesHistory/hidden">
+					숨김
+					<c:if test="${articleCount.hiddenCount != 0 }">
+						&nbsp;${articleCount.hiddenCount }
+					</c:if>
+				</a>
 			</span>
 		</div>
 		<div class="line"></div>
