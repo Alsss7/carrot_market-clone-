@@ -201,7 +201,7 @@ public class ArticleController {
 			long timeDiff = currentTime.getTime() - dbTimeStamp.getTime();
 
 			MemberVO member = memberService.findById(article.getUserId());
-			mav.addObject("msg", "success");
+			mav.addObject("isExists", "true");
 			mav.addObject("article", article);
 			mav.addObject("timeDiff", timeDiff);
 			mav.addObject("member", member);
@@ -212,7 +212,7 @@ public class ArticleController {
 				increaseView(req, res, productId);
 			}
 		} else {
-			mav.addObject("msg", "fail");
+			mav.addObject("isExists", "false");
 		}
 		mav.setViewName("article");
 		return mav;

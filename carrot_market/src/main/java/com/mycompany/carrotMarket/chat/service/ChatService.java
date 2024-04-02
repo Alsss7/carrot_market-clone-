@@ -10,6 +10,8 @@ import com.mycompany.carrotMarket.chat.vo.MessageVO;
 
 public interface ChatService {
 	public ChatVO selectChat(ChatDTO chatDTO) throws DataAccessException;
+	
+	public ChatVO selectChatByChatId(int chatId) throws DataAccessException;
 
 	public boolean insertChat(ChatVO chatVO) throws DataAccessException;
 

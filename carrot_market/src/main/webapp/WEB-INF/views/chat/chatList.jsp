@@ -18,11 +18,9 @@
 			</c:when>
 			<c:otherwise>
 				<c:forEach var="chat" items="${chats }" varStatus="status">
-					<form action="${contextPath }/chat/${article.productId}" method="POST" id="chatting"
+					<form action="${contextPath }/chat/${article.productId}" method="GET" id="chatting"
 						style="cursor: pointer" onclick="submit()">
-						<input type="hidden" value="${article.productId }" name="productId" />
-						<input type="hidden" value="${loginId }" name="sellerId" />
-						<input type="hidden" value="${members[status.index].id }" name="buyerId" />
+						<input type="hidden" name="buyerId" value="${chat.buyerId}" />
 						<div class="chat-wrapper">
 							<div class="image-wrapper">
 								<img class="image-background" src="${contextPath }/resources/image/white.png" /> <img

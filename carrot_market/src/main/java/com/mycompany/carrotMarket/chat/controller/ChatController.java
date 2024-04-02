@@ -13,12 +13,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
@@ -84,38 +85,70 @@ public class ChatController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/{productId}", method = RequestMethod.POST)
-	public ModelAndView getChatting(@ModelAttribute ChatDTO chatDTO) throws Exception {
+	@RequestMapping(value = "/{productId}", method = RequestMethod.GET)
+	public ModelAndView getChatting(@PathVariable int productId,
+			@RequestParam(value = "buyerId", required = false) String buyerId, RedirectAttributes attributes)
+			throws Exception {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String loginId = authentication.getName();
 
 		ModelAndView mav = new ModelAndView();
 
-		ChatVO chat = chatService.selectChat(chatDTO);
-		if (chat != null) {
-			List<MessageVO> messages = chatService.selectMessagesByChatId(chat.getChatId());
-			mav.addObject("messages", messages);
-			Date date = messages.get(messages.size() - 1).getSentAt();
-			LocalDate lastMessageDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-			mav.addObject("lastMsgDate", lastMessageDate);
+		ArticleVO article = articleService.selectArticle(productId);
+
+		ChatVO chat;
+		MemberVO seller;
+		MemberVO buyer;
+		if (buyerId != null) {
+			chat = chatService.selectChat(new ChatDTO(article.getUserId(), buyerId, productId));
+			seller = memberService.findById(article.getUserId());
+			buyer = memberService.findById(buyerId);
+		} else {
+			chat = chatService.selectChat(new ChatDTO(article.getUserId(), loginId, productId));
+			seller = memberService.findById(article.getUserId());
+			buyer = memberService.findById(loginId);
 		}
 
-		MemberVO seller = memberService.findById(chatDTO.getSellerId());
-		MemberVO buyer = memberService.findById(chatDTO.getBuyerId());
+		if (chat != null) {
+			if (chat.getSellerId().equals(loginId) || chat.getBuyerId().equals(loginId)) {
+				List<MessageVO> messages = chatService.selectMessagesByChatId(chat.getChatId());
+				mav.addObject("messages", messages);
+				Date date = messages.get(messages.size() - 1).getSentAt();
+				LocalDate lastMessageDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				mav.addObject("lastMsgDate", lastMessageDate);
+
+				httpSession.setAttribute("chatId", chat.getChatId());
+			} else {
+				logger.info("not valid");
+				attributes.addFlashAttribute("msg", "잘못된 접근입니다.");
+				mav.setViewName("redirect:/article/" + article.getProductId());
+			}
+		}
 		if (loginId.equals(seller.getId())) {
 			mav.addObject("target", buyer);
 		} else {
 			mav.addObject("target", seller);
 		}
 
-		ArticleVO article = articleService.selectArticle(chatDTO.getProductId());
 		mav.addObject("article", article);
-
 		mav.addObject("sellerId", seller.getId());
 		mav.addObject("buyerId", buyer.getId());
-		httpSession.setAttribute("chatId", chat.getChatId());
-
 		mav.setViewName("chat");
+		return mav;
+	}
+
+	@RequestMapping(value = "/condition", method = RequestMethod.GET)
+	public ModelAndView chatOrChatList(@RequestParam("productId") int productId) throws Exception {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+		ModelAndView mav = new ModelAndView();
+
+		ArticleVO article = articleService.selectArticle(productId);
+		if (article.getUserId().equals(loginId)) {
+			mav.setViewName("redirect:/chat/chatList/" + productId);
+		} else {
+			mav.setViewName("redirect:/chat/" + productId);
+		}
 		return mav;
 	}
 

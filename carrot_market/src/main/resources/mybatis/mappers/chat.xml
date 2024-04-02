@@ -15,6 +15,17 @@
 		WHERE seller_id = #{sellerId} AND buyer_id = #{buyerId} AND product_id = #{productId}
 	</select>
 	
+	<select id="selectChatByChatId" parameterType="int" resultType="chatVO">
+		SELECT
+			chat_id AS chatId,
+			product_id AS productId,
+			seller_id AS sellerId,
+			buyer_id AS buyerId,
+			created_at AS createdAt
+		FROM CHATS
+		WHERE CHAT_ID = #{value}
+	</select>
+	
 	<insert id="insertChat" parameterType="chatVO">
 		INSERT INTO chats(chat_id, product_id, seller_id, buyer_id)
 		VALUES (chat_seq.NEXTVAL, #{productId}, #{sellerId}, #{buyerId})
@@ -38,9 +49,11 @@
 			product_id AS productId,
 			seller_id AS sellerId,
 			buyer_id AS buyerId,
-			created_at AS createdAt
+			created_at AS createdAt,
+			last_sent_at AS lastSentAt
 		FROM CHATS
 		WHERE product_id = #{value}
+		ORDER BY last_sent_at DESC
 	</select>
 	
 	<select id="selectMessagesByChatId" parameterType="int" resultType="messageVO">
@@ -52,10 +65,21 @@
 			sent_at as sentAt
 		FROM MESSAGES
 		WHERE chat_id = #{value}
+		ORDER BY message_id
 	</select>
 	
 	<insert id="insertMessage" parameterType="messageVO">
 		INSERT INTO messages(message_id, chat_id, sender, content)
 		VALUES (message_seq.NEXTVAL, #{chatId}, #{sender}, #{content})
 	</insert>
+	
+	<update id="updateLastMessageDate" parameterType="int">
+		UPDATE chats c
+		SET c.last_sent_at = (
+    		SELECT MAX(m.sent_at)
+    		FROM messages m
+    		WHERE m.chat_id = c.chat_id
+		)
+		WHERE c.chat_id = #{value}
+	</update>
 </mapper>

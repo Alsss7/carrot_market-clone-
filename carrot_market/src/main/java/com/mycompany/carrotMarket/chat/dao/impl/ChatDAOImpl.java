@@ -25,6 +25,12 @@ public class ChatDAOImpl implements ChatDAO {
 	}
 
 	@Override
+	public ChatVO selectChatByChatId(int chatId) throws DataAccessException {
+		ChatVO chat = sqlSession.selectOne("mappers.chat.selectChatByChatId", chatId);
+		return chat;
+	}
+
+	@Override
 	public int insertChat(ChatVO chatVO) throws DataAccessException {
 		int result = sqlSession.insert("mappers.chat.insertChat", chatVO);
 		return result;
@@ -57,6 +63,12 @@ public class ChatDAOImpl implements ChatDAO {
 	@Override
 	public int insertMessage(MessageVO messageVO) throws DataAccessException {
 		int result = sqlSession.insert("mappers.chat.insertMessage", messageVO);
+		return result;
+	}
+
+	@Override
+	public int updateLastMessageDate(int chatId) throws DataAccessException {
+		int result = sqlSession.update("mappers.chat.updateLastMessageDate", chatId);
 		return result;
 	}
 

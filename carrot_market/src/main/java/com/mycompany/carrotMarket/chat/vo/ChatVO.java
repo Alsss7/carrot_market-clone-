@@ -13,12 +13,13 @@ public class ChatVO {
 
 	private Date createdAt;
 
+	private Date lastSentAt;
+
 	public ChatVO() {
 
 	}
 
 	public ChatVO(int productId, String sellerId, String buyerId) {
-		super();
 		this.productId = productId;
 		this.sellerId = sellerId;
 		this.buyerId = buyerId;
@@ -62,6 +63,14 @@ public class ChatVO {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public Date getLastSentAt() {
+		return lastSentAt;
+	}
+
+	public void setLastSentAt(Date lastSentAt) {
+		this.lastSentAt = lastSentAt;
 	}
 
 	@Override

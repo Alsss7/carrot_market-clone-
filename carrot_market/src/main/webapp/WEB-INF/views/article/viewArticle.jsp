@@ -11,6 +11,11 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath }/resources/css/article/viewArticle.css" />
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<c:if test="${not empty msg }">
+	<script>
+		alert('${msg}');
+	</script>
+</c:if>
 <c:if test="${addResult }">
 	<c:choose>
 		<c:when test="${addResult == true }">
@@ -64,7 +69,7 @@
 <body>
 	<main>
 		<c:choose>
-			<c:when test="${msg == 'success' }">
+			<c:when test="${isExists == 'true' }">
 				<div id="images-and-user">
 					<div id="images">
 						<div class="slider-btn" id="prevBtn" onclick="prevSlide()">&#10094;</div>
@@ -193,17 +198,15 @@
 								</div>
 							</c:when>
 							<c:otherwise>
-								<form action="${contextPath }/chat/${article.productId}" method="post">
-									<input type="hidden" value="${article.productId }" name="productId" />
-									<input type="hidden" value="${article.userId }" name="sellerId" />
-									<input type="hidden" value="${loginId }" name="buyerId" />
+								<form action="${contextPath }/chat/${article.productId}" method="GET">
 									<input type="submit" value="채팅하기" class="chat" />
 								</form>
 							</c:otherwise>
 						</c:choose>
 					</sec:authorize>
 					<sec:authorize access="!isAuthenticated()">
-						<form action="${contextPath }/chat/${article.productId}" method="post">
+						<form action="${contextPath }/chat/condition" method="GET">
+							<input type="hidden" value="${article.productId }" name="productId" />
 							<input type="submit" value="로그인 후 채팅하기" class="chat" />
 						</form>
 					</sec:authorize>

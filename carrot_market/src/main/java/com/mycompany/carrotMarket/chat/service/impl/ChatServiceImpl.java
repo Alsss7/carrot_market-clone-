@@ -30,6 +30,12 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
+	public ChatVO selectChatByChatId(int chatId) throws DataAccessException {
+		ChatVO chat = chatDAO.selectChatByChatId(chatId);
+		return chat;
+	}
+
+	@Override
 	@Transactional
 	public boolean insertChat(ChatVO chatVO) throws DataAccessException {
 		int result1 = chatDAO.insertChat(chatVO);
@@ -71,9 +77,11 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
+	@Transactional
 	public boolean insertMessage(MessageVO messageVO) throws DataAccessException {
-		int result = chatDAO.insertMessage(messageVO);
-		if (result != 0) {
+		int result1 = chatDAO.insertMessage(messageVO);
+		int result2 = chatDAO.updateLastMessageDate(messageVO.getChatId());
+		if (result1 != 0 && result2 != 0) {
 			return true;
 		} else {
 			return false;

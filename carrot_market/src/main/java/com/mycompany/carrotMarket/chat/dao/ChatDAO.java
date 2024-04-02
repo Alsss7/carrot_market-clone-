@@ -11,6 +11,8 @@ import com.mycompany.carrotMarket.chat.vo.MessageVO;
 public interface ChatDAO {
 	public ChatVO selectChat(ChatDTO chatDTO) throws DataAccessException;
 
+	public ChatVO selectChatByChatId(int chatId) throws DataAccessException;
+
 	public int insertChat(ChatVO chatVO) throws DataAccessException;
 
 	public int deleteChatByProductId(int productId) throws DataAccessException;
@@ -22,5 +24,7 @@ public interface ChatDAO {
 	public List<MessageVO> selectMessagesByChatId(int chatId) throws DataAccessException;
 
 	public int insertMessage(MessageVO messageVO) throws DataAccessException;
+
+	public int updateLastMessageDate(int chatId) throws DataAccessException;
 
 }

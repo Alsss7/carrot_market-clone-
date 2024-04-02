@@ -31,22 +31,24 @@ public class ChatHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		logger.info("#ChatHandler, afterConnectionEstablished");
-		int chatId = (Integer) session.getAttributes().get("chatId");
-		if (!chatRoomSessionMap.containsKey(chatId)) {
-			chatRoomSessionMap.put(chatId, new HashSet<WebSocketSession>());
-		}
-		Set<WebSocketSession> chatRoomSessions = chatRoomSessionMap.get(chatId);
+		if (session.getAttributes().get("chatId") != null) {
+			int chatId = (Integer) session.getAttributes().get("chatId");
+			if (!chatRoomSessionMap.containsKey(chatId)) {
+				chatRoomSessionMap.put(chatId, new HashSet<WebSocketSession>());
+			}
+			Set<WebSocketSession> chatRoomSessions = chatRoomSessionMap.get(chatId);
 
-		if (!chatRoomSessions.contains(session)) {
-			chatRoomSessions.add(session);
-		}
+			if (!chatRoomSessions.contains(session)) {
+				chatRoomSessions.add(session);
+			}
 
-		for (int key : chatRoomSessionMap.keySet()) {
-			logger.info("----------------------------");
-			logger.info("chatId : {}", key);
-			logger.info("----------참가자 목록----------");
-			for (WebSocketSession s : chatRoomSessionMap.get(key)) {
-				logger.info("{}", s.getPrincipal().getName());
+			for (int key : chatRoomSessionMap.keySet()) {
+				logger.info("----------------------------");
+				logger.info("chatId : {}", key);
+				logger.info("----------참가자 목록----------");
+				for (WebSocketSession s : chatRoomSessionMap.get(key)) {
+					logger.info("{}", s.getPrincipal().getName());
+				}
 			}
 		}
 	}
@@ -62,12 +64,9 @@ public class ChatHandler extends TextWebSocketHandler {
 		String sellerId = object.getString("sellerId");
 		String msg = object.getString("msg");
 
-		int chatId = (Integer) session.getAttributes().get("chatId");
-
-		Set<WebSocketSession> chatRoomSessions = chatRoomSessionMap.get(chatId);
-		for (WebSocketSession wsSession : chatRoomSessions) {
-			logger.info("message send to {}", wsSession.getPrincipal().getName());
-			wsSession.sendMessage(new TextMessage(loginId + ":" + msg));
+		int chatId;
+		if (session.getAttributes().get("chatId") != null) {
+			chatId = (Integer) session.getAttributes().get("chatId");
 		}
 
 		ChatDTO chatDTO = new ChatDTO(sellerId, buyerId, productId);
@@ -81,6 +80,24 @@ public class ChatHandler extends TextWebSocketHandler {
 			if (result) {
 				logger.info("새로운 채팅이 생성되었습니다.");
 				chat = chatService.selectChat(chatDTO);
+				chatId = chat.getChatId();
+				if (!chatRoomSessionMap.containsKey(chatId)) {
+					chatRoomSessionMap.put(chatId, new HashSet<WebSocketSession>());
+				}
+
+				Set<WebSocketSession> chatRoomSessions = chatRoomSessionMap.get(chatId);
+				if (!chatRoomSessions.contains(session)) {
+					chatRoomSessions.add(session);
+				}
+
+				for (int key : chatRoomSessionMap.keySet()) {
+					logger.info("----------------------------");
+					logger.info("chatId : {}", key);
+					logger.info("----------참가자 목록----------");
+					for (WebSocketSession s : chatRoomSessionMap.get(key)) {
+						logger.info("{}", s.getPrincipal().getName());
+					}
+				}
 			} else {
 				logger.info("새로운 채팅이 생성되지 않았습니다.");
 			}
@@ -97,19 +114,29 @@ public class ChatHandler extends TextWebSocketHandler {
 		} else {
 			logger.info("메시지가 저장되지 않았습니다.");
 		}
+
+		chatId = chat.getChatId();
+		Set<WebSocketSession> chatRoomSessions = chatRoomSessionMap.get(chatId);
+		for (WebSocketSession wsSession : chatRoomSessions) {
+			logger.info("message send to {}", wsSession.getPrincipal().getName());
+			wsSession.sendMessage(new TextMessage(loginId + ":" + msg));
+		}
 	}
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		logger.info("#ChattingHandler, afterConnectionClosed");
-		int chatId = (Integer) session.getAttributes().get("chatId");
-		if (chatRoomSessionMap.containsKey(chatId)) {
-			chatRoomSessionMap.get(chatId).remove(session);
-			logger.info("{}님이 퇴장하였습니다.", session.getPrincipal().getName());
-		}
-		if (chatRoomSessionMap.get(chatId).size() == 0) {
-			chatRoomSessionMap.remove(chatId);
-			logger.info("{}채팅방의 참가자가 모두 퇴장하여 채팅방을 삭제합니다.", chatId);
+
+		if (session.getAttributes().get("chatId") != null) {
+			int chatId = (Integer) session.getAttributes().get("chatId");
+			if (chatRoomSessionMap.containsKey(chatId)) {
+				chatRoomSessionMap.get(chatId).remove(session);
+				logger.info("{}님이 퇴장하였습니다.", session.getPrincipal().getName());
+			}
+			if (chatRoomSessionMap.get(chatId).size() == 0) {
+				chatRoomSessionMap.remove(chatId);
+				logger.info("{}채팅방의 참가자가 모두 퇴장하여 채팅방을 삭제합니다.", chatId);
+			}
 		}
 	}
 
