@@ -10,16 +10,22 @@ import com.mycompany.carrotMarket.chat.vo.MessageVO;
 
 public interface ChatService {
 	public ChatVO selectChat(ChatDTO chatDTO) throws DataAccessException;
-	
+
 	public ChatVO selectChatByChatId(int chatId) throws DataAccessException;
 
 	public boolean insertChat(ChatVO chatVO) throws DataAccessException;
+
+	public boolean deleteChatById(int chatId) throws DataAccessException;
+
+	public boolean deleteChatByChatDTO(ChatDTO chatDTO) throws DataAccessException;
 
 	public boolean deleteChatByProductId(int productId) throws DataAccessException;
 
 	public List<ChatVO> selectChatListByProductId(int productId) throws DataAccessException;
 
 	public List<MessageVO> selectMessagesByChatId(int chatId) throws DataAccessException;
+
+	public int selectMessagesCountByChatId(int chatId) throws DataAccessException;
 
 	public boolean insertMessage(MessageVO messageVO) throws DataAccessException;
 }

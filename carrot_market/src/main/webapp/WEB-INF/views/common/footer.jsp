@@ -66,6 +66,8 @@
 			<br> <br>
 			<a href="https://www.flaticon.com/kr/free-icons/" title="카메라 아이콘">카메라 아이콘 제작자: Good Ware -
 				Flaticon</a>
+			<br> <br>
+			<a href="https://kr.freepik.com/search">Pixel perfect 제작 아이콘</a>
 		</div>
 	</div>
 </body>

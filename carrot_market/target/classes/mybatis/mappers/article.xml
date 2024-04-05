@@ -255,13 +255,13 @@
 		WHERE product_id = #{value}
 	</delete>
 	
-	<update id="increaseChat">
+	<update id="increaseChat" parameterType="int">
 		UPDATE PRODUCTS
 		SET CHAT_COUNT = CHAT_COUNT + 1
 		WHERE PRODUCT_ID = #{value}
 	</update>
 	
-	<update id="decreaseChat">
+	<update id="decreaseChat" parameterType="int">
 		UPDATE PRODUCTS
 		SET CHAT_COUNT = CHAT_COUNT - 1
 		WHERE PRODUCT_ID = #{value}

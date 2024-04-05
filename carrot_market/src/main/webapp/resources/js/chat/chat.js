@@ -12,7 +12,7 @@ $('#input-message').on('keypress', function(e) {
         sendMessage();
         $('#input-message').val('');
     }
-})
+});
 
 var sock = new SockJS('http://localhost:8090/carrotMarket/chatting');
 
@@ -29,7 +29,30 @@ function sendMessage() {
     };
     var jsonData = JSON.stringify(msg);
 	sock.send(jsonData);
+
+    if(!isChatExists) {
+        $.ajax({
+            url: contextPath + '/chat/getMessageSize',
+            type: 'POST',
+            headers: {
+                "content-Type": 'application/json; charset=UTF-8'
+            },
+            data: JSON.stringify({
+                chatId : chatId
+            }),
+            success: function(response) {
+                var messageSize = response.messageSize;
+                if(messageSize != 0) {
+                    isChatExists = true;
+                }
+            },
+            error: function(error) {
+    
+            }
+        });
+    }
 }
+
 //서버에서 메시지를 받았을 때
 function onMessage(msg) {
 	
@@ -92,8 +115,8 @@ function onMessage(msg) {
 	}
     document.getElementById('message-area').appendChild(div);
     messageArea.scrollTop = messageArea.scrollHeight;
-	
 }
+
 //채팅창에서 나갔을 때
 function onClose(evt) {
 
@@ -176,5 +199,37 @@ $(document).ready(function() {
                 
 		    }
         });
+    });
+});
+
+$('document').ready(function() {
+    $('#exit-button').click(function() {
+        if(isChatExists && confirm('채팅방을 나가면 채팅 목록 및 대화 내용이 삭제되고 복구할 수 없어요. 채팅방에서 나가시겠어요?')){
+            $.ajax({
+                url: contextPath + '/chat/exit',
+                type: 'POST',
+                headers: {
+                     "content-Type": 'application/json; charset=UTF-8'
+                },
+                data: JSON.stringify({
+                    chatId: chatId
+                }),
+                success: function(response) {
+                    var result = response.result;
+    
+                    if(result == 'true') {
+                        alert('채팅방에서 나갔습니다.');
+                        window.location.href = contextPath + '/article/' + productId;
+                    } else {
+                        alert('채팅방 나가기에 실패했습니다.');
+                    }
+                },
+                error: function(error) {
+                    
+                }
+            });
+        } else {
+            alert('아직 채팅방이 생성되지 않았습니다.');
+        }
     });
 });

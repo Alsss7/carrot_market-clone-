@@ -17,9 +17,13 @@
 <body>
 	<div class="chat-container">
 		<div class="user-wrapper">
-
-			<div class="user-id">${target.id }</div>
-			<div class="manner-temperature">${target.manner }&#8451;</div>
+			<div class="user-container">
+				<div class="user-id">${target.id }</div>
+				<div class="manner-temperature">${target.manner }&#8451;</div>
+			</div>
+			<div class="exit-container" id="exit-button">
+				<img src="${contextPath }/resources/image/exit.png" />
+			</div>
 		</div>
 		<div class="line"></div>
 		<div class="product-wrapper">
@@ -110,7 +114,20 @@
 		var productStatus = "${article.status}";
 
 		var lastMsgDate = '${lastMsgDate}';
+		var chatId = '${chatId}';
 	</script>
+	<c:choose>
+		<c:when test="${messageSize == 0 }">
+			<script>
+				var isChatExists = false;
+			</script>
+		</c:when>
+		<c:otherwise>
+			<script>
+				var isChatExists = true;
+			</script>
+		</c:otherwise>
+	</c:choose>
 	<script src="${contextPath }/resources/js/chat/chat.js"></script>
 </body>
 </html>

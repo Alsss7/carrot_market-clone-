@@ -31,6 +31,18 @@
 		VALUES (chat_seq.NEXTVAL, #{productId}, #{sellerId}, #{buyerId})
 	</insert>
 	
+	<delete id="deleteChatById" parameterType="int">
+		DELETE
+		FROM CHATS
+		WHERE chat_id = #{value}
+	</delete>
+	
+	<delete id="deleteChatByChatDTO" parameterType="chatDTO">
+		DELETE
+		FROM CHATS
+		WHERE seller_id = #{sellerId} AND buyer_id = #{buyerId} AND product_id = #{productId}
+	</delete>
+	
 	<delete id="deleteChatByProductId" parameterType="int">
 		DELETE
 		FROM CHATS
@@ -66,6 +78,12 @@
 		FROM MESSAGES
 		WHERE chat_id = #{value}
 		ORDER BY message_id
+	</select>
+	
+	<select id="selectMessagesCountByChatId" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+		FROM MESSAGES
+		WHERE chat_id = #{value}
 	</select>
 	
 	<insert id="insertMessage" parameterType="messageVO">

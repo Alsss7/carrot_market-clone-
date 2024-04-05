@@ -41,4 +41,8 @@ public class ChatDTO {
 		this.productId = productId;
 	}
 
+	@Override
+	public String toString() {
+		return "ChatDTO [sellerId=" + sellerId + ", buyerId=" + buyerId + ", productId=" + productId + "]";
+	}
 }

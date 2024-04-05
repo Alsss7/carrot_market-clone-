@@ -26,7 +26,22 @@ body {
 .user-wrapper {
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
+}
+
+.user-container {
+	display: flex;
+	align-items: center;
 	margin-top: 10px;
+}
+
+.exit-container {
+	cursor: pointer;
+}
+
+.exit-container img {
+	width: 30px;
+	height: 30px;
 }
 
 .user-id {

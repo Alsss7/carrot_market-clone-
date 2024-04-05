@@ -38,9 +38,38 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	@Transactional
 	public boolean insertChat(ChatVO chatVO) throws DataAccessException {
-		int result1 = chatDAO.insertChat(chatVO);
-		int result2 = articleService.increaseChat(chatVO.getProductId());
-		if (result1 != 0 && result2 != 0) {
+		int result = chatDAO.insertChat(chatVO);
+		if (result != 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	@Transactional
+	public boolean deleteChatById(int chatId) throws DataAccessException {
+		ChatVO chat = selectChatByChatId(chatId);
+
+		int result1 = chatDAO.deleteMsgByChatId(chatId);
+		int result2 = chatDAO.deleteChatById(chatId);
+		int result3 = articleService.decreaseChat(chat.getProductId());
+		if (result1 != 0 && result2 != 0 && result3 != 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	@Transactional
+	public boolean deleteChatByChatDTO(ChatDTO chatDTO) throws DataAccessException {
+		ChatVO chat = selectChat(chatDTO);
+
+		int result1 = chatDAO.deleteMsgByChatId(chat.getChatId());
+		int result2 = chatDAO.deleteChatByChatDTO(chatDTO);
+		int result3 = articleService.decreaseChat(chatDTO.getProductId());
+		if (result1 != 0 && result2 != 0 && result3 != 0) {
 			return true;
 		} else {
 			return false;
@@ -77,8 +106,19 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
+	public int selectMessagesCountByChatId(int chatId) throws DataAccessException {
+		int count = chatDAO.selectMessagesCountByChatId(chatId);
+		return count;
+	}
+
+	@Override
 	@Transactional
 	public boolean insertMessage(MessageVO messageVO) throws DataAccessException {
+		int msgCount = chatDAO.selectMessagesCountByChatId(messageVO.getChatId());
+		if (msgCount == 0) {
+			ChatVO chat = chatDAO.selectChatByChatId(messageVO.getChatId());
+			articleService.increaseChat(chat.getProductId());
+		}
 		int result1 = chatDAO.insertMessage(messageVO);
 		int result2 = chatDAO.updateLastMessageDate(messageVO.getChatId());
 		if (result1 != 0 && result2 != 0) {
