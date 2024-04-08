@@ -204,6 +204,18 @@ public class MemberController {
 		return mav;
 	}
 
+	@RequestMapping(value = "/myPage/purchaseHistory", method = RequestMethod.GET)
+	public ModelAndView getPurchaseHistory() throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+		List<ArticleVO> articlesList = articleService.selectArticlesPurchasedById(loginId);
+
+		mav.addObject("articles", articlesList);
+		mav.setViewName("purchaseHistory");
+		return mav;
+	}
+
 	/*
 	 * 회원가입 메서드
 	 */

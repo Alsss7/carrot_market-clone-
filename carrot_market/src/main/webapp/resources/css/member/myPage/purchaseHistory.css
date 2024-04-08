@@ -99,14 +99,9 @@ main {
 	justify-content: space-between;
 }
 
-#like-chat a {
-	display: flex;
-	justify-content: flex-end;
-}
-
 #like-chat-count {
 	display: flex;
-	align-items: center;
+	align-items: flex-end;
 }
 
 #chat-count {

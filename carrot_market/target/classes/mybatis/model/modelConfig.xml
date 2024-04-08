@@ -35,5 +35,11 @@
 			type="com.mycompany.carrotMarket.chat.dto.ChatDTO" alias="chatDTO" />
 		<typeAlias
 			type="com.mycompany.carrotMarket.chat.vo.MessageVO" alias="messageVO" />
+
+		<typeAlias
+			type="com.mycompany.carrotMarket.article.vo.TradeVO" alias="tradeVO" />
+		<typeAlias
+			type="com.mycompany.carrotMarket.article.dto.TradeDTO"
+			alias="tradeDTO" />
 	</typeAliases>
 </configuration>

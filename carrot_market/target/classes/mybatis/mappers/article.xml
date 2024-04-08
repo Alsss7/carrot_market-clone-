@@ -37,7 +37,7 @@
 			view_count AS viewCount,
 			status
 		FROM products
-		WHERE status IN ('Active' ,'Booking', 'Sold') and hidden = 0	
+		WHERE status IN ('Active', 'Booking', 'Sold') and hidden = 0	
 		ORDER BY created_at DESC
 	</select>
 	
@@ -54,6 +54,30 @@
 			status
 		FROM products
 		WHERE product_id IN 
+		<if test="list != null and list.size() > 0">
+        	<foreach collection="list" item="productId" open="(" separator="," close=")">
+	            #{productId}
+        	</foreach>
+    	</if>
+    	<if test="list == null or list.size() == 0">
+	        (NULL)
+	    </if>
+	</select>
+	
+	<select id="selectSoldArticlesByProductIdList" parameterType="java.util.List" resultType="articleVO">
+		SELECT
+			product_id AS productId,
+			user_id AS userId,
+			title,
+			price,
+			region,
+			like_count AS likeCount,
+			chat_count AS chatCount,
+			view_count AS viewCount,
+			status
+		FROM products
+		WHERE status = 'Sold' AND 
+		product_id IN 
 		<if test="list != null and list.size() > 0">
         	<foreach collection="list" item="productId" open="(" separator="," close=")">
 	            #{productId}
@@ -170,7 +194,7 @@
 	
 	<update id="updateArticleStatus" parameterType="updateStatusDTO">
 		UPDATE products
-		SET status = #{status}, buyer_id = #{buyerId}
+		SET status = #{status}
 		WHERE product_id = #{productId}
 	</update>
 	

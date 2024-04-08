@@ -7,29 +7,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="${contextPath }/resources/css/member/myPage/likeList.css" />
-<c:if test="${removeResult }">
-	<c:choose>
-		<c:when test="${removeResult == true }">
-			<script>
-				window.onload = function() {
-					alert('찜하기 해제!');
-				}
-			</script>
-		</c:when>
-		<c:otherwise>
-			<script>
-				window.onload = function() {
-					alert('찜하기 해제 실패!');
-				}
-			</script>
-		</c:otherwise>
-	</c:choose>
-</c:if>
+<link rel="stylesheet" href="${contextPath }/resources/css/member/myPage/purchaseHistory.css" />
 </head>
 <body>
 	<main>
-		<h2 style="text-align: center">관심목록</h2>
+		<h2 style="text-align: center">구매내역</h2>
 		<c:choose>
 			<c:when test="${articles.size() != 0 }">
 				<c:forEach var="article" items="${articles }">
@@ -44,14 +26,7 @@
 									<div class="title">${article.title }</div>
 									<div class="region">${article.region }</div>
 									<div id="status-price">
-										<c:choose>
-											<c:when test="${article.status == 'Booking' }">
-												<span class="status" style="background-color: green;">예약 중</span>
-											</c:when>
-											<c:when test="${article.status == 'Sold' }">
-												<span class="status" style="background-color: black;">거래완료</span>
-											</c:when>
-										</c:choose>
+										<span class="status" style="background-color: black;">거래완료</span>
 										<c:choose>
 											<c:when test="${article.price == 0 }">
 												<div class="price">나눔</div>
@@ -68,25 +43,20 @@
 								</div>
 							</div>
 						</a>
-						<div id="like-chat">
-							<a href="${contextPath }/member/myPage/likeList/remove/${article.productId}">
-								<span id="isLiked">♥</span>
-							</a>
-							<div id="like-chat-count">
-								<c:if test="${article.chatCount != 0 }">
-									<div id="chat-count">☏&nbsp;${article.chatCount }</div>
-								</c:if>
-								<c:if test="${article.likeCount != 0 }">
-									<div id="like-count">♡&nbsp;${article.likeCount}</div>
-								</c:if>
-							</div>
+						<div id="like-chat-count">
+							<c:if test="${article.chatCount != 0 }">
+								<div id="chat-count">☏&nbsp;${article.chatCount }</div>
+							</c:if>
+							<c:if test="${article.likeCount != 0 }">
+								<div id="like-count">♡&nbsp;${article.likeCount}</div>
+							</c:if>
 						</div>
 					</div>
 					<div class="line"></div>
 				</c:forEach>
 			</c:when>
 			<c:otherwise>
-				<h1 style="text-align: center; color: orange">찜한 상품이 없습니다!</h1>
+				<h1 style="text-align: center; color: orange">구매한 상품이 없습니다!</h1>
 			</c:otherwise>
 		</c:choose>
 	</main>

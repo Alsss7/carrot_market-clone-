@@ -40,7 +40,7 @@
 					<img src="${contextPath }/resources/image/myPage/receipt.png" />&nbsp;판매 내역
 				</span>
 			</a>
-			<a href="#">
+			<a href="${contextPath }/member/myPage/purchaseHistory">
 				<span id="buy-list" class="list">
 					<img src="${contextPath }/resources/image/myPage/shopping.png" />&nbsp;구매 내역
 				</span>

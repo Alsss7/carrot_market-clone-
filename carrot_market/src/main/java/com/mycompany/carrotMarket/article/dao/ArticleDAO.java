@@ -21,6 +21,8 @@ public interface ArticleDAO {
 
 	public List<ArticleVO> selectArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException;
 
+	public List<ArticleVO> selectSoldArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException;
+
 	public List<ArticleVO> selectArticlesByUserIdAndStat(SalesDTO salesDTO) throws DataAccessException;
 
 	public List<ArticleVO> selectArticlesByHidden(String userId) throws DataAccessException;

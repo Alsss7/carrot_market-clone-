@@ -12,14 +12,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.carrotMarket.article.dao.ArticleDAO;
+import com.mycompany.carrotMarket.article.dao.TradeDAO;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
+import com.mycompany.carrotMarket.article.dto.TradeDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 import com.mycompany.carrotMarket.article.vo.ImageVO;
+import com.mycompany.carrotMarket.article.vo.TradeVO;
 import com.mycompany.carrotMarket.chat.service.ChatService;
 
 @Service
@@ -32,6 +35,9 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Autowired
 	ArticleDAO articleDAO;
+
+	@Autowired
+	TradeDAO tradeDAO;
 
 	@Override
 	@Transactional
@@ -115,6 +121,20 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	@Transactional
+	public List<ArticleVO> selectArticlesPurchasedById(String buyerId) throws DataAccessException {
+		List<Integer> tradeList = tradeDAO.selectTradeByBuyerId(buyerId);
+		List<ArticleVO> articleList = articleDAO.selectSoldArticlesByProductIdList(tradeList);
+		if (articleList.size() > 0) {
+			for (ArticleVO article : articleList) {
+				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
+				article.setFilesName(imageList);
+			}
+		}
+		return articleList;
+	}
+
+	@Override
+	@Transactional
 	public ArticleVO selectArticle(int productId) throws DataAccessException {
 		ArticleVO article = articleDAO.selectArticle(productId);
 		if (article != null) {
@@ -148,9 +168,33 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	@Transactional
 	public boolean updateArticleStatus(UpdateStatusDTO updateStatusDTO) throws DataAccessException {
-		int result = articleDAO.updateArticleStatus(updateStatusDTO);
-		if (result != 0) {
+		int productId = updateStatusDTO.getProductId();
+		String buyerId = updateStatusDTO.getBuyerId();
+		String status = updateStatusDTO.getStatus();
+		logger.info("productId: {}", String.valueOf(productId));
+		logger.info("buyerId : {}", buyerId);
+		logger.info("status : {}", status);
+
+		int result1 = articleDAO.updateArticleStatus(updateStatusDTO);
+
+		int result2;
+		if (status.equals("Active")) {
+			result2 = tradeDAO.deleteTradeByProductId(productId);
+		} else {
+			// status.equals("Booking") || status.equals("Sold")
+			TradeVO trade = tradeDAO.selectTradeByProductId(productId);
+			if (trade != null) {
+				logger.info("tradeDAO.update");
+				result2 = tradeDAO.updateTradeByProductId(new TradeDTO(productId, buyerId));
+			} else {
+				logger.info("tradeDAO.insert");
+				result2 = tradeDAO.insertTrade(new TradeDTO(productId, buyerId));
+			}
+		}
+
+		if (result1 != 0 && result2 != 0) {
 			return true;
 		} else {
 			return false;

@@ -23,8 +23,10 @@ public interface ArticleService {
 	public List<ArticleVO> selectArticlesByUserIdAndStat(SalesDTO salesDTO) throws DataAccessException;
 
 	public List<ArticleVO> selectArticlesByHidden(String userId) throws DataAccessException;
-	
+
 	public Map<String, Integer> selectArticlesCountByStatus(String userId) throws DataAccessException;
+
+	public List<ArticleVO> selectArticlesPurchasedById(String buyerId) throws DataAccessException;
 
 	public ArticleVO selectArticle(int productId) throws DataAccessException;
 

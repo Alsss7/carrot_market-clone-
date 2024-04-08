@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.trade">
+	<insert id="insertTrade" parameterType="tradeDTO">
+		INSERT INTO TRADES(TRADE_ID, PRODUCT_ID, BUYER_ID)
+		VALUES (trade_seq.NEXTVAL, #{productId}, #{buyerId})
+	</insert>
+	
+	<select id="selectTradeByProductId" parameterType="int" resultType="tradeVO">
+		SELECT
+			TRADE_ID AS tradeId,
+			PRODUCT_ID AS productId,
+			BUYER_ID AS buyerId
+		FROM TRADES
+		WHERE PRODUCT_ID = #{value}
+	</select>
+	
+	<select id="selectTradeByBuyerId" parameterType="String" resultType="int">
+		SELECT
+			PRODUCT_ID AS productId
+		FROM TRADES
+		WHERE BUYER_ID = #{value}
+		ORDER BY traded_at DESC
+	</select>
+	
+	<update id="updateTradeByProductId" parameterType="tradeDTO">
+		UPDATE TRADES
+		SET buyer_id = #{buyerId}
+		WHERE product_id = #{productId}
+	</update>
+	
+	<delete id="deleteTradeByTradeId" parameterType="int">
+		DELETE
+		FROM TRADES
+		WHERE TRADE_ID = #{value}
+	</delete>
+	
+	<delete id="deleteTradeByProductId" parameterType="int">
+		DELETE
+		FROM TRADES
+		WHERE PRODUCT_ID = #{value}
+	</delete>
+</mapper>

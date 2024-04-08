@@ -100,6 +100,7 @@ public class ArticleController {
 			mav.addObject("images", images);
 			mav.setViewName("modifyArticleForm");
 		} else {
+			mav.addObject("msg", "잘못된 접근입니다.");
 			mav.setViewName("redirect:/article/" + productId);
 		}
 		return mav;
