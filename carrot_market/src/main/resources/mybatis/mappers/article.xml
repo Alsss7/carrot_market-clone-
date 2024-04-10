@@ -64,7 +64,7 @@
 	    </if>
 	</select>
 	
-	<select id="selectSoldArticlesByProductIdList" parameterType="java.util.List" resultType="articleVO">
+	<select id="selectTradedArticles" parameterType="String" resultType="articleVO">
 		SELECT
 			product_id AS productId,
 			user_id AS userId,
@@ -76,16 +76,10 @@
 			view_count AS viewCount,
 			status
 		FROM products
-		WHERE status = 'Sold' AND 
-		product_id IN 
-		<if test="list != null and list.size() > 0">
-        	<foreach collection="list" item="productId" open="(" separator="," close=")">
-	            #{productId}
-        	</foreach>
-    	</if>
-    	<if test="list == null or list.size() == 0">
-	        (NULL)
-	    </if>
+		WHERE status IN ('Sold', 'Shared') AND 
+		product_id IN (SELECT product_id
+					   FROM TRADES
+					   WHERE buyer_id = #{value})
 	</select>
 	
 	<select id="selectArticlesByUserIdAndStat" parameterType="salesDTO" resultType="articleVO">
@@ -112,7 +106,7 @@
     	</choose>
 	</select>
 	
-	<select id="selectArticlesByHidden" parameterType="String" resultType="articleVO">
+	<select id="selectHiddenArticles" parameterType="String" resultType="articleVO">
 		SELECT
 			product_id AS productId,
 			user_id AS userId,
@@ -128,21 +122,21 @@
 		WHERE user_id = #{value} and hidden = 1
 	</select>
 	
-	<select id="selectArticlesCountByActive" parameterType="String" resultType="int">
+	<select id="selectActiveArticlesCount" parameterType="String" resultType="int">
 		SELECT
 			COUNT(*)
 		FROM PRODUCTS
 		WHERE USER_ID = #{value} AND status IN ('Active', 'Booking') AND HIDDEN = 0
 	</select>
 	
-	<select id="selectArticlesCountBySold" parameterType="String" resultType="int">
+	<select id="selectSoldArticlesCount" parameterType="String" resultType="int">
 		SELECT
 			COUNT(*)
 		FROM PRODUCTS
 		WHERE USER_ID = #{value} AND status = 'Sold' AND HIDDEN = 0
 	</select>
 	
-	<select id="selectArticlesCountByHidden" parameterType="String" resultType="int">
+	<select id="selectHiddenArticlesCount" parameterType="String" resultType="int">
 		SELECT
 			COUNT(*)
 		FROM PRODUCTS

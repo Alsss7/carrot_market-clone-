@@ -10,7 +10,6 @@ document.getElementById("checkNickname").onclick = function() {
 		url: contextPath + "/member/checkNickname",
        	type: "POST",
 		headers: {
-		 	"X-CSRF-TOKEN": csrfToken,
 		 	"content-Type": 'application/json; charset=UTF-8'
 		},
 		data: JSON.stringify({

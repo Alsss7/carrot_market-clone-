@@ -8,39 +8,64 @@
 	<select id="findById" parameterType="String"
 		resultType="memberVO">
 		<![CDATA[
-			select * from members where id=#{id}
+			SELECT 
+				id,
+				pw,
+				name,
+				email,
+				nickname,
+				region1,
+				region2,
+				manner,
+				profile_img AS fileName,
+				created_at
+			FROM MEMBERS
+			WHERE id = #{id}
 		]]>
 	</select>
 
 	<select id="findByNickname" parameterType="String"
 		resultType="memberVO">
 		<![CDATA[
-			select * from members where nickname=#{nickname}
+			SELECT
+				id,
+				pw,
+				name,
+				email,
+				nickname,
+				region1,
+				region2,
+				manner,
+				profile_img AS fileName,
+				created_at 
+			FROM MEMBERS
+			WHERE nickname = #{nickname}
 		]]>
 	</select>
 
 	<insert id="insertMember" parameterType="memberVO">
 		<![CDATA[
-		 insert into members(id, pw, name, nickname, email, region1)
-		 values(#{id}, #{pw}, #{name}, #{nickname}, #{email}, #{region1})
+		 INSERT INTO MEMBERS(id, pw, name, nickname, email, region1, profile_img)
+		 VALUES(#{id}, #{pw}, #{name}, #{nickname}, #{email}, #{region1}, #{fileName})
 		]]>
 	</insert>
 
 	<insert id="insertAuthority" parameterType="memberVO">
 		<![CDATA[
-			insert into authorities(id, authority)
-			values(#{id}, #{authority})
+			INSERT INTO authorities(id, authority)
+			VALUES(#{id}, #{authority})
 		]]>
 	</insert>
 
 	<update id="updateMember" parameterType="memberVO">
 		<![CDATA[
-			update members
-			set pw = #{pw},
+			UPDATE MEMBERS
+			SET pw = #{pw},
 				nickname = #{nickname},
 				email = #{email},
-				region1 = #{region1}
-			where id = #{id}
+				region1 = #{region1},
+				profile_img = #{fileName}
+			WHERE id = #{id}
 		]]>
 	</update>
 

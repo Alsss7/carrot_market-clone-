@@ -19,8 +19,8 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	BCryptPasswordEncoder encoder;
 
-	@Transactional
 	@Override
+	@Transactional
 	public boolean addMember(MemberVO memberVO) throws DataAccessException {
 		memberVO.setPw(encoder.encode(memberVO.getPw()));
 		int result1 = memberDAO.insertMember(memberVO);

@@ -47,9 +47,8 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public List<ArticleVO> selectSoldArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException {
-		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectSoldArticlesByProductIdList",
-				productIdList);
+	public List<ArticleVO> selectTradedArticles(String buyerId) throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectTradedArticles", buyerId);
 		return list;
 	}
 
@@ -60,26 +59,26 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public List<ArticleVO> selectArticlesByHidden(String userId) throws DataAccessException {
-		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesByHidden", userId);
+	public List<ArticleVO> selectHiddenArticles(String userId) throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectHiddenArticles", userId);
 		return list;
 	}
 
 	@Override
-	public int selectArticlesCountByActive(String userId) throws DataAccessException {
-		int result = sqlSession.selectOne("mappers.article.selectArticlesCountByActive", userId);
+	public int selectActiveArticlesCount(String userId) throws DataAccessException {
+		int result = sqlSession.selectOne("mappers.article.selectActiveArticlesCount", userId);
 		return result;
 	}
 
 	@Override
-	public int selectArticlesCountBySold(String userId) throws DataAccessException {
-		int result = sqlSession.selectOne("mappers.article.selectArticlesCountBySold", userId);
+	public int selectSoldArticlesCount(String userId) throws DataAccessException {
+		int result = sqlSession.selectOne("mappers.article.selectSoldArticlesCount", userId);
 		return result;
 	}
 
 	@Override
-	public int selectArticlesCountByHidden(String userId) throws DataAccessException {
-		int result = sqlSession.selectOne("mappers.article.selectArticlesCountByHidden", userId);
+	public int selectHiddenArticlesCount(String userId) throws DataAccessException {
+		int result = sqlSession.selectOne("mappers.article.selectHiddenArticlesCount", userId);
 		return result;
 	}
 

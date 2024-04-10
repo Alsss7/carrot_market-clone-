@@ -44,10 +44,10 @@
 						<c:otherwise>
 							<c:choose>
 								<c:when test="${article.status == 'Booking' }">
-									<span class="stat" style="background-color: green;">예약 중</span>
+									<span class="stat">예약 중</span>
 								</c:when>
 								<c:when test="${article.status == 'Sold' }">
-									<span class="stat" style="background-color: black;">거래완료</span>
+									<span class="stat">거래완료</span>
 								</c:when>
 								<c:otherwise>
 									<span class="stat">판매중</span>

@@ -179,7 +179,7 @@ public class ArticleController {
 		String uploadResult;
 		boolean result = articleService.addArticle(articleVO);
 		if (result) {
-			imageFileUpload(articleVO.getProductId(), files);
+			uploadImageFile(articleVO.getProductId(), files);
 			uploadResult = "등록 성공";
 		} else {
 			uploadResult = "등록 실패";
@@ -343,7 +343,7 @@ public class ArticleController {
 		return ResponseEntity.ok(response);
 	}
 
-	private void imageFileUpload(int productId, List<MultipartFile> files) {
+	private void uploadImageFile(int productId, List<MultipartFile> files) {
 		for (MultipartFile file : files) {
 			if (!file.isEmpty()) {
 				try {
@@ -395,7 +395,7 @@ public class ArticleController {
 			}
 		}
 		if (files != null && files.size() != 0) {
-			imageFileUpload(article.getProductId(), files);
+			uploadImageFile(article.getProductId(), files);
 		}
 	}
 

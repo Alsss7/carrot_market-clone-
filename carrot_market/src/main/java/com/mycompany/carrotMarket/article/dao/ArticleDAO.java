@@ -21,17 +21,17 @@ public interface ArticleDAO {
 
 	public List<ArticleVO> selectArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException;
 
-	public List<ArticleVO> selectSoldArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException;
+	public List<ArticleVO> selectTradedArticles(String buyerId) throws DataAccessException;
 
 	public List<ArticleVO> selectArticlesByUserIdAndStat(SalesDTO salesDTO) throws DataAccessException;
 
-	public List<ArticleVO> selectArticlesByHidden(String userId) throws DataAccessException;
+	public List<ArticleVO> selectHiddenArticles(String userId) throws DataAccessException;
 
-	public int selectArticlesCountByActive(String userId) throws DataAccessException;
+	public int selectActiveArticlesCount(String userId) throws DataAccessException;
 
-	public int selectArticlesCountBySold(String userId) throws DataAccessException;
+	public int selectSoldArticlesCount(String userId) throws DataAccessException;
 
-	public int selectArticlesCountByHidden(String userId) throws DataAccessException;
+	public int selectHiddenArticlesCount(String userId) throws DataAccessException;
 
 	public ArticleVO selectArticle(int productId) throws DataAccessException;
 

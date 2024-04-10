@@ -95,8 +95,15 @@
 					<div id="user-info">
 						<div id="profile">
 							<div id="profile-image">
-								<img
-									src="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-c649f052a34ebc4eee35048815d8e4f73061bf74552558bb70e07133f25524f9.png" />
+								<c:choose>
+									<c:when test="${not empty member.fileName }">
+										<img src="${contextPath }/resources/image/profile_image/${member.id}/${member.fileName}" />
+									</c:when>
+									<c:otherwise>
+										<img
+											src="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-c649f052a34ebc4eee35048815d8e4f73061bf74552558bb70e07133f25524f9.png" />
+									</c:otherwise>
+								</c:choose>
 							</div>
 							<div id="info">
 								<span id="user-id">${member.id }</span>

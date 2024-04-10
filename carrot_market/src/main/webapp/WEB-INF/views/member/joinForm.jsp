@@ -2,6 +2,8 @@
 	isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
+p
+
 request.setCharacterEncoding("utf-8");
 %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
@@ -11,13 +13,11 @@ request.setCharacterEncoding("utf-8");
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath }/resources/css/member/joinForm.css" />
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script>
-	var csrfToken = "${_csrf.token}";
-</script>
 </head>
 <body>
 	<div id="joinFormDiv">
-		<form id="joinForm" action="${contextPath }/member/join" method="post">
+		<form id="joinForm" action="${contextPath }/member/join" method="post"
+			enctype="multipart/form-data">
 			<div id="join_subject">
 				<span>
 					<img src="${contextPath }/resources/image/logo.webp" id="logo">
@@ -25,6 +25,17 @@ request.setCharacterEncoding("utf-8");
 				<span>&nbsp;회원가입</span>
 			</div>
 			<table>
+				<tr style="text-align: center;">
+					<td></td>
+					<td>
+						<div id="imagePreviewContainer">
+							<input type="file" name="profile_image" id="fileInput" style="display: none;" />
+							<img id="previewImage"
+								src="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-c649f052a34ebc4eee35048815d8e4f73061bf74552558bb70e07133f25524f9.png" />
+							<a id="deleteButton" class="delete-button" onclick="removeImage(event)">X</a>
+						</div>
+					</td>
+				</tr>
 				<tr>
 					<td class="label">아이디&nbsp;</td>
 					<td>
@@ -138,5 +149,6 @@ request.setCharacterEncoding("utf-8");
 	</div>
 	<script src="${contextPath }/resources/js/member/getRegion.js"></script>
 	<script src="${contextPath }/resources/js/member/joinDupCheck.js"></script>
+	<script src="${contextPath }/resources/js/member/joinForm.js"></script>
 </body>
 </html>

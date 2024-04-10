@@ -1,13 +1,18 @@
 package com.mycompany.carrotMarket.member.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -43,6 +49,7 @@ import com.mycompany.carrotMarket.validator.NicknameValidator;
 @RestController
 @RequestMapping("/member")
 public class MemberController {
+	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
 	private final MemberService memberService;
 
@@ -54,14 +61,17 @@ public class MemberController {
 
 	private final NicknameValidator nicknameValidator;
 
+	private final ServletContext servletContext;
+
 	@Autowired
 	public MemberController(MemberService memberService, ArticleService articleService, MemberValidator memberValidator,
-			IdValidator idValidator, NicknameValidator nicknameValidator) {
+			IdValidator idValidator, NicknameValidator nicknameValidator, ServletContext servletContext) {
 		this.memberService = memberService;
 		this.articleService = articleService;
 		this.memberValidator = memberValidator;
 		this.idValidator = idValidator;
 		this.nicknameValidator = nicknameValidator;
+		this.servletContext = servletContext;
 	}
 
 	@InitBinder("id")
@@ -82,6 +92,11 @@ public class MemberController {
 	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
 	public ModelAndView myPage(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+		MemberVO member = memberService.findById(loginId);
+
+		mav.addObject("member", member);
 		mav.setViewName("myPage");
 		return mav;
 	}
@@ -114,30 +129,49 @@ public class MemberController {
 
 	@RequestMapping(value = "/myPage/profile/modify", method = RequestMethod.POST)
 	public ModelAndView modifyMember(@ModelAttribute("member") MemberVO memberVO, BindingResult bindingResult,
-			RedirectAttributes attributes) throws Exception {
+			HttpServletRequest request, RedirectAttributes attributes) throws Exception {
+		logger.info("modifyMember");
 		ModelAndView mav = new ModelAndView();
 		attributes.addFlashAttribute("isMatch", true);
 		String password = memberVO.getPw();
 		memberValidator.validate(memberVO, bindingResult);
+
 		if (bindingResult.hasErrors()) {
+			logger.info("hasError");
 			for (FieldError error : bindingResult.getFieldErrors()) {
+				logger.info("error.getField() : {}", error.getField());
+				logger.info("error.getDefaultMessage() : {}", error.getDefaultMessage());
 				attributes.addFlashAttribute(error.getField(), error.getDefaultMessage());
 			}
 			attributes.addFlashAttribute("member", memberVO);
 		} else {
+			logger.info("NoError");
+			String paramValue = request.getParameter("fileName");
+			if (paramValue != null) {
+				logger.info("originImage : {}", paramValue);
+				memberVO.setFileName(paramValue);
+			} else {
+				logger.info("changeImage : {}", memberVO.getProfile_image().getOriginalFilename());
+				memberVO.setFileName(memberVO.getProfile_image().getOriginalFilename());
+			}
 			boolean result = memberService.modifyMember(memberVO);
 			if (result) {
+				logger.info("modify Success");
+				if (paramValue == null) {
+					updateImageFile(memberVO, memberVO.getProfile_image());
+					logger.info("image changed");
+				}
 				attributes.addFlashAttribute("result", "success");
 				MemberVO modifiedMember = memberService.findById(memberVO.getId());
 				modifiedMember.setPw(password);
 				attributes.addFlashAttribute("member", modifiedMember);
 			} else {
+				logger.info("modify fail");
 				attributes.addFlashAttribute("result", "failed");
 				attributes.addFlashAttribute("member", memberVO);
-				System.out.println(attributes.getAttribute("memeber"));
 			}
 		}
-		mav.setViewName("redirect:/member/profile");
+		mav.setViewName("redirect:/member/myPage/profile");
 		return mav;
 	}
 
@@ -190,7 +224,7 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String loginId = authentication.getName();
-		List<ArticleVO> articleList = articleService.selectArticlesByHidden(loginId);
+		List<ArticleVO> articleList = articleService.selectHiddenArticles(loginId);
 		Map<String, Integer> map = articleService.selectArticlesCountByStatus(loginId);
 
 		mav.addObject("articles", articleList);
@@ -233,8 +267,10 @@ public class MemberController {
 			attributes.addFlashAttribute("member", memberVO); // 입력되었던 데이터들
 			mav.setViewName("redirect:/join"); // 리다이렉트
 		} else { // 에러가 없다면
+			memberVO.setFileName(memberVO.getProfile_image().getOriginalFilename());
 			boolean result = memberService.addMember(memberVO); // 회원가입 실행
 			if (result) { // 완료되었다면
+				uploadImageFile(memberVO.getId(), memberVO.getProfile_image());
 				attributes.addFlashAttribute("result", "success");
 			} else { // 실패했다면
 				attributes.addFlashAttribute("result", "failed");
@@ -300,6 +336,60 @@ public class MemberController {
 		response.put(target, isAvailable);
 
 		return response;
+	}
+
+	private void uploadImageFile(String id, MultipartFile file) {
+		if (!file.isEmpty()) {
+			try {
+				String uploadDir = servletContext.getRealPath("/resources/image/profile_image/" + id);
+				String fileName = file.getOriginalFilename();
+				String filePath = uploadDir + "\\" + fileName;
+
+				// 디렉토리가 존재하지 않으면 생성
+				File directory = new File(uploadDir);
+				if (!directory.exists()) {
+					directory.mkdir();
+				}
+
+				file.transferTo(new File(filePath));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void deleteImageFile(String id) {
+		String uploadDir = servletContext.getRealPath("/resources/image/profile_image/" + id);
+		File directory = new File(uploadDir);
+		if (directory.exists()) {
+			File[] files = directory.listFiles();
+			for (File file : files) {
+				file.delete();
+			}
+			directory.delete();
+		}
+	}
+
+	private void updateImageFile(MemberVO member, MultipartFile newFile) {
+		String uploadDir = servletContext.getRealPath("/resources/image/profile_image/" + member.getId());
+		File directory = new File(uploadDir);
+		if (directory.exists()) {
+			File[] existFiles = directory.listFiles();
+			for (File file : existFiles) {
+				boolean isFileExists = false;
+				if (file.getName().equals(member.getFileName())) {
+					isFileExists = true;
+				}
+
+				if (!isFileExists) {
+					file.delete();
+				}
+			}
+		}
+
+		if (newFile != null) {
+			uploadImageFile(member.getId(), newFile);
+		}
 	}
 
 }

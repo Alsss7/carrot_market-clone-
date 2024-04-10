@@ -26,8 +26,16 @@
 								<img class="image-background" src="${contextPath }/resources/image/white.png" /> <img
 									id="product-image"
 									src="${contextPath }/resources/image/product_image/${article.productId}/${article.filesName[0]}" />
-								<img id="profile-image"
-									src="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-c649f052a34ebc4eee35048815d8e4f73061bf74552558bb70e07133f25524f9.png" />
+								<c:choose>
+									<c:when test="${not empty members[status.index].fileName }">
+										<img id="profile-image"
+											src="${contextPath }/resources/image/profile_image/${members[status.index].id}/${members[status.index].fileName}" />
+									</c:when>
+									<c:otherwise>
+										<img id="profile-image"
+											src="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-c649f052a34ebc4eee35048815d8e4f73061bf74552558bb70e07133f25524f9.png" />
+									</c:otherwise>
+								</c:choose>
 							</div>
 							<div class="user-wrapper">
 								<div class="user" id="user${status.index }">

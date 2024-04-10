@@ -94,8 +94,8 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	@Transactional
-	public List<ArticleVO> selectArticlesByHidden(String userId) throws DataAccessException {
-		List<ArticleVO> articleList = articleDAO.selectArticlesByHidden(userId);
+	public List<ArticleVO> selectHiddenArticles(String userId) throws DataAccessException {
+		List<ArticleVO> articleList = articleDAO.selectHiddenArticles(userId);
 		if (articleList.size() > 0) {
 			for (ArticleVO article : articleList) {
 				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
@@ -108,9 +108,9 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public Map<String, Integer> selectArticlesCountByStatus(String userId) throws DataAccessException {
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		int activeCount = articleDAO.selectArticlesCountByActive(userId);
-		int soldCount = articleDAO.selectArticlesCountBySold(userId);
-		int hiddenCount = articleDAO.selectArticlesCountByHidden(userId);
+		int activeCount = articleDAO.selectActiveArticlesCount(userId);
+		int soldCount = articleDAO.selectSoldArticlesCount(userId);
+		int hiddenCount = articleDAO.selectHiddenArticlesCount(userId);
 
 		map.put("activeCount", activeCount);
 		map.put("soldCount", soldCount);
@@ -122,8 +122,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	@Transactional
 	public List<ArticleVO> selectArticlesPurchasedById(String buyerId) throws DataAccessException {
-		List<Integer> tradeList = tradeDAO.selectTradeByBuyerId(buyerId);
-		List<ArticleVO> articleList = articleDAO.selectSoldArticlesByProductIdList(tradeList);
+		List<ArticleVO> articleList = articleDAO.selectTradedArticles(buyerId);
 		if (articleList.size() > 0) {
 			for (ArticleVO article : articleList) {
 				List<String> imageList = articleDAO.selectImagesName(article.getProductId());

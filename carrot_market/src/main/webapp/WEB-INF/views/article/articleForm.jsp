@@ -14,8 +14,9 @@
 		<form action="${contextPath }/article/register" method="post" id="article-form"
 			enctype="multipart/form-data" onsubmit="return validateForm()">
 			<div id="image-upload-wrapper">
-				<label class="upload-button" onclick="addFile()"><img
-					src="${contextPath }/resources/image/camera.png" /></label>
+				<label class="upload-button" onclick="addFile()">
+					<img src="${contextPath }/resources/image/camera.png" />
+				</label>
 				<div id="image-preview-container"></div>
 			</div>
 			<div>

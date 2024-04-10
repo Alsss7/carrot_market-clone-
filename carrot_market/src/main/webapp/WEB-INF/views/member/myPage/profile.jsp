@@ -13,9 +13,6 @@ request.setCharacterEncoding("utf-8");
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath }/resources/css/member/myPage/profile.css">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script>
-	var csrfToken = "${_csrf.token}";
-</script>
 </head>
 <body>
 	<div id="profileDiv">
@@ -46,7 +43,6 @@ request.setCharacterEncoding("utf-8");
 					<button type="submit" id="confirm_bt">확인</button>
 					<input type="hidden" name="id" id="id"
 						value="<sec:authentication property="principal.username" />" />
-					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				</form>
 			</c:when>
 			<c:otherwise>
@@ -70,7 +66,8 @@ request.setCharacterEncoding("utf-8");
 						</c:choose>
 					</c:when>
 				</c:choose>
-				<form action="${contextPath }/member/profile/modify" method="post" id="profileForm">
+				<form action="${contextPath }/member/myPage/profile/modify" method="post" id="profileForm"
+					enctype="multipart/form-data">
 					<div class="profile_subject">
 						<span>
 							<img src="${contextPath }/resources/image/logo.webp" id="logo">
@@ -78,6 +75,28 @@ request.setCharacterEncoding("utf-8");
 						<span>&nbsp;프로필</span>
 					</div>
 					<table>
+						<tr style="text-align: center;">
+							<td></td>
+							<td>
+								<div id="imagePreviewContainer">
+									<input type="file" name="profile_image" id="fileInput" style="display: none;" />
+									<c:choose>
+										<c:when test="${not empty member.fileName }">
+											<input type="hidden" name="fileName" value="${member.fileName }" id="originImage" />
+											<img id="previewImage"
+												src="${contextPath }/resources/image/profile_image/${member.id}/${member.fileName}" />
+											<a id="deleteButton" class="delete-button" onclick="removeImage(event)"
+												style="display: flex">X</a>
+										</c:when>
+										<c:otherwise>
+											<img id="previewImage"
+												src="https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-c649f052a34ebc4eee35048815d8e4f73061bf74552558bb70e07133f25524f9.png" />
+											<a id="deleteButton" class="delete-button" onclick="removeImage(event)">X</a>
+										</c:otherwise>
+									</c:choose>
+								</div>
+							</td>
+						</tr>
 						<tr>
 							<td class="label">아이디&nbsp;</td>
 							<td>
@@ -182,9 +201,7 @@ request.setCharacterEncoding("utf-8");
 							</c:choose>
 						</tr>
 					</table>
-					<button type="button" id="modify_bt">수정하기</button>
-					<input name="authority" type="hidden" value="USER" />
-					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<button type="submit" id="modify_bt">수정하기</button>
 				</form>
 			</c:otherwise>
 		</c:choose>
@@ -202,6 +219,7 @@ request.setCharacterEncoding("utf-8");
             document.body.appendChild(scriptElement2);
         }
     </script>
+	<script src="${contextPath }/resources/js/member/myPage/profile.js"></script>
 </body>
 </html>
 
