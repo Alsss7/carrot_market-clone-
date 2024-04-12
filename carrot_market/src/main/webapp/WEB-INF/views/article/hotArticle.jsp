@@ -12,78 +12,91 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
-	<h1 class="subject">중고거래 인기매물</h1>
+	<c:choose>
+		<c:when test="${not empty region1 and not empty region2 }">
+			<h1 class="subject">${region1 }&nbsp;${region2 }&nbsp;중고거래&nbsp;인기매물</h1>
+		</c:when>
+		<c:when test="${not empty region1 }">
+			<h1 class="subject">${region1 }&nbsp;중고거래&nbsp;인기매물</h1>
+		</c:when>
+		<c:otherwise>
+			<h1 class="subject">중고거래&nbsp;인기매물</h1>
+		</c:otherwise>
+	</c:choose>
 	<div id="select-region">
-		<form action="${contextPath }/article/hotArticle" method="GET" id="regionForm">
-			<select id="region1">
-				<option value="" selected>지역을 선택하세요</option>
-				<option value="서울특별시">서울특별시</option>
-				<option value="경기도">경기도</option>
-			</select>
-			<select id="region2" disabled>
-				<option value="" selected>동네를 선택하세요</option>
-				<option value="가평군">가평군</option>
-				<option value="고양시 덕양구">고양시 덕양구</option>
-				<option value="고양시 일산동구">고양시 일산동구</option>
-				<option value="김포시">김포시</option>
-			</select>
-		</form>
+		<select class="region" id="region1">
+			<option value="" selected>지역을 선택하세요</option>
+		</select>
+		<select class="region" id="region2" disabled>
+			<option value="" selected>동네를 선택하세요</option>
+		</select>
 	</div>
-	<div id="item-wrap">
-		<div id="item-list">
-			<c:forEach var="article" items="${articles}">
-				<c:set var="images" value="${article.filesName }" />
-				<div id="item">
-					<a href="${contextPath }/article/${article.productId}">
-						<c:choose>
-							<c:when test="${images.size() == 0 }">
-								<img src="${contextPath }/resources/image/product_image/empty.png">
-								<br>
-							</c:when>
-							<c:otherwise>
-								<img src="${contextPath }/resources/image/product_image/${article.productId}/${images[0] }" />
-								<br>
-							</c:otherwise>
-						</c:choose>
-						<div class="article_title">${article.title }</div>
-						<div id="status-price">
-							<c:choose>
-								<c:when test="${article.status == 'Booking' }">
-									<span class="status" style="background-color: green;">예약 중</span>
-								</c:when>
-								<c:when test="${article.status == 'Sold' }">
-									<span class="status" style="background-color: black;">거래완료</span>
-								</c:when>
-							</c:choose>
-							<c:choose>
-								<c:when test="${article.price == 0 }">
-									<div class="price">나눔</div>
-								</c:when>
-								<c:otherwise>
-									<div class="price">
-										<c:set var="productPrice" value="${article.price }" />
-										<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
-										${formattedPrice }원
-									</div>
-								</c:otherwise>
-							</c:choose>
+	<c:choose>
+		<c:when test="${not empty articles }">
+			<div id="item-wrap">
+				<div id="item-list">
+					<c:forEach var="article" items="${articles}">
+						<c:set var="images" value="${article.filesName }" />
+						<div class="item">
+							<a href="${contextPath }/article/${article.productId}">
+								<c:choose>
+									<c:when test="${images.size() == 0 }">
+										<img src="${contextPath }/resources/image/product_image/empty.png">
+										<br>
+									</c:when>
+									<c:otherwise>
+										<img
+											src="${contextPath }/resources/image/product_image/${article.productId}/${images[0] }" />
+										<br>
+									</c:otherwise>
+								</c:choose>
+								<div class="article_title">${article.title }</div>
+								<div id="status-price">
+									<c:choose>
+										<c:when test="${article.status == 'Booking' }">
+											<span class="status" style="background-color: green;">예약 중</span>
+										</c:when>
+										<c:when test="${article.status == 'Sold' }">
+											<span class="status" style="background-color: black;">거래완료</span>
+										</c:when>
+									</c:choose>
+									<c:choose>
+										<c:when test="${article.price == 0 }">
+											<div class="price">나눔</div>
+										</c:when>
+										<c:otherwise>
+											<div class="price">
+												<c:set var="productPrice" value="${article.price }" />
+												<fmt:formatNumber value="${productPrice }" pattern="#,##0" var="formattedPrice" />
+												${formattedPrice }원
+											</div>
+										</c:otherwise>
+									</c:choose>
+								</div>
+								<div class="region">${article.region }</div>
+								<div class="likeAndChat">
+									<span class="">관심 ${article.likeCount}</span>
+									·
+									<span class="">채팅 ${article.chatCount }</span>
+								</div>
+							</a>
 						</div>
-						<div class="region">${article.region }</div>
-						<div class="likeAndChat">
-							<span class="">관심 ${article.likeCount}</span>
-							·
-							<span class="">채팅 ${article.chatCount }</span>
-						</div>
-					</a>
+					</c:forEach>
 				</div>
-			</c:forEach>
-		</div>
-	</div>
+			</div>
+		</c:when>
+		<c:otherwise>
+			<h1 style="text-align: center;">등록된 상품이 없습니다!</h1>
+		</c:otherwise>
+	</c:choose>
 	<sec:authorize access="isAuthenticated()">
 		<a class="register-item" href="${contextPath }/article/new">
 			<img src="${contextPath}/resources/image/register.png">
 		</a>
 	</sec:authorize>
+	<script>
+		var contextPath = '${contextPath}';
+	</script>
 	<script src="${contextPath }/resources/js/article/hotArticle.js"></script>
 </body>
 </html>

@@ -14,6 +14,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -47,6 +49,8 @@ import com.mycompany.carrotMarket.member.vo.MemberVO;
 @RequestMapping("/article")
 public class ArticleController {
 
+	private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
+
 	@Autowired
 	ArticleService articleService;
 
@@ -62,16 +66,52 @@ public class ArticleController {
 	@RequestMapping(value = "/fleamarket", method = RequestMethod.GET)
 	public ModelAndView fleamarket(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		List<ArticleVO> articleList = articleService.selectArticles();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+
+		logger.info("loginId : {}", loginId);
+		List<ArticleVO> articleList;
+		if (loginId.equals("anonymousUser")) {
+			articleList = articleService.selectArticles();
+		} else {
+			MemberVO member = memberService.findById(loginId);
+			logger.info("member : {}", member.toString());
+			logger.info("region : {}", member.getRegion1());
+			articleList = articleService.selectArticlesByRegion(member.getRegion1());
+			mav.addObject("region", member.getRegion1());
+		}
 		mav.addObject("articles", articleList);
 		mav.setViewName("fleamarket");
 		return mav;
 	}
 
 	@RequestMapping(value = "/hotArticle", method = RequestMethod.GET)
-	public ModelAndView hotArticle(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView hotArticle(@PathVariable(required = false) String region1,
+			@PathVariable(required = false) String region2, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		ModelAndView mav = new ModelAndView();
 		List<ArticleVO> articleList = articleService.selectArticles();
+		mav.addObject("articles", articleList);
+		mav.setViewName("hotArticle");
+		return mav;
+	}
+
+	@RequestMapping(value = "/hotArticle/{region1}", method = RequestMethod.GET)
+	public ModelAndView hotArticle(@PathVariable String region1) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		List<ArticleVO> articleList = articleService.selectArticlesByContainRegion(region1);
+		mav.addObject("region1", region1);
+		mav.addObject("articles", articleList);
+		mav.setViewName("hotArticle");
+		return mav;
+	}
+
+	@RequestMapping(value = "/hotArticle/{region1}/{region2}", method = RequestMethod.GET)
+	public ModelAndView hotArticle(@PathVariable String region1, @PathVariable String region2) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		List<ArticleVO> articleList = articleService.selectArticlesByContainRegion(region1 + " " + region2);
+		mav.addObject("region1", region1);
+		mav.addObject("region2", region2);
 		mav.addObject("articles", articleList);
 		mav.setViewName("hotArticle");
 		return mav;

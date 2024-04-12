@@ -51,13 +51,20 @@
 					src="https://d1unjqcospf8gs.cloudfront.net/assets/home/main/3x/fleamarket-39d1db152a4769a6071f587fa9320b254085d726a06f61d544728b9ab3bd940a.webp" />
 			</div>
 		</div>
-		<h1 class="subject">중고거래 인기매물</h1>
+		<c:choose>
+			<c:when test="${not empty region }">
+				<h1 class="subject">${region }</h1>
+			</c:when>
+			<c:otherwise>
+				<h1 class="subject">중고거래&nbsp;인기매물</h1>
+			</c:otherwise>
+		</c:choose>
 
 		<div id="item-wrap">
 			<div id="item-list">
 				<c:forEach var="article" items="${articles}">
 					<c:set var="images" value="${article.filesName }" />
-					<div id="item">
+					<div class="item">
 						<a href="${contextPath }/article/${article.productId}">
 							<c:choose>
 								<c:when test="${images.size() == 0 }">
@@ -104,7 +111,16 @@
 				</c:forEach>
 			</div>
 			<div id="more-item">
-				<a href="${contextPath }/article/hotArticle">인기매물 더 보기</a>
+				<a href="${contextPath }/article/hotArticle">
+					<c:choose>
+						<c:when test="${not empty region }">
+							다른 동네 인기매물 더 보기
+						</c:when>
+						<c:otherwise>
+							인기매물 더 보기
+						</c:otherwise>
+					</c:choose>
+				</a>
 			</div>
 		</div>
 		<sec:authorize access="isAuthenticated()">

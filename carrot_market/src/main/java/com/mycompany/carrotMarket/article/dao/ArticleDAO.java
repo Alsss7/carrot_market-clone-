@@ -18,6 +18,10 @@ public interface ArticleDAO {
 	public int insertImageFiles(ArticleVO articleVO) throws DataAccessException;
 
 	public List<ArticleVO> selectArticles() throws DataAccessException;
+	
+	public List<ArticleVO> selectArticlesByRegion(String region) throws DataAccessException;
+	
+	public List<ArticleVO> selectArticlesByContainRegion(String region) throws DataAccessException;
 
 	public List<ArticleVO> selectArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException;
 

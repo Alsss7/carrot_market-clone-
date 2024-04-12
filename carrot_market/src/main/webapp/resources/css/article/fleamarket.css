@@ -54,25 +54,26 @@ body {
 }
 
 #item-wrap {
-	width: 757px;
+	width: 800px;
 	margin: 0 auto;
 }
 
 #item-list {
 	display: flex;
-	flex-flow: row wrap;
-	justify-content: space-between;
-	align-items: center;
+	flex-flow: wrap;
 	width: 100%;
 }
 
-#item {
-	margin-top: 50px;
+.item {
+	width: 250px; /* 3개씩 나열되도록 설정 */
+	padding: 10px;
+	box-sizing: border-box;
+	margin: 6px;
 }
 
-#item img {
-	width: 223px;
-	height: 223px;
+.item img {
+	width: 230px;
+	height: 230px;
 	object-fit: cover;
 	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
 }

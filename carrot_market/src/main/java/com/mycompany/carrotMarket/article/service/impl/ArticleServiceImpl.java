@@ -68,6 +68,32 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	@Transactional
+	public List<ArticleVO> selectArticlesByRegion(String region) throws DataAccessException {
+		List<ArticleVO> articleList = articleDAO.selectArticlesByRegion(region);
+		if (articleList.size() > 0) {
+			for (ArticleVO article : articleList) {
+				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
+				article.setFilesName(imageList);
+			}
+		}
+		return articleList;
+	}
+
+	@Override
+	@Transactional
+	public List<ArticleVO> selectArticlesByContainRegion(String region) throws DataAccessException {
+		List<ArticleVO> articleList = articleDAO.selectArticlesByContainRegion(region);
+		if (articleList.size() > 0) {
+			for (ArticleVO article : articleList) {
+				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
+				article.setFilesName(imageList);
+			}
+		}
+		return articleList;
+	}
+
+	@Override
+	@Transactional
 	public List<ArticleVO> selectArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException {
 		List<ArticleVO> articleList = articleDAO.selectArticlesByProductIdList(productIdList);
 		if (articleList.size() > 0) {

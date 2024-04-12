@@ -41,6 +41,18 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
+	public List<ArticleVO> selectArticlesByRegion(String region) throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesByRegion", region);
+		return list;
+	}
+
+	@Override
+	public List<ArticleVO> selectArticlesByContainRegion(String region) throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesByContainRegion", region);
+		return list;
+	}
+
+	@Override
 	public List<ArticleVO> selectArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException {
 		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesByProductIdList", productIdList);
 		return list;

@@ -13,29 +13,39 @@ body {
 
 #select-region {
 	text-align: right;
-	width: 757px;
+	width: 1000px;
 	margin: 50px auto;
+}
+
+.region {
+	width: 140px;
+	height: 30px;
+	font-size: 13pt;
+	border-radius: 10px;
+	font-weight: bold;
 }
 
 #item-wrap {
 	width: 1000px;
 	margin: 0 auto;
-	margin-bottom: 100px;
+	margin-top: 50px;
+	margin-bottom: 50px;
 }
 
 #item-list {
 	display: flex;
-	flex-flow: row wrap;
-	justify-content: space-between;
-	align-items: center;
+	flex-flow: wrap;
 	width: 100%;
 }
 
-#item {
-	margin-top: 50px;
+.item {
+	width: 250px; /* 3개씩 나열되도록 설정 */
+	padding: 10px;
+	box-sizing: border-box;
+	margin: 6px;
 }
 
-#item img {
+.item img {
 	width: 223px;
 	height: 223px;
 	object-fit: cover;

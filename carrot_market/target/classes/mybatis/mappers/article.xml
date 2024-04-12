@@ -41,6 +41,38 @@
 		ORDER BY created_at DESC
 	</select>
 	
+	<select id="selectArticlesByRegion" parameterType="String" resultType="articleVO">
+		SELECT
+			product_id AS productId,
+			user_id AS userId,
+			title,
+			price,
+			region,
+			like_count AS likeCount,
+			chat_count AS chatCount,
+			view_count AS viewCount,
+			status
+		FROM products
+		WHERE status IN ('Active', 'Booking', 'Sold') AND hidden = 0 AND region = #{value}
+		ORDER BY created_at DESC
+	</select>
+	
+	<select id="selectArticlesByContainRegion" parameterType="String" resultType="articleVO">
+		SELECT
+			product_id AS productId,
+			user_id AS userId,
+			title,
+			price,
+			region,
+			like_count AS likeCount,
+			chat_count AS chatCount,
+			view_count AS viewCount,
+			status
+		FROM products
+		WHERE status IN ('Active', 'Booking', 'Sold') AND hidden = 0 AND region LIKE CONCAT(#{value}, '%')
+		ORDER BY created_at DESC
+	</select>
+	
 	<select id="selectArticlesByProductIdList" parameterType="java.util.List" resultType="articleVO">
 		SELECT
 			product_id AS productId,
