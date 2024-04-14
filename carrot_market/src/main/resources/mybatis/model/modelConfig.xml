@@ -27,6 +27,9 @@
 		<typeAlias
 			type="com.mycompany.carrotMarket.article.dto.UpdateImagesDTO"
 			alias="updateImagesDTO" />
+		<typeAlias
+			type="com.mycompany.carrotMarket.article.dto.SearchDTO"
+			alias="searchDTO" />
 
 
 		<typeAlias type="com.mycompany.carrotMarket.chat.vo.ChatVO"

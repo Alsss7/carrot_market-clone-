@@ -1,13 +1,16 @@
 const slidesContainer = document.getElementById('slides');
 const slides = document.querySelectorAll('.slide');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
+const dots = document.querySelectorAll('.dot');
+
 let slideIndex = 0;
 
 function showSlide(index) {
 	slides.forEach((slide, i) => {
     	slide.classList.toggle('active', i === index);    
    	});
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+    });
 }
 
 function nextSlide() {
@@ -170,3 +173,33 @@ function deleteArticle() {
         }
     });
 }
+
+$('document').ready(function() {
+    var userManner = $('#user-manner');
+    var progressValue = $('#progressValue');
+    if(manner < 21.3) {
+        userManner.css('color', '#898989');
+        progressValue.css('width', manner + '%');
+        progressValue.css('background-color', '#898989');
+    } else if(manner < 33.3) {
+        userManner.css('color', '#3F77B2');
+        progressValue.css('width', manner + '%');
+        progressValue.css('background-color', '#3F77B2');
+    } else if(manner < 43.5) {
+        userManner.css('color', '#5D9BE7');
+        progressValue.css('width', manner + '%');
+        progressValue.css('background-color', '#5D9BE7');
+    } else if(manner < 58) {
+        userManner.css('color', '#74C697');
+        progressValue.css('width', manner + '%');
+        progressValue.css('background-color', '#74C697');
+    } else if(manner < 76.8) {
+        userManner.css('color', '#EBBC6A');
+        progressValue.css('width', manner + '%');
+        progressValue.css('background-color', '#EBBC6A');
+    } else {
+        userManner.css('color', '#E27029');
+        progressValue.css('width', manner + '%');
+        progressValue.css('background-color', '#E27029');
+    }
+});

@@ -68,13 +68,15 @@
 </head>
 <body>
 	<main>
+		<c:set var="images" value="${article.filesName }" />
 		<c:choose>
 			<c:when test="${isExists == 'true' }">
 				<div id="images-and-user">
 					<div id="images">
-						<div class="slider-btn" id="prevBtn" onclick="prevSlide()">&#10094;</div>
+						<c:if test="${images.size() > 1}">
+							<div class="slider-btn" id="prevBtn" onclick="prevSlide()">&#10094;</div>
+						</c:if>
 						<div id="slides">
-							<c:set var="images" value="${article.filesName }" />
 							<c:choose>
 								<c:when test="${images.size() == 0}">
 									<div class="slide">
@@ -89,8 +91,17 @@
 									</c:forEach>
 								</c:otherwise>
 							</c:choose>
+							<c:if test="${images.size() > 1}">
+								<div id="dots">
+									<c:forEach var="number" begin="0" end="${images.size() - 1 }" varStatus="status">
+										<span class="dot ${status.first ? 'active' : ''}" id="dot${number }"></span>
+									</c:forEach>
+								</div>
+							</c:if>
 						</div>
-						<div class="slider-btn" id="nextBtn" onclick="nextSlide()">&#10095;</div>
+						<c:if test="${images.size() > 1}">
+							<div class="slider-btn" id="nextBtn" onclick="nextSlide()">&#10095;</div>
+						</c:if>
 					</div>
 					<div id="user-info">
 						<div id="profile">
@@ -113,17 +124,62 @@
 						</div>
 						<div id="manner">
 							<div id="manner-detail">
-								<div id="user-manner">
-									<span> ${member.manner } &#8451; </span>
-									<br>
-									<span>
-										<progress value="${member.manner }" max="100"></progress>
-									</span>
-								</div>
-								<div id="manner-image">
-									<img src="${contextPath }/resources/image/product_image/empty.png">
-								</div>
-								<br>
+								<c:choose>
+									<c:when test="${member.manner < 21.3 }">
+										<div id="user-manner">
+											<div>${member.manner }&#8451;</div>
+											<div class="progress-wrapper">
+												<div class="progress-value" id="progressValue"></div>
+											</div>
+										</div>
+										<div id="manner-image">😠</div>
+									</c:when>
+									<c:when test="${member.manner < 33.3 }">
+										<div id="user-manner">
+											<div>${member.manner }&#8451;</div>
+											<div class="progress-wrapper">
+												<div class="progress-value" id="progressValue"></div>
+											</div>
+										</div>
+										<div id="manner-image">😒</div>
+									</c:when>
+									<c:when test="${member.manner < 43.5 }">
+										<div id="user-manner">
+											<div>${member.manner }&#8451;</div>
+											<div class="progress-wrapper">
+												<div class="progress-value" id="progressValue"></div>
+											</div>
+										</div>
+										<div id="manner-image">🙂</div>
+									</c:when>
+									<c:when test="${member.manner < 58 }">
+										<div id="user-manner">
+											<div>${member.manner }&#8451;</div>
+											<div class="progress-wrapper">
+												<div class="progress-value" id="progressValue"></div>
+											</div>
+										</div>
+										<div id="manner-image">😀</div>
+									</c:when>
+									<c:when test="${member.manner < 76.8 }">
+										<div id="user-manner">
+											<div>${member.manner }&#8451;</div>
+											<div class="progress-wrapper">
+												<div class="progress-value" id="progressValue"></div>
+											</div>
+										</div>
+										<div id="manner-image">😄</div>
+									</c:when>
+									<c:otherwise>
+										<div id="user-manner">
+											<div>${member.manner }&#8451;</div>
+											<div class="progress-wrapper">
+												<div class="progress-value" id="progressValue"></div>
+											</div>
+										</div>
+										<div id="manner-image">😆</div>
+									</c:otherwise>
+								</c:choose>
 							</div>
 							<div id="manner-temperature">매너온도</div>
 						</div>
@@ -286,6 +342,7 @@
 		var timeDiff = "${timeDiff}";
 		var productId = "${article.productId}";
 		var productStatus = "${article.status}";
+		var manner = "${member.manner}";
 	</script>
 	<script src="${contextPath }/resources/js/article/viewArticle.js"></script>
 </body>

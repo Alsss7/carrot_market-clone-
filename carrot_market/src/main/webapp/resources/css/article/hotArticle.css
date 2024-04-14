@@ -11,22 +11,22 @@ body {
 	text-align: center;
 }
 
-#select-region {
+#select-region-container {
 	text-align: right;
 	width: 1000px;
 	margin: 50px auto;
 }
 
-.region {
+.select-region {
 	width: 140px;
 	height: 30px;
-	font-size: 13pt;
+	font-size: 10pt;
 	border-radius: 10px;
 	font-weight: bold;
 }
 
 #item-wrap {
-	width: 1000px;
+	width: 1049px;
 	margin: 0 auto;
 	margin-top: 50px;
 	margin-bottom: 50px;
@@ -52,7 +52,10 @@ body {
 	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
 }
 
-.article_title {
+.article-title {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	font-size: 13pt;
 	padding-top: 2px;
 	padding-bottom: 2px;

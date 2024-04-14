@@ -34,6 +34,7 @@ main {
 	display: flex;
 	flex-flow: row;
 	align-items: center;
+	justify-content: center;
 	overflow: hidden;
 	margin: auto;
 }
@@ -46,13 +47,43 @@ main {
 	display: block;
 }
 
+#slides {
+	position: relative;
+	z-index: 1;
+}
+
+#dots {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	z-index: 2;
+	/* 아래의 코드는 dots를 slides 중앙에 배치합니다. */
+	top: 95%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.dot {
+	height: 15px;
+	width: 15px;
+	margin: 0 5px;
+	background-color: #EEEEEE;
+	border-radius: 50%;
+	transition: background-color 0.6s ease;
+}
+
+.dot.active {
+	background-color: #717171;
+}
+
 #images {
 	width: 800px;
 }
 
 #images img {
 	width: 700px;
-	height: 500px;
+	height: 550px;
 	object-fit: cover;
 	border-radius: 10px 10px 10px 10px/10px 10px 10px 10px;
 }
@@ -68,8 +99,7 @@ main {
 	width: 86%;
 	display: flex;
 	justify-content: space-between;
-	margin-top: 15px;
-	margin-bottom: 15px;
+	margin: 10px 0px;
 }
 
 #profile {
@@ -113,27 +143,45 @@ main {
 	display: flex;
 	flex-flow: row;
 	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 5px;
 }
 
 #user-manner {
-	font-size: 12pt;
+	display: flex;
+	flex-flow: column;
+	font-size: 11pt;
 	font-weight: bold;
-	color: blue;
 	text-align: right;
-	margin-right: 20px;
 }
 
-#manner-image img {
-	width: 30px;
-	hieght: 30px;
-	object-fit: cover;
+.progress-wrapper {
+	margin-top: 5px;
+	display: flex;
+	align-items: center;
+	width: 120px;
+	height: 5px;
+	background: #eeeeee;
+	border: none;
+	border-radius: 5px;
+	over-flow: hidden;
+}
+
+.progress-value {
+	height: 100%;
+	border: none;
+	border-radius: 5px;
+}
+
+#manner-image {
+	margin-left: 5px;
+	font-size: 20pt;
 }
 
 #manner-temperature {
-	font-size: 10pt;
+	font-size: 9pt;
 	color: gray;
-	display: flex;
-	justify-content: flex-end;
+	text-align: right;
 }
 
 #line {
@@ -146,11 +194,11 @@ main {
 }
 
 #details {
+	width: 86%;
 	margin-top: 20px;
 	display: flex;
 	flex-flow: column;
 	justify-content: center;
-	width: 705px;
 	height: auto;
 }
 
@@ -206,11 +254,6 @@ main {
 	font-size: 10pt;
 	color: gray;
 	margin-bottom: 30px;
-}
-
-progress {
-	height: 10px;
-	width: 100px;
 }
 
 #like-and-chat {

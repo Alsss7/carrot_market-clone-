@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
+import com.mycompany.carrotMarket.article.dto.SearchDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
@@ -17,6 +18,10 @@ public interface ArticleService {
 	public boolean addArticle(ArticleVO articleVO) throws DataAccessException;
 
 	public List<ArticleVO> selectArticles() throws DataAccessException;
+
+	public List<ArticleVO> selectArticlesBySearch(String value) throws DataAccessException;
+
+	public List<ArticleVO> selectArticlesBySearchInRegion(SearchDTO dto) throws DataAccessException;
 
 	public List<ArticleVO> selectArticlesByRegion(String region) throws DataAccessException;
 

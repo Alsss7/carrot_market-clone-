@@ -23,11 +23,11 @@
 			<h1 class="subject">중고거래&nbsp;인기매물</h1>
 		</c:otherwise>
 	</c:choose>
-	<div id="select-region">
-		<select class="region" id="region1">
+	<div id="select-region-container">
+		<select class="select-region" id="region1">
 			<option value="" selected>지역을 선택하세요</option>
 		</select>
-		<select class="region" id="region2" disabled>
+		<select class="select-region" id="region2" disabled>
 			<option value="" selected>동네를 선택하세요</option>
 		</select>
 	</div>
@@ -50,7 +50,7 @@
 										<br>
 									</c:otherwise>
 								</c:choose>
-								<div class="article_title">${article.title }</div>
+								<div class="article-title">${article.title }</div>
 								<div id="status-price">
 									<c:choose>
 										<c:when test="${article.status == 'Booking' }">

@@ -8,18 +8,6 @@
 <head>
 <link rel="stylesheet" href="${contextPath }/resources/css/common/header.css" />
 <meta charset="UTF-8">
-<script type="text/javascript">
-	function search(e) {
-		const code = e.code;
-		var input = document.getElementById("search");
-		var form = document.getElementById("")
-		if (code == 'Enter') {
-			// 검색어 처리 로직
-			console.log(input.value);
-			input.value = '';
-		}
-	}
-</script>
 </head>
 <body>
 	<header>
@@ -31,23 +19,26 @@
 					</a>
 				</span>
 				<span class="menu" id="fleamarket">
-					<a href="${contextPath }/article/fleamarket">중고거래</a>
+					<c:choose>
+						<c:when test="${pageTitle == 'trade' }">
+							<a href="${contextPath }/article/fleamarket" style="color: #FF6F0F;">중고거래</a>
+						</c:when>
+						<c:otherwise>
+							<a href="${contextPath }/article/fleamarket">중고거래</a>
+						</c:otherwise>
+					</c:choose>
 				</span>
 				<span class="menu">동네업체</span>
 				<span class="menu">알바</span>
 				<span class="menu">부동산 직거래</span>
 				<span class="menu">중고차 직거래</span>
-				<form name="searchForm" style="display: inline">
-					<span>
-						<input type="search" id="search" name="search" onkeypress="search(event)"
-							placeholder="물품이나 동네를 검색해보세요" size="30" />
-					</span>
-				</form>
+				<span style="display: inline">
+					<input type="search" id="search" name="search" placeholder="물품을 검색해보세요" size="30" />
+				</span>
 				<sec:authorize access="isAuthenticated()">
 					<form action="${contextPath }/logout" method="post">
 						<span>
 							<button type="submit" id="logout_bt">로그아웃</button>
-							<input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
 						</span>
 					</form>
           			&nbsp;&nbsp;
@@ -68,5 +59,9 @@
 			</nav>
 		</div>
 	</header>
+	<script>
+		var contextPath = '${contextPath}';
+	</script>
+	<script src="${contextPath }/resources/js/common/header.js"></script>
 </body>
 </html>

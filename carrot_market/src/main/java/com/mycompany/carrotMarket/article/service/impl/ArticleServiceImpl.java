@@ -15,6 +15,7 @@ import com.mycompany.carrotMarket.article.dao.ArticleDAO;
 import com.mycompany.carrotMarket.article.dao.TradeDAO;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
+import com.mycompany.carrotMarket.article.dto.SearchDTO;
 import com.mycompany.carrotMarket.article.dto.TradeDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
@@ -57,6 +58,32 @@ public class ArticleServiceImpl implements ArticleService {
 	@Transactional
 	public List<ArticleVO> selectArticles() throws DataAccessException {
 		List<ArticleVO> articleList = articleDAO.selectArticles();
+		if (articleList.size() > 0) {
+			for (ArticleVO article : articleList) {
+				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
+				article.setFilesName(imageList);
+			}
+		}
+		return articleList;
+	}
+
+	@Override
+	@Transactional
+	public List<ArticleVO> selectArticlesBySearch(String value) throws DataAccessException {
+		List<ArticleVO> articleList = articleDAO.selectArticlesBySearch(value);
+		if (articleList.size() > 0) {
+			for (ArticleVO article : articleList) {
+				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
+				article.setFilesName(imageList);
+			}
+		}
+		return articleList;
+	}
+
+	@Override
+	@Transactional
+	public List<ArticleVO> selectArticlesBySearchInRegion(SearchDTO dto) throws DataAccessException {
+		List<ArticleVO> articleList = articleDAO.selectArticlesBySearchInRegion(dto);
 		if (articleList.size() > 0) {
 			for (ArticleVO article : articleList) {
 				List<String> imageList = articleDAO.selectImagesName(article.getProductId());

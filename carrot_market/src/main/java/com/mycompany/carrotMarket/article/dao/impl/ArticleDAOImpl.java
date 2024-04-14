@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.mycompany.carrotMarket.article.dao.ArticleDAO;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
+import com.mycompany.carrotMarket.article.dto.SearchDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
@@ -37,6 +38,18 @@ public class ArticleDAOImpl implements ArticleDAO {
 	@Override
 	public List<ArticleVO> selectArticles() throws DataAccessException {
 		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticles");
+		return list;
+	}
+
+	@Override
+	public List<ArticleVO> selectArticlesBySearch(String value) throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesBySearch", value);
+		return list;
+	}
+
+	@Override
+	public List<ArticleVO> selectArticlesBySearchInRegion(SearchDTO dto) throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesBySearchInRegion", dto);
 		return list;
 	}
 

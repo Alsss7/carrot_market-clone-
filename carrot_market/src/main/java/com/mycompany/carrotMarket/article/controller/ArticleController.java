@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
+import com.mycompany.carrotMarket.article.dto.SearchDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
@@ -81,6 +82,7 @@ public class ArticleController {
 			mav.addObject("region", member.getRegion1());
 		}
 		mav.addObject("articles", articleList);
+		mav.addObject("pageTitle", "trade");
 		mav.setViewName("fleamarket");
 		return mav;
 	}
@@ -91,6 +93,7 @@ public class ArticleController {
 			throws Exception {
 		ModelAndView mav = new ModelAndView();
 		List<ArticleVO> articleList = articleService.selectArticles();
+		mav.addObject("pageTitle", "trade");
 		mav.addObject("articles", articleList);
 		mav.setViewName("hotArticle");
 		return mav;
@@ -101,6 +104,7 @@ public class ArticleController {
 		ModelAndView mav = new ModelAndView();
 		List<ArticleVO> articleList = articleService.selectArticlesByContainRegion(region1);
 		mav.addObject("region1", region1);
+		mav.addObject("pageTitle", "trade");
 		mav.addObject("articles", articleList);
 		mav.setViewName("hotArticle");
 		return mav;
@@ -112,6 +116,7 @@ public class ArticleController {
 		List<ArticleVO> articleList = articleService.selectArticlesByContainRegion(region1 + " " + region2);
 		mav.addObject("region1", region1);
 		mav.addObject("region2", region2);
+		mav.addObject("pageTitle", "trade");
 		mav.addObject("articles", articleList);
 		mav.setViewName("hotArticle");
 		return mav;
@@ -230,8 +235,30 @@ public class ArticleController {
 
 	}
 
+	@RequestMapping(value = "/search/{value}", method = RequestMethod.GET)
+	public ModelAndView searchArticles(@PathVariable String value) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String loginId = authentication.getName();
+		List<ArticleVO> articles;
+		if (loginId == "anonymousUser") {
+			articles = articleService.selectArticlesBySearch(value);
+		} else {
+			MemberVO member = memberService.findById(loginId);
+			String[] regionArray = member.getRegion1().split(" ");
+			String region = regionArray[0] + " " + regionArray[1];
+			logger.info("region : {}", region);
+			articles = articleService.selectArticlesBySearchInRegion(new SearchDTO(value, region));
+			mav.addObject("region", region);
+		}
+		mav.addObject("articles", articles);
+		mav.setViewName("searchResult");
+		return mav;
+	}
+
 	@RequestMapping(value = "/{productId}", method = RequestMethod.GET)
-	public ModelAndView viewArticle(@PathVariable int productId, HttpServletRequest req, HttpServletResponse res) {
+	public ModelAndView viewArticle(@PathVariable int productId, HttpServletRequest req, HttpServletResponse res)
+			throws Exception {
 		ModelAndView mav = new ModelAndView();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String loginId = authentication.getName();
