@@ -56,6 +56,9 @@ body {
 #item-wrap {
 	width: 787px;
 	margin: 0 auto;
+	display: flex;
+	flex-flow: column;
+	align-items: center;
 }
 
 #item-list {
@@ -87,7 +90,7 @@ body {
 	padding-bottom: 2px;
 }
 
-#status-price {
+.status-price {
 	display: flex;
 	flex-flow: row;
 	align-items: center;
@@ -125,6 +128,16 @@ body {
 a {
 	text-decoration: none;
 	color: black;
+}
+
+.more-item-button {
+	text-align: center;
+	border-radius: 15px;
+	background-color: #EE7832;
+	padding: 5px 15px;
+	color: white;
+	cursor: pointer;
+	margin-top: 20px;
 }
 
 #more-item {

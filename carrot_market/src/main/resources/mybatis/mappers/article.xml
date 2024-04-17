@@ -41,69 +41,190 @@
 		ORDER BY created_at DESC
 	</select>
 	
+	<select id="selectArticlesByRandom" resultType="articleVO" parameterType="int">
+		<![CDATA[
+			SELECT *
+			FROM (
+	    		SELECT
+		        	product_id AS productId,
+        			user_id AS userId,
+        			title,
+        			price,
+        			region,
+        			like_count AS likeCount,
+        			chat_count AS chatCount,
+        			view_count AS viewCount,
+        			status
+    			FROM products
+    			WHERE status IN ('Active', 'Booking') AND hidden = 0
+    			ORDER BY DBMS_RANDOM.RANDOM
+    		)
+    		WHERE ROWNUM <= #{value}
+    	]]>
+	</select>
+	
 	<select id="selectArticlesBySearch" parameterType="String" resultType="articleVO">
-		SELECT
-			product_id AS productId,
-			user_id AS userId,
-			title,
-			price,
-			region,
-			like_count AS likeCount,
-			chat_count AS chatCount,
-			view_count AS viewCount,
-			status
+		<![CDATA[
+			SELECT * 
+			FROM (
+				SELECT
+					product_id AS productId,
+					user_id AS userId,
+					title,
+					price,
+					region,
+					like_count AS likeCount,
+					chat_count AS chatCount,
+					view_count AS viewCount,
+					status
+				FROM products
+				WHERE status IN ('Active', 'Booking') AND hidden = 0 AND title LIKE '%' || #{value} || '%'
+				ORDER BY created_at DESC
+			)
+			WHERE ROWNUM <= 6
+		]]>
+	</select>
+	
+	<select id="selectArticlesCountBySearch" parameterType="String" resultType="int">
+		SELECT COUNT(product_id)
 		FROM products
 		WHERE status IN ('Active', 'Booking') AND hidden = 0 AND title LIKE '%' || #{value} || '%'
-		ORDER BY created_at DESC
 	</select>
 	
 	<select id="selectArticlesBySearchInRegion" parameterType="searchDTO" resultType="articleVO">
-		SELECT
-			product_id AS productId,
-			user_id AS userId,
-			title,
-			price,
-			region,
-			like_count AS likeCount,
-			chat_count AS chatCount,
-			view_count AS viewCount,
-			status
+		<![CDATA[
+			SELECT * 
+			FROM (
+				SELECT
+					product_id AS productId,
+					user_id AS userId,
+					title,
+					price,
+					region,
+					like_count AS likeCount,
+					chat_count AS chatCount,
+					view_count AS viewCount,
+					status
+				FROM products
+				WHERE status IN ('Active', 'Booking') AND hidden = 0 
+						AND title LIKE '%' || #{value} || '%' AND region LIKE #{region} || '%'
+				ORDER BY created_at DESC
+			)
+			WHERE ROWNUM <= 6
+		]]>
+	</select>
+	
+	<select id="selectArticlesCountBySearchInRegion" parameterType="searchDTO" resultType="int">
+		SELECT COUNT(product_id)
 		FROM products
-		WHERE status IN ('Active', 'Booking') AND hidden = 0 
-				AND title LIKE '%' || #{value} || '%' AND region LIKE #{region} || '%'
-		ORDER BY created_at DESC
+		WHERE status IN ('Active', 'Booking') AND hidden = 0 AND title LIKE '%' || #{value} || '%' AND region LIKE #{region} || '%'
+	</select>
+	
+	<select id="selectMoreArticlesBySearch" parameterType="moreArticleDTO" resultType="articleVO">
+	        SELECT * FROM (
+            	SELECT
+	                product_id AS productId,
+                	user_id AS userId,
+                	title,
+                	price,
+                	region,
+                	like_count AS likeCount,
+                	chat_count AS chatCount,
+                	view_count AS viewCount,
+                	status,
+                	ROWNUM AS rn
+            	FROM (
+	                SELECT *
+                	FROM products
+                	<where>
+                		<if test="region != null">
+                			AND region LIKE '%' || #{region} || '%'
+                		</if>
+                		AND status IN ('Active', 'Booking') AND hidden = 0 AND title LIKE '%' || #{searchValue} || '%'
+                	</where>
+                	ORDER BY product_id DESC
+            	)
+		<![CDATA[
+            	WHERE ROWNUM <= #{nextArticleListSize}
+        	)
+        	WHERE rn > #{articleListSize}
+    	]]>
 	</select>
 	
 	<select id="selectArticlesByRegion" parameterType="String" resultType="articleVO">
-		SELECT
-			product_id AS productId,
-			user_id AS userId,
-			title,
-			price,
-			region,
-			like_count AS likeCount,
-			chat_count AS chatCount,
-			view_count AS viewCount,
-			status
-		FROM products
-		WHERE status IN ('Active', 'Booking') AND hidden = 0 AND region = #{value}
-		ORDER BY created_at DESC
+		<![CDATA[
+			SELECT *
+	        FROM (
+            	SELECT
+	                product_id AS productId,
+                	user_id AS userId,
+                	title,
+                	price,
+                	region,
+                	like_count AS likeCount,
+                	chat_count AS chatCount,
+                	view_count AS viewCount,
+                	status
+            	FROM products
+            	WHERE status IN ('Active', 'Booking') AND hidden = 0 AND region = #{value}
+            	ORDER BY productId DESC
+        	)
+        	WHERE ROWNUM <= 12
+		]]>
 	</select>
 	
-	<select id="selectArticlesByContainRegion" parameterType="String" resultType="articleVO">
-		SELECT
-			product_id AS productId,
-			user_id AS userId,
-			title,
-			price,
-			region,
-			like_count AS likeCount,
-			chat_count AS chatCount,
-			view_count AS viewCount,
-			status
+	<select id="selectMoreArticlesByRegion" parameterType="moreArticleDTO" resultType="articleVO">
+		<![CDATA[
+	        SELECT * FROM (
+            	SELECT
+	                product_id AS productId,
+                	user_id AS userId,
+                	title,
+                	price,
+                	region,
+                	like_count AS likeCount,
+                	chat_count AS chatCount,
+                	view_count AS viewCount,
+                	status,
+                	ROWNUM AS rn
+            	FROM (
+	                SELECT *
+                	FROM products
+                	WHERE status IN ('Active', 'Booking') AND hidden = 0 AND region = #{region}
+                	ORDER BY product_id DESC
+            	)
+            	WHERE ROWNUM <= #{nextArticleListSize}
+        	)
+        	WHERE rn > #{articleListSize}
+    	]]>
+	</select>
+	
+	<select id="selectArticlesCountByRegion" parameterType="String" resultType="int">
+		SELECT COUNT(product_id)
 		FROM products
-		WHERE status IN ('Active', 'Booking') AND hidden = 0 AND region LIKE CONCAT(#{value}, '%')
-		ORDER BY created_at DESC
+		WHERE region = #{value}
+	</select>
+	
+	<select id="selectRandomArticlesByContainRegion" parameterType="String" resultType="articleVO">
+		<![CDATA[
+			SELECT * 
+			FROM(
+				SELECT
+					product_id AS productId,
+					user_id AS userId,
+					title,
+					price,
+					region,
+					like_count AS likeCount,
+					chat_count AS chatCount,
+					view_count AS viewCount,
+					status
+				FROM products
+				WHERE status IN ('Active', 'Booking') AND hidden = 0 AND region LIKE CONCAT(#{value}, '%')
+				ORDER BY DBMS_RANDOM.RANDOM
+			)
+			WHERE ROWNUM < 100
+		]]>
 	</select>
 	
 	<select id="selectArticlesByProductIdList" parameterType="java.util.List" resultType="articleVO">

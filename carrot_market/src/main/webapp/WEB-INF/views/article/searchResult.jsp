@@ -12,7 +12,7 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
-	<div class="container">
+	<div class="container" id="resultContainer">
 		<div class="subject-wrapper">
 			<c:choose>
 				<c:when test="${not empty region}">
@@ -47,7 +47,7 @@
 										<div class="article-title">${article.title }</div>
 										<div class="region">${article.region }</div>
 										<div class="price-likeCount">
-											<div id="status-price">
+											<div class="status-price">
 												<c:choose>
 													<c:when test="${article.status == 'Booking' }">
 														<span class="status" style="background-color: green;">예약 중</span>
@@ -75,7 +75,7 @@
 											</div>
 										</div>
 									</a>
-								</div>
+								</div>ㄴ
 							</c:forEach>
 						</div>
 					</div>
@@ -86,9 +86,13 @@
 			</c:choose>
 		</div>
 	</div>
-	<div class="more-item" id="moreItem">더 보기</div>
+	<div class="more-item" id="moreItemButton">더 보기</div>
 	<script>
 		var contextPath = '${contextPath}';
+		var articleCount = '${articleCount}';
+		var region = '${region}';
+		var allCount = '${allCount}';
+		var search = '${search}';
 	</script>
 	<script src="${contextPath }/resources/js/article/searchResult.js"></script>
 </body>

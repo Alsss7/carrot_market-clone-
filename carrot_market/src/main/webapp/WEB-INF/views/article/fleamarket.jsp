@@ -8,6 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath }/resources/css/article/fleamarket.css" />
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <c:if test="${not empty result }">
 	<script>
 		var message = "${result}";
@@ -78,7 +79,7 @@
 								</c:otherwise>
 							</c:choose>
 							<div class="article-title">${article.title }</div>
-							<div id="status-price">
+							<div class="status-price">
 								<c:choose>
 									<c:when test="${article.status == 'Booking' }">
 										<span class="status" style="background-color: green;">예약 중</span>
@@ -104,17 +105,27 @@
 							<div class="like-and-chat">
 								<span class="">관심 ${article.likeCount}</span>
 								·
-								<span class="">채팅 ${article.chatCount }</span>
+								<span class="">채팅 ${article.chatCount}</span>
 							</div>
 						</a>
 					</div>
 				</c:forEach>
 			</div>
+			<c:choose>
+				<c:when test="${articles.size() != 0}">
+					<c:if test="${not empty region }">
+						<span class="more-item-button" id="moreItemButton">더 보기</span>
+					</c:if>
+				</c:when>
+				<c:otherwise>
+					<h2>등록된 물품이 없습니다!</h2>
+				</c:otherwise>
+			</c:choose>
 			<div id="more-item">
 				<a href="${contextPath }/article/hotArticle">
 					<c:choose>
 						<c:when test="${not empty region }">
-							다른 동네 인기매물 더 보기
+							다른 지역 인기매물 보기
 						</c:when>
 						<c:otherwise>
 							인기매물 더 보기
@@ -129,5 +140,12 @@
 			</a>
 		</sec:authorize>
 	</main>
+	<script>
+		var contextPath = '${contextPath}';
+		var articleCount = '${articleCount}';
+		var region = '${region}';
+		var allCount = '${allCount}';
+	</script>
+	<script src="${contextPath }/resources/js/article/fleamarket.js"></script>
 </body>
 </html>

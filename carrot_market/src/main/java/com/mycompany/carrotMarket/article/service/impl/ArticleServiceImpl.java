@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mycompany.carrotMarket.article.dao.ArticleDAO;
 import com.mycompany.carrotMarket.article.dao.TradeDAO;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
+import com.mycompany.carrotMarket.article.dto.MoreArticleDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
 import com.mycompany.carrotMarket.article.dto.SearchDTO;
 import com.mycompany.carrotMarket.article.dto.TradeDTO;
@@ -68,6 +69,18 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public List<ArticleVO> selectArticlesByRandom(int count) throws DataAccessException {
+		List<ArticleVO> articleList = articleDAO.selectArticlesByRandom(count);
+		if (articleList.size() > 0) {
+			for (ArticleVO article : articleList) {
+				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
+				article.setFilesName(imageList);
+			}
+		}
+		return articleList;
+	}
+
+	@Override
 	@Transactional
 	public List<ArticleVO> selectArticlesBySearch(String value) throws DataAccessException {
 		List<ArticleVO> articleList = articleDAO.selectArticlesBySearch(value);
@@ -81,9 +94,32 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public int selectArticlesCountBySearch(String value) throws DataAccessException {
+		return articleDAO.selectArticlesCountBySearch(value);
+	}
+
+	@Override
 	@Transactional
-	public List<ArticleVO> selectArticlesBySearchInRegion(SearchDTO dto) throws DataAccessException {
-		List<ArticleVO> articleList = articleDAO.selectArticlesBySearchInRegion(dto);
+	public List<ArticleVO> selectArticlesBySearch(SearchDTO dto) throws DataAccessException {
+		List<ArticleVO> articleList = articleDAO.selectArticlesBySearch(dto);
+		if (articleList.size() > 0) {
+			for (ArticleVO article : articleList) {
+				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
+				article.setFilesName(imageList);
+			}
+		}
+		return articleList;
+	}
+
+	@Override
+	public int selectArticlesCountBySearch(SearchDTO dto) throws DataAccessException {
+		return articleDAO.selectArticlesCountBySearch(dto);
+	}
+
+	@Override
+	@Transactional
+	public List<ArticleVO> selectMoreArticlesBySearch(MoreArticleDTO dto) throws DataAccessException {
+		List<ArticleVO> articleList = articleDAO.selectMoreArticlesBySearch(dto);
 		if (articleList.size() > 0) {
 			for (ArticleVO article : articleList) {
 				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
@@ -107,9 +143,27 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public List<ArticleVO> selectMoreArticlesByRegion(MoreArticleDTO dto) throws DataAccessException {
+		List<ArticleVO> articleList = articleDAO.selectMoreArticlesByRegion(dto);
+		if (articleList.size() > 0) {
+			for (ArticleVO article : articleList) {
+				List<String> imageList = articleDAO.selectImagesName(article.getProductId());
+				article.setFilesName(imageList);
+			}
+		}
+		return articleList;
+	}
+
+	@Override
+	public int selectArticlesCountByRegion(String region) throws DataAccessException {
+		int count = articleDAO.selectArticlesCountByRegion(region);
+		return count;
+	}
+
+	@Override
 	@Transactional
-	public List<ArticleVO> selectArticlesByContainRegion(String region) throws DataAccessException {
-		List<ArticleVO> articleList = articleDAO.selectArticlesByContainRegion(region);
+	public List<ArticleVO> selectRandomArticlesByContainRegion(String region) throws DataAccessException {
+		List<ArticleVO> articleList = articleDAO.selectRandomArticlesByContainRegion(region);
 		if (articleList.size() > 0) {
 			for (ArticleVO article : articleList) {
 				List<String> imageList = articleDAO.selectImagesName(article.getProductId());

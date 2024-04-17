@@ -2,8 +2,6 @@ $('document').ready(function() {
     articleCount = parseInt(articleCount);
     if(allCount <= articleCount) {
         document.getElementById('moreItemButton').style.display = 'none';
-        document.getElementById('resultContainer').style.marginBottom = '50px';
-        document.getElementById('resultContainer').style.borderRadius = '10px';
     }
 });
 
@@ -14,35 +12,19 @@ if(location.hash) {
     }
 }
 
-if(region != null) {
-    document.getElementById('moreItemButton').addEventListener('click', function() {
-        $.ajax({
-            url: contextPath + '/article/search/getMoreArticle/' + search + '/' + articleCount + '/' + region,
-            type: 'GET',
-            success : function(response) {
-                appendItemList(response);
-                history.replaceState({data: response}, '', contextPath + '/article/search/' + search + '##');
-            },
-            error : function(error) {
-                console.log(error);
-            }
-        });
+document.getElementById('moreItemButton').addEventListener('click', function() {
+    $.ajax({
+        url: contextPath + '/article/getMoreArticle/' + articleCount + '/' + region,
+        type: 'GET',
+        success : function(response) {
+            appendItemList(response);
+            history.replaceState({data: response}, '', contextPath + '/article/fleamarket##');
+        },
+        error : function(error) {
+            console.log(error);
+        }
     });
-} else {
-    document.getElementById('moreItemButton').addEventListener('click', function() {
-        $.ajax({
-            url: contextPath + '/article/search/getMoreArticle/' + search + '/'  + articleCount,
-            type: 'GET',
-            success : function(response) {
-                appendItemList(response);
-                history.replaceState({data: response}, '', contextPath + '/article/search/' + search + '##');
-            },
-            error : function(error) {
-                console.log(error);
-            }
-        });
-    });
-}
+});
 
 function appendItemList(response) {
     response.forEach(function(element) {
@@ -65,13 +47,6 @@ function appendItemList(response) {
         titleElement.classList.add('article-title');
         titleElement.innerHTML = element.title;
 
-        var regionElement = document.createElement('div');
-        regionElement.classList.add('region');
-        regionElement.innerHTML = element.region;
-
-        var priceLikeCountElement = document.createElement('div');
-        priceLikeCountElement.classList.add('price-likeCount');
-
         var statusPriceElement = document.createElement('div');
 
         var statusElement = document.createElement('span');
@@ -93,27 +68,31 @@ function appendItemList(response) {
             var formattedPrice = formatter.format(element.price);
             priceElement.innerHTML = formattedPrice + '원';
         }
+
         statusPriceElement.appendChild(statusElement);
         statusPriceElement.appendChild(priceElement);
 
-        var likeCountElement = document.createElement('div');
-        var likeIcon = document.createElement('span');
-        likeIcon.classList.add('like-icon');
-        likeIcon.innerHTML = '♡';
-        var likeCount = document.createElement('span');
-        likeCount.classList.add('like-count');
-        likeCount.innerHTML = element.likeCount;
-        likeCountElement.appendChild(likeIcon);
-        likeCountElement.appendChild(likeCount);
+        var regionElement = document.createElement('div');
+        regionElement.classList.add('region');
+        regionElement.innerHTML = element.region;
 
-        priceLikeCountElement.appendChild(statusPriceElement);
-        priceLikeCountElement.appendChild(likeCountElement);
+        var likeChatElement = document.createElement('div');
+        likeChatElement.classList.add('like-and-chat');
+        var likeElement = document.createElement('span');
+        var chatElement = document.createElement('span');
+        likeElement.innerHTML = '관심 ' + element.likeCount;
+        chatElement.innerHTML = '채팅 ' + element.chatCount;
+        
+        likeChatElement.appendChild(likeElement);
+        likeChatElement.append(' · ');
+        likeChatElement.appendChild(chatElement);
 
         
         aElement.appendChild(imgElement);
         aElement.appendChild(titleElement);
+        aElement.appendChild(statusPriceElement);
         aElement.appendChild(regionElement);
-        aElement.appendChild(priceLikeCountElement);
+        aElement.appendChild(likeChatElement);
         
         item.appendChild(aElement);
 
@@ -121,10 +100,8 @@ function appendItemList(response) {
     });
     
     articleCount = parseInt(articleCount);
-    articleCount += 6;
+    articleCount += 12;
     if(allCount <= articleCount) {
         document.getElementById('moreItemButton').style.display = 'none';
-        document.getElementById('resultContainer').style.marginBottom = '50px';
-        document.getElementById('resultContainer').style.borderRadius = '10px';
     }
 }

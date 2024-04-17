@@ -6,7 +6,7 @@ var path = pathname.split('/');
 
 $('document').ready(function() {
     var districts = ["서울", "인천", "대전", "광주", "대구", 
-                    "울산", "부산", "경기", "강원특별자치도", "충북", "충남", "전북", 
+                    "울산", "부산", "경기", "강원특별자치도", "충북", "충남", "전북특별자치도", 
                     "전남", "경북", "경남", "제주특별자치도"];
     for(var i = 0; i < districts.length; i++) {
         var option = document.createElement('option');
@@ -140,7 +140,7 @@ function setRegion2() {
             option.value = chungnamDistricts[i];
             region2.add(option);
         }
-    } else if(region1.value == "전북") {
+    } else if(region1.value == "전북특별자치도") {
         var jeonbukDistricts = ["군산시", "김제시", "남원시", "익산시", "전주시", "정읍시", "고창군", "무주군", 
                                 "부안군", "순창군", "완주군", "임실군", "장수군", "진안군"];
         for(var i = 0; i < jeonbukDistricts.length; i++) {

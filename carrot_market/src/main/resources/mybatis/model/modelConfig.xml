@@ -30,7 +30,9 @@
 		<typeAlias
 			type="com.mycompany.carrotMarket.article.dto.SearchDTO"
 			alias="searchDTO" />
-
+		<typeAlias
+			type="com.mycompany.carrotMarket.article.dto.MoreArticleDTO"
+			alias="moreArticleDTO" />
 
 		<typeAlias type="com.mycompany.carrotMarket.chat.vo.ChatVO"
 			alias="chatVO" />

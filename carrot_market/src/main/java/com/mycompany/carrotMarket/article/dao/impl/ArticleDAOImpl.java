@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mycompany.carrotMarket.article.dao.ArticleDAO;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
+import com.mycompany.carrotMarket.article.dto.MoreArticleDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
 import com.mycompany.carrotMarket.article.dto.SearchDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
@@ -42,14 +43,38 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
+	public List<ArticleVO> selectArticlesByRandom(int count) throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesByRandom", count);
+		return list;
+	}
+
+	@Override
 	public List<ArticleVO> selectArticlesBySearch(String value) throws DataAccessException {
 		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesBySearch", value);
 		return list;
 	}
 
 	@Override
-	public List<ArticleVO> selectArticlesBySearchInRegion(SearchDTO dto) throws DataAccessException {
+	public int selectArticlesCountBySearch(String value) throws DataAccessException {
+		int count = sqlSession.selectOne("mappers.article.selectArticlesCountBySearch", value);
+		return count;
+	}
+
+	@Override
+	public List<ArticleVO> selectArticlesBySearch(SearchDTO dto) throws DataAccessException {
 		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesBySearchInRegion", dto);
+		return list;
+	}
+
+	@Override
+	public int selectArticlesCountBySearch(SearchDTO dto) throws DataAccessException {
+		int count = sqlSession.selectOne("mappers.article.selectArticlesCountBySearchInRegion", dto);
+		return count;
+	}
+
+	@Override
+	public List<ArticleVO> selectMoreArticlesBySearch(MoreArticleDTO dto) throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectMoreArticlesBySearch", dto);
 		return list;
 	}
 
@@ -60,8 +85,20 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public List<ArticleVO> selectArticlesByContainRegion(String region) throws DataAccessException {
-		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesByContainRegion", region);
+	public List<ArticleVO> selectMoreArticlesByRegion(MoreArticleDTO dto) throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectMoreArticlesByRegion", dto);
+		return list;
+	}
+
+	@Override
+	public int selectArticlesCountByRegion(String region) throws DataAccessException {
+		int count = sqlSession.selectOne("mappers.article.selectArticlesCountByRegion", region);
+		return count;
+	}
+
+	@Override
+	public List<ArticleVO> selectRandomArticlesByContainRegion(String region) throws DataAccessException {
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectRandomArticlesByContainRegion", region);
 		return list;
 	}
 

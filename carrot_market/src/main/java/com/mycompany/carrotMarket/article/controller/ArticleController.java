@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
+import com.mycompany.carrotMarket.article.dto.MoreArticleDTO;
 import com.mycompany.carrotMarket.article.dto.SearchDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
@@ -73,26 +74,43 @@ public class ArticleController {
 		logger.info("loginId : {}", loginId);
 		List<ArticleVO> articleList;
 		if (loginId.equals("anonymousUser")) {
-			articleList = articleService.selectArticles();
+			articleList = articleService.selectArticlesByRandom(12);
 		} else {
 			MemberVO member = memberService.findById(loginId);
 			logger.info("member : {}", member.toString());
 			logger.info("region : {}", member.getRegion1());
 			articleList = articleService.selectArticlesByRegion(member.getRegion1());
+			int allCount = articleService.selectArticlesCountByRegion(member.getRegion1());
 			mav.addObject("region", member.getRegion1());
+			logger.info("allCount : {}", allCount);
+			mav.addObject("allCount", allCount);
 		}
 		mav.addObject("articles", articleList);
+		mav.addObject("articleCount", articleList.size());
+		logger.info("articleCount : {}", articleList.size());
 		mav.addObject("pageTitle", "trade");
 		mav.setViewName("fleamarket");
 		return mav;
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/getMoreArticle/{articleListSize}/{region}", method = RequestMethod.GET)
+	public List<ArticleVO> getMoreArticle(@PathVariable int articleListSize, @PathVariable String region) {
+		logger.info("articleListSize : {}", articleListSize);
+		logger.info("region : {}", region);
+		List<ArticleVO> articlesList = articleService
+				.selectMoreArticlesByRegion(new MoreArticleDTO(articleListSize, articleListSize + 12, region));
+
+		for (ArticleVO article : articlesList) {
+			logger.info("article.title : {}", article.getTitle());
+		}
+		return articlesList;
+	}
+
 	@RequestMapping(value = "/hotArticle", method = RequestMethod.GET)
-	public ModelAndView hotArticle(@PathVariable(required = false) String region1,
-			@PathVariable(required = false) String region2, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ModelAndView hotArticle(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		List<ArticleVO> articleList = articleService.selectArticles();
+		List<ArticleVO> articleList = articleService.selectArticlesByRandom(100);
 		mav.addObject("pageTitle", "trade");
 		mav.addObject("articles", articleList);
 		mav.setViewName("hotArticle");
@@ -102,7 +120,7 @@ public class ArticleController {
 	@RequestMapping(value = "/hotArticle/{region1}", method = RequestMethod.GET)
 	public ModelAndView hotArticle(@PathVariable String region1) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		List<ArticleVO> articleList = articleService.selectArticlesByContainRegion(region1);
+		List<ArticleVO> articleList = articleService.selectRandomArticlesByContainRegion(region1);
 		mav.addObject("region1", region1);
 		mav.addObject("pageTitle", "trade");
 		mav.addObject("articles", articleList);
@@ -113,7 +131,7 @@ public class ArticleController {
 	@RequestMapping(value = "/hotArticle/{region1}/{region2}", method = RequestMethod.GET)
 	public ModelAndView hotArticle(@PathVariable String region1, @PathVariable String region2) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		List<ArticleVO> articleList = articleService.selectArticlesByContainRegion(region1 + " " + region2);
+		List<ArticleVO> articleList = articleService.selectRandomArticlesByContainRegion(region1 + " " + region2);
 		mav.addObject("region1", region1);
 		mav.addObject("region2", region2);
 		mav.addObject("pageTitle", "trade");
@@ -241,19 +259,62 @@ public class ArticleController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String loginId = authentication.getName();
 		List<ArticleVO> articles;
+		int allCount;
+		int articleCount;
 		if (loginId == "anonymousUser") {
 			articles = articleService.selectArticlesBySearch(value);
+			allCount = articleService.selectArticlesCountBySearch(value);
+			articleCount = articles.size();
 		} else {
 			MemberVO member = memberService.findById(loginId);
 			String[] regionArray = member.getRegion1().split(" ");
 			String region = regionArray[0] + " " + regionArray[1];
 			logger.info("region : {}", region);
-			articles = articleService.selectArticlesBySearchInRegion(new SearchDTO(value, region));
+			SearchDTO dto = new SearchDTO(value, region);
+			articles = articleService.selectArticlesBySearch(dto);
 			mav.addObject("region", region);
+			allCount = articleService.selectArticlesCountBySearch(dto);
+			articleCount = articles.size();
 		}
+		mav.addObject("allCount", allCount);
+		mav.addObject("articleCount", articleCount);
+		logger.info("allCount : {}", allCount);
+		logger.info("articleCount : {}", articleCount);
 		mav.addObject("articles", articles);
+		mav.addObject("search", value);
 		mav.setViewName("searchResult");
 		return mav;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/search/getMoreArticle/{value}/{articleSize}/{region}", method = RequestMethod.GET)
+	public List<ArticleVO> getMoreArticlesAtSearch(@PathVariable String value, @PathVariable int articleSize,
+			@PathVariable String region) throws Exception {
+		logger.info("value : {}", value);
+		logger.info("articleSize : {}", articleSize);
+		logger.info("region : {}", region);
+		List<ArticleVO> list = articleService
+				.selectMoreArticlesBySearch(new MoreArticleDTO(value, articleSize, articleSize + 6, region));
+
+		for (ArticleVO article : list) {
+			logger.info(article.toString());
+		}
+		return list;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/search/getMoreArticle/{value}/{articleSize}", method = RequestMethod.GET)
+	public List<ArticleVO> getMoreArticlesAtSearch(@PathVariable String value, @PathVariable int articleSize)
+			throws Exception {
+		logger.info("value : {}", value);
+		logger.info("articleSize : {}", articleSize);
+		List<ArticleVO> list = articleService
+				.selectMoreArticlesBySearch(new MoreArticleDTO(value, articleSize, articleSize + 6));
+
+		for (ArticleVO article : list) {
+			logger.info(article.toString());
+		}
+		return list;
 	}
 
 	@RequestMapping(value = "/{productId}", method = RequestMethod.GET)

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.dao.DataAccessException;
 
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
+import com.mycompany.carrotMarket.article.dto.MoreArticleDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
 import com.mycompany.carrotMarket.article.dto.SearchDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
@@ -19,13 +20,25 @@ public interface ArticleService {
 
 	public List<ArticleVO> selectArticles() throws DataAccessException;
 
+	public List<ArticleVO> selectArticlesByRandom(int count) throws DataAccessException;
+
 	public List<ArticleVO> selectArticlesBySearch(String value) throws DataAccessException;
 
-	public List<ArticleVO> selectArticlesBySearchInRegion(SearchDTO dto) throws DataAccessException;
+	public int selectArticlesCountBySearch(String value) throws DataAccessException;
+
+	public List<ArticleVO> selectArticlesBySearch(SearchDTO dto) throws DataAccessException;
+
+	public int selectArticlesCountBySearch(SearchDTO dto) throws DataAccessException;
+
+	public List<ArticleVO> selectMoreArticlesBySearch(MoreArticleDTO dto) throws DataAccessException;
 
 	public List<ArticleVO> selectArticlesByRegion(String region) throws DataAccessException;
 
-	public List<ArticleVO> selectArticlesByContainRegion(String region) throws DataAccessException;
+	public List<ArticleVO> selectMoreArticlesByRegion(MoreArticleDTO dto) throws DataAccessException;
+
+	public int selectArticlesCountByRegion(String region) throws DataAccessException;
+
+	public List<ArticleVO> selectRandomArticlesByContainRegion(String region) throws DataAccessException;
 
 	public List<ArticleVO> selectArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException;
 

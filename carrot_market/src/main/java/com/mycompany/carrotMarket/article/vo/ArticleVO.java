@@ -178,7 +178,6 @@ public class ArticleVO {
 
 	@Override
 	public String toString() {
-		return "번호 : " + getProductId() + " 회원 아이디 : " + getUserId();
+		return "ArticleVO [productId=" + productId + ", title=" + title + "]";
 	}
-
 }
