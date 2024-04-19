@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.carrotMarket.member.dao.MemberDAO;
+import com.mycompany.carrotMarket.member.dto.MannerDTO;
 import com.mycompany.carrotMarket.member.service.MemberService;
 import com.mycompany.carrotMarket.member.vo.MemberVO;
 
@@ -49,6 +50,16 @@ public class MemberServiceImpl implements MemberService {
 		memberVO.setPw(encoder.encode(memberVO.getPw()));
 		int result = memberDAO.updateMember(memberVO);
 		if (result == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean updateMemberManner(MannerDTO dto) throws DataAccessException {
+		int result = memberDAO.updateMemberManner(dto);
+		if (result != 0) {
 			return true;
 		} else {
 			return false;

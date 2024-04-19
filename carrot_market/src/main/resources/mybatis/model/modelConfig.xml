@@ -7,6 +7,9 @@
 		<!-- Member Model -->
 		<typeAlias
 			type="com.mycompany.carrotMarket.member.vo.MemberVO" alias="memberVO" />
+		<typeAlias
+			type="com.mycompany.carrotMarket.member.dto.MannerDTO"
+			alias="mannerDTO" />
 
 
 		<!-- Article Model -->
@@ -48,8 +51,7 @@
 		<typeAlias
 			type="com.mycompany.carrotMarket.trade.vo.TradeVO" alias="tradeVO" />
 		<typeAlias
-			type="com.mycompany.carrotMarket.trade.dto.TradeDTO"
-			alias="tradeDTO" />
+			type="com.mycompany.carrotMarket.trade.dto.TradeDTO" alias="tradeDTO" />
 
 		<!-- Review Model -->
 		<typeAlias

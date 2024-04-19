@@ -4,9 +4,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.carrotMarket.member.dao.MemberDAO;
+import com.mycompany.carrotMarket.member.dto.MannerDTO;
 import com.mycompany.carrotMarket.member.vo.MemberVO;
 
 @Repository
@@ -31,6 +31,11 @@ public class MemberDAOImpl implements MemberDAO {
 	public MemberVO findById(String id) throws DataAccessException {
 		MemberVO member = sqlSession.selectOne("mappers.member.findById", id);
 		return member;
+	}
+
+	@Override
+	public int updateMemberManner(MannerDTO dto) throws DataAccessException {
+		return sqlSession.update("mappers.member.updateMemberManner", dto);
 	}
 
 	@Override

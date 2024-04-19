@@ -68,5 +68,11 @@
 			WHERE id = #{id}
 		]]>
 	</update>
+	
+	<update id="updateMemberManner" parameterType="mannerDTO">
+		UPDATE MEMBERS
+		SET manner = manner + #{amountOfIncrease}
+		WHERE id = #{id}
+	</update>
 
 </mapper>
