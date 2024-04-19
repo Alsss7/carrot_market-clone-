@@ -38,7 +38,15 @@
 						<a href="${contextPath }/article/${article.productId}">
 							<div id="product">
 								<div id="thumbnail">
-									<img src="${contextPath }/resources/image/product_image/${article.productId}/${images[0]}" />
+									<c:choose>
+										<c:when test="${images.size() == 0 }">
+											<img src="${contextPath }/resources/image/product_image/empty.png" />
+										</c:when>
+										<c:otherwise>
+											<img
+												src="${contextPath }/resources/image/product_image/${article.productId}/${images[0]}" />
+										</c:otherwise>
+									</c:choose>
 								</div>
 								<div id="product-detail">
 									<div class="title">${article.title }</div>

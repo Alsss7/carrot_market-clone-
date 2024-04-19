@@ -175,7 +175,7 @@
 										<c:choose>
 											<c:when test="${article.status == 'Booking' }">
 												<div id="active" class="options">
-													<a onclick="updateStat(this, 'Active', '${article.productId}')">판매중</a>
+													<a onclick="updateStat(this, 'Active', '${article.productId}', '${review }')">판매중</a>
 												</div>
 												<div class="line"></div>
 												<div id="modify" class="options">

@@ -47,6 +47,7 @@ import com.mycompany.carrotMarket.chat.vo.MessageVO;
 import com.mycompany.carrotMarket.member.service.MemberService;
 import com.mycompany.carrotMarket.member.vo.MemberVO;
 import com.mycompany.carrotMarket.review.service.ReviewService;
+import com.mycompany.carrotMarket.review.vo.ReviewVO;
 import com.mycompany.carrotMarket.trade.service.TradeService;
 import com.mycompany.carrotMarket.trade.vo.TradeVO;
 
@@ -348,6 +349,10 @@ public class ArticleController {
 				boolean isLiked = articleService.selectLike(likeDTO);
 				mav.addObject("like", isLiked);
 				increaseView(req, res, productId);
+			}
+			ReviewVO review = reviewService.selectReview(productId, loginId);
+			if (review != null) {
+				mav.addObject("isReviewed", "true");
 			}
 		} else {
 			mav.addObject("isExists", "false");

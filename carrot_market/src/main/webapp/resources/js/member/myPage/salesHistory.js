@@ -70,39 +70,46 @@ function updateHidden(isHidden, productId) {
     });
 }
 
-function updateStat(element, status, productId) {
+function updateStat(element, status, productId, review) {
     if(status == 'Active') {
-        $.ajax({
-            url: contextPath + '/article/updateStat/' + productId,
-            type: 'POST',
-            headers: {
-                "content-Type": 'application/json; charset=UTF-8'
-            },
-            data: JSON.stringify({
-                    status: status,
-                    buyerId: ''
-            }),
-            success: function(response) {
-                var result = response.result;
-                var buyerId = response.buyerId;
-
-                if(result == 'true') {
-                    if(status == 'Active') {
-                        alert('판매중으로 변경되었습니다.');
-                    }
-                } else {
-                    alert('상태 변경에 실패했습니다.');
-                }
-                location.reload();
-            },
-            error: function(error) {
-            
+        if(review !== null) {
+            if(confirm('판매중으로 변경 시 작성한 후기가 사라집니다. 변경하시겠습니까?')) {
+                updateStatusRequest(productId, status);
             }
-        });
+        } else {
+            updateStatusRequest(productId, status);
+        }
     } else {
         element.href = contextPath + '/article/updateStat/' + productId + '/selectBuyer?status=' + status + '&pre=salesHistory';
         window.location.href = element.href;
     }
+}
+
+function updateStatusRequest(productId, status) {
+    $.ajax({
+        url: contextPath + '/article/updateStat/' + productId,
+        type: 'POST',
+        headers: {
+            "content-Type": 'application/json; charset=UTF-8'
+        },
+        data: JSON.stringify({
+                status: status,
+                buyerId: ''
+        }),
+        success: function(response) {
+            var result = response.result;
+
+            if(result == 'true') {
+                alert('판매중으로 변경되었습니다.');
+            } else {
+                alert('상태 변경에 실패했습니다.');
+            }
+            location.reload();
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
 }
 
 function deleteArticle(productId) {

@@ -343,6 +343,8 @@
 		var productId = "${article.productId}";
 		var productStatus = "${article.status}";
 		var manner = "${member.manner}";
+
+		var isReviewed = "${isReviewed}";
 	</script>
 	<script src="${contextPath }/resources/js/article/viewArticle.js"></script>
 </body>

@@ -168,41 +168,50 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#status-select').change(function() {
         var selectedValue = $(this).val();
-
-        $.ajax({
-            url: contextPath + '/article/updateStat/' + productId,
-            type: 'POST',
-            headers: {
-                 "content-Type": 'application/json; charset=UTF-8'
-            },
-            data: JSON.stringify({
-                    status: selectedValue,
-                    buyerId: buyerId
-            }),
-		    success: function(response) {
-                var tradeId = response.tradeId;
-                var result = response.result;
-                var buyerId = response.buyerId;
-
-                if(result == 'true') {
-                    if(selectedValue == 'Active') {
-                        alert('판매중으로 변경되었습니다.');
-                    } else if(selectedValue == 'Booking') {
-                        alert(buyerId + '님이 예약중입니다!');
-                    } else {
-                        alert(buyerId + '님과 거래완료 되었습니다!');
-                        toReview(tradeId);
-                    }
-                } else {
-                    alert('상태 변경에 실패했습니다.');
-                }
-		    },
-		    error: function(error) {
-                
-		    }
-        });
+        if(selectedValue == 'Active' && isReviewed == 'true') {
+            if(confirm('판매중으로 변경 시 작성한 후기가 사라집니다. 변경하시겠습니까?')) {
+                updateStatusRequest(selectedValue);
+            }
+        } else {
+            updateStatusRequest(selectedValue);
+        }
     });
 });
+
+function updateStatusRequest(selectedValue) {
+    $.ajax({
+        url: contextPath + '/article/updateStat/' + productId,
+        type: 'POST',
+        headers: {
+             "content-Type": 'application/json; charset=UTF-8'
+        },
+        data: JSON.stringify({
+                status: selectedValue,
+                buyerId: buyerId
+        }),
+        success: function(response) {
+            var tradeId = response.tradeId;
+            var result = response.result;
+            var buyerId = response.buyerId;
+
+            if(result == 'true') {
+                if(selectedValue == 'Active') {
+                    alert('판매중으로 변경되었습니다.');
+                } else if(selectedValue == 'Booking') {
+                    alert(buyerId + '님이 예약중입니다!');
+                } else {
+                    alert(buyerId + '님과 거래완료 되었습니다!');
+                    toReview(tradeId);
+                }
+            } else {
+                alert('상태 변경에 실패했습니다.');
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
 
 $('document').ready(function() {
     $('#exit-button').click(function() {

@@ -336,6 +336,10 @@ public class ArticleServiceImpl implements ArticleService {
 
 		chatService.deleteChatByProductId(productId);
 
+		reviewDAO.deleteReviewByProductId(productId);
+
+		tradeDAO.deleteTradeByProductId(productId);
+
 		int result = articleDAO.deleteArticleById(productId);
 
 		if (result != 0) {

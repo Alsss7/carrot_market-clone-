@@ -122,6 +122,7 @@
 
 		var lastMsgDate = '${lastMsgDate}';
 		var chatId = '${chatId}';
+		var isReviewed = '${isReviewed}';
 	</script>
 	<c:choose>
 		<c:when test="${messageSize == 0 }">

@@ -35,6 +35,8 @@ import com.mycompany.carrotMarket.chat.vo.ChatVO;
 import com.mycompany.carrotMarket.chat.vo.MessageVO;
 import com.mycompany.carrotMarket.member.service.MemberService;
 import com.mycompany.carrotMarket.member.vo.MemberVO;
+import com.mycompany.carrotMarket.review.service.ReviewService;
+import com.mycompany.carrotMarket.review.vo.ReviewVO;
 
 @RestController
 @RequestMapping("/chat")
@@ -51,6 +53,9 @@ public class ChatController {
 
 	@Autowired
 	private ChatService chatService;
+
+	@Autowired
+	private ReviewService reviewService;
 
 	@Autowired
 	private HttpSession httpSession;
@@ -133,6 +138,11 @@ public class ChatController {
 				mav.addObject("chatId", chat.getChatId());
 				mav.addObject("messageSize", messages.size());
 				httpSession.setAttribute("chatId", chat.getChatId());
+
+				ReviewVO review = reviewService.selectReview(productId, loginId);
+				if (review != null) {
+					mav.addObject("isReviewed", "true");
+				}
 			} else {
 				logger.info("not valid");
 				attributes.addFlashAttribute("msg", "잘못된 접근입니다.");
