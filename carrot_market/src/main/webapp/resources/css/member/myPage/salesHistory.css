@@ -121,6 +121,36 @@ main {
 	justify-content: space-between;
 }
 
+.button-wrapper {
+	margin-top: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.sent-review {
+	width: 700px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 30px;
+	border-radius: 10px;
+	background-color: lightgray;
+	color: white;
+}
+
+.send-review {
+	width: 700px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 30px;
+	border-radius: 10px;
+	background-color: #EE7832;
+	color: white;
+	cursor: pointer;
+}
+
 #indicator {
 	background-color: lightgray;
 	display: flex;

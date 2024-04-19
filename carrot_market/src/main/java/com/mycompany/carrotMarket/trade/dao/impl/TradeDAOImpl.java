@@ -1,4 +1,4 @@
-package com.mycompany.carrotMarket.article.dao.impl;
+package com.mycompany.carrotMarket.trade.dao.impl;
 
 import java.util.List;
 
@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
-import com.mycompany.carrotMarket.article.dao.TradeDAO;
-import com.mycompany.carrotMarket.article.dto.TradeDTO;
-import com.mycompany.carrotMarket.article.vo.TradeVO;
+import com.mycompany.carrotMarket.trade.dao.TradeDAO;
+import com.mycompany.carrotMarket.trade.dto.TradeDTO;
+import com.mycompany.carrotMarket.trade.vo.TradeVO;
 
 @Repository
 public class TradeDAOImpl implements TradeDAO {
@@ -21,6 +21,12 @@ public class TradeDAOImpl implements TradeDAO {
 	public int insertTrade(TradeDTO dto) throws DataAccessException {
 		int result = sqlSession.insert("mappers.trade.insertTrade", dto);
 		return result;
+	}
+
+	@Override
+	public TradeVO selectTrade(int tradeId) throws DataAccessException {
+		TradeVO trade = sqlSession.selectOne("mappers.trade.selectTrade", tradeId);
+		return trade;
 	}
 
 	@Override

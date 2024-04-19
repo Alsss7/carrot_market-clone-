@@ -202,7 +202,7 @@
 	<select id="selectArticlesCountByRegion" parameterType="String" resultType="int">
 		SELECT COUNT(product_id)
 		FROM products
-		WHERE region = #{value}
+		WHERE region = #{value} AND status NOT IN ('Sold')
 	</select>
 	
 	<select id="selectRandomArticlesByContainRegion" parameterType="String" resultType="articleVO">

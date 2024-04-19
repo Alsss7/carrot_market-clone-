@@ -23,9 +23,16 @@
 					<div class="chat-wrapper"
 						onclick="submit('${chat.buyerId}', '${productStatus }', '${article.productId }')">
 						<div class="image-wrapper">
-							<img class="image-background" src="${contextPath }/resources/image/white.png" /> <img
-								id="product-image"
-								src="${contextPath }/resources/image/product_image/${article.productId}/${article.filesName[0]}" />
+							<img class="image-background" src="${contextPath }/resources/image/white.png" />
+							<c:choose>
+								<c:when test="${article.filesName.size() == 0 }">
+									<img id="product-image" src="${contextPath }/resources/image/product_image/empty.png" />
+								</c:when>
+								<c:otherwise>
+									<img id="product-image"
+										src="${contextPath }/resources/image/product_image/${article.productId}/${article.filesName[0]}" />
+								</c:otherwise>
+							</c:choose>
 							<c:choose>
 								<c:when test="${not empty members[status.index].fileName }">
 									<img id="profile-image"

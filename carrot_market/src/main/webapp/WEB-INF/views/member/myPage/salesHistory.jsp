@@ -76,7 +76,9 @@
 		<div class="line"></div>
 		<c:choose>
 			<c:when test="${articles.size() != 0 }">
-				<c:forEach var="article" items="${articles }">
+				<c:forEach var="entry" items="${articles }">
+					<c:set var="article" value="${entry.key }" />
+					<c:set var="review" value="${entry.value }" />
 					<c:set var="images" value="${article.filesName }" />
 					<div id="product-wrapper">
 						<a href="${contextPath }/article/${article.productId}">
@@ -135,6 +137,19 @@
 								</c:if>
 							</div>
 						</div>
+					</div>
+					<div class="button-wrapper">
+						<c:if test="${article.status == 'Sold' }">
+							<c:choose>
+								<c:when test="${not empty review}">
+									<div class="sent-review">후기 전송 완료</div>
+								</c:when>
+								<c:otherwise>
+									<div class="send-review" id="sendReview" onclick="sendReview(${article.productId})">✏️
+										후기 보내기</div>
+								</c:otherwise>
+							</c:choose>
+						</c:if>
 					</div>
 					<div class="line"></div>
 

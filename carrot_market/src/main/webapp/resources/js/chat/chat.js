@@ -180,6 +180,7 @@ $(document).ready(function() {
                     buyerId: buyerId
             }),
 		    success: function(response) {
+                var tradeId = response.tradeId;
                 var result = response.result;
                 var buyerId = response.buyerId;
 
@@ -190,6 +191,7 @@ $(document).ready(function() {
                         alert(buyerId + '님이 예약중입니다!');
                     } else {
                         alert(buyerId + '님과 거래완료 되었습니다!');
+                        toReview(tradeId);
                     }
                 } else {
                     alert('상태 변경에 실패했습니다.');
@@ -233,3 +235,9 @@ $('document').ready(function() {
         }
     });
 });
+
+function toReview(tradeId) {
+    if(confirm('거래 후기를 남기시겠습니까?')) {
+        window.location.href = contextPath + '/review/' + tradeId;
+    }
+}

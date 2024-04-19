@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,8 @@ import com.mycompany.carrotMarket.member.dto.MemberDTO;
 import com.mycompany.carrotMarket.member.dto.NicknameDTO;
 import com.mycompany.carrotMarket.member.service.MemberService;
 import com.mycompany.carrotMarket.member.vo.MemberVO;
+import com.mycompany.carrotMarket.review.service.ReviewService;
+import com.mycompany.carrotMarket.review.vo.ReviewVO;
 import com.mycompany.carrotMarket.validator.IdValidator;
 import com.mycompany.carrotMarket.validator.MemberValidator;
 import com.mycompany.carrotMarket.validator.NicknameValidator;
@@ -55,6 +58,8 @@ public class MemberController {
 
 	private final ArticleService articleService;
 
+	private final ReviewService reviewService;
+
 	private final MemberValidator memberValidator;
 
 	private final IdValidator idValidator;
@@ -64,10 +69,12 @@ public class MemberController {
 	private final ServletContext servletContext;
 
 	@Autowired
-	public MemberController(MemberService memberService, ArticleService articleService, MemberValidator memberValidator,
-			IdValidator idValidator, NicknameValidator nicknameValidator, ServletContext servletContext) {
+	public MemberController(MemberService memberService, ArticleService articleService, ReviewService reviewService,
+			MemberValidator memberValidator, IdValidator idValidator, NicknameValidator nicknameValidator,
+			ServletContext servletContext) {
 		this.memberService = memberService;
 		this.articleService = articleService;
+		this.reviewService = reviewService;
 		this.memberValidator = memberValidator;
 		this.idValidator = idValidator;
 		this.nicknameValidator = nicknameValidator;
@@ -212,9 +219,15 @@ public class MemberController {
 		List<ArticleVO> articleList = articleService.selectArticlesByUserIdAndStat(new SalesDTO(loginId, status));
 		Map<String, Integer> map = articleService.selectArticlesCountByStatus(loginId);
 
-		mav.addObject("articles", articleList);
+		Map<ArticleVO, ReviewVO> reviewMap = new LinkedHashMap<ArticleVO, ReviewVO>();
+		for (ArticleVO article : articleList) {
+			ReviewVO review = reviewService.selectReview(article.getProductId(), loginId);
+			reviewMap.put(article, review);
+		}
+
 		mav.addObject("status", status);
 		mav.addObject("articleCount", map);
+		mav.addObject("articles", reviewMap);
 		mav.setViewName("salesHistory");
 		return mav;
 	}
@@ -243,9 +256,15 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String loginId = authentication.getName();
-		List<ArticleVO> articlesList = articleService.selectArticlesPurchasedById(loginId);
+		List<ArticleVO> articleList = articleService.selectArticlesPurchasedById(loginId);
 
-		mav.addObject("articles", articlesList);
+		Map<ArticleVO, ReviewVO> reviewMap = new LinkedHashMap<ArticleVO, ReviewVO>();
+		for (ArticleVO article : articleList) {
+			ReviewVO review = reviewService.selectReview(article.getProductId(), loginId);
+			reviewMap.put(article, review);
+		}
+
+		mav.addObject("articles", reviewMap);
 		mav.setViewName("purchaseHistory");
 		return mav;
 	}

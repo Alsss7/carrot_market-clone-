@@ -46,6 +46,9 @@ import com.mycompany.carrotMarket.chat.vo.ChatVO;
 import com.mycompany.carrotMarket.chat.vo.MessageVO;
 import com.mycompany.carrotMarket.member.service.MemberService;
 import com.mycompany.carrotMarket.member.vo.MemberVO;
+import com.mycompany.carrotMarket.review.service.ReviewService;
+import com.mycompany.carrotMarket.trade.service.TradeService;
+import com.mycompany.carrotMarket.trade.vo.TradeVO;
 
 @RestController
 @RequestMapping("/article")
@@ -61,6 +64,12 @@ public class ArticleController {
 
 	@Autowired
 	ChatService chatService;
+
+	@Autowired
+	TradeService tradeService;
+
+	@Autowired
+	ReviewService reviewService;
 
 	@Autowired
 	private ServletContext servletContext;
@@ -408,6 +417,10 @@ public class ArticleController {
 		}
 
 		boolean result = articleService.updateArticleStatus(new UpdateStatusDTO(productId, status, buyerId));
+		TradeVO trade = tradeService.selectTradeByProductId(productId);
+		if (trade != null) {
+			response.put("tradeId", String.valueOf(trade.getTradeId()));
+		}
 		response.put("result", String.valueOf(result));
 		response.put("buyerId", buyerId);
 

@@ -8,19 +8,30 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath }/resources/css/member/myPage/purchaseHistory.css" />
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
 	<main>
 		<h2 style="text-align: center">구매내역</h2>
 		<c:choose>
 			<c:when test="${articles.size() != 0 }">
-				<c:forEach var="article" items="${articles }">
+				<c:forEach var="entry" items="${articles }">
+					<c:set var="article" value="${entry.key }" />
+					<c:set var="review" value="${entry.value }" />
 					<c:set var="images" value="${article.filesName }" />
 					<div id="product-wrapper">
 						<a href="${contextPath }/article/${article.productId}">
 							<div id="product">
 								<div id="thumbnail">
-									<img src="${contextPath }/resources/image/product_image/${article.productId}/${images[0]}" />
+									<c:choose>
+										<c:when test="${images.size() == 0 }">
+											<img src="${contextPath }/resources/image/product_image/empty.png" />
+										</c:when>
+										<c:otherwise>
+											<img
+												src="${contextPath }/resources/image/product_image/${article.productId}/${images[0]}" />
+										</c:otherwise>
+									</c:choose>
 								</div>
 								<div id="product-detail">
 									<div class="title">${article.title }</div>
@@ -52,6 +63,19 @@
 							</c:if>
 						</div>
 					</div>
+					<div class="button-wrapper">
+						<c:if test="${article.status == 'Sold' }">
+							<c:choose>
+								<c:when test="${not empty review}">
+									<div class="sent-review">후기 전송 완료</div>
+								</c:when>
+								<c:otherwise>
+									<div class="send-review" id="sendReview" onclick="sendReview(${article.productId})">✏️
+										후기 보내기</div>
+								</c:otherwise>
+							</c:choose>
+						</c:if>
+					</div>
 					<div class="line"></div>
 				</c:forEach>
 			</c:when>
@@ -59,6 +83,7 @@
 				<h1 style="text-align: center; color: orange">구매한 상품이 없습니다!</h1>
 			</c:otherwise>
 		</c:choose>
+		<script src="${contextPath }/resources/js/member/myPage/purchaseHistory.js"></script>
 	</main>
 </body>
 </html>

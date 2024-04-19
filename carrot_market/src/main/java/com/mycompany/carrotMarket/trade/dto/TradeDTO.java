@@ -1,4 +1,4 @@
-package com.mycompany.carrotMarket.article.dto;
+package com.mycompany.carrotMarket.trade.dto;
 
 public class TradeDTO {
 

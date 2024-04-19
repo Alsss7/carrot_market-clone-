@@ -12,20 +12,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.carrotMarket.article.dao.ArticleDAO;
-import com.mycompany.carrotMarket.article.dao.TradeDAO;
 import com.mycompany.carrotMarket.article.dto.LikeDTO;
 import com.mycompany.carrotMarket.article.dto.MoreArticleDTO;
 import com.mycompany.carrotMarket.article.dto.SalesDTO;
 import com.mycompany.carrotMarket.article.dto.SearchDTO;
-import com.mycompany.carrotMarket.article.dto.TradeDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
 import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 import com.mycompany.carrotMarket.article.vo.ImageVO;
-import com.mycompany.carrotMarket.article.vo.TradeVO;
 import com.mycompany.carrotMarket.chat.service.ChatService;
+import com.mycompany.carrotMarket.review.dao.ReviewDAO;
+import com.mycompany.carrotMarket.trade.dao.TradeDAO;
+import com.mycompany.carrotMarket.trade.dto.TradeDTO;
+import com.mycompany.carrotMarket.trade.vo.TradeVO;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -40,6 +41,9 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Autowired
 	TradeDAO tradeDAO;
+
+	@Autowired
+	ReviewDAO reviewDAO;
 
 	@Override
 	@Transactional
@@ -287,6 +291,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 		int result2;
 		if (status.equals("Active")) {
+			reviewDAO.deleteReviewByProductId(productId);
 			result2 = tradeDAO.deleteTradeByProductId(productId);
 		} else {
 			// status.equals("Booking") || status.equals("Sold")

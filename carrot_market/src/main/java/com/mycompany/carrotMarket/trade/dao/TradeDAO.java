@@ -1,14 +1,16 @@
-package com.mycompany.carrotMarket.article.dao;
+package com.mycompany.carrotMarket.trade.dao;
 
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
-import com.mycompany.carrotMarket.article.dto.TradeDTO;
-import com.mycompany.carrotMarket.article.vo.TradeVO;
+import com.mycompany.carrotMarket.trade.dto.TradeDTO;
+import com.mycompany.carrotMarket.trade.vo.TradeVO;
 
 public interface TradeDAO {
 	public int insertTrade(TradeDTO dto) throws DataAccessException;
+
+	public TradeVO selectTrade(int tradeId) throws DataAccessException;
 
 	public TradeVO selectTradeByProductId(int productId) throws DataAccessException;
 

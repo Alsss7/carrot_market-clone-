@@ -4,10 +4,12 @@
 
 <configuration>
 	<typeAliases>
+		<!-- Member Model -->
 		<typeAlias
 			type="com.mycompany.carrotMarket.member.vo.MemberVO" alias="memberVO" />
 
 
+		<!-- Article Model -->
 		<typeAlias
 			type="com.mycompany.carrotMarket.article.vo.ArticleVO"
 			alias="articleVO" />
@@ -34,6 +36,7 @@
 			type="com.mycompany.carrotMarket.article.dto.MoreArticleDTO"
 			alias="moreArticleDTO" />
 
+		<!-- Chat Model -->
 		<typeAlias type="com.mycompany.carrotMarket.chat.vo.ChatVO"
 			alias="chatVO" />
 		<typeAlias
@@ -41,10 +44,19 @@
 		<typeAlias
 			type="com.mycompany.carrotMarket.chat.vo.MessageVO" alias="messageVO" />
 
+		<!-- Trade Model -->
 		<typeAlias
-			type="com.mycompany.carrotMarket.article.vo.TradeVO" alias="tradeVO" />
+			type="com.mycompany.carrotMarket.trade.vo.TradeVO" alias="tradeVO" />
 		<typeAlias
-			type="com.mycompany.carrotMarket.article.dto.TradeDTO"
+			type="com.mycompany.carrotMarket.trade.dto.TradeDTO"
 			alias="tradeDTO" />
+
+		<!-- Review Model -->
+		<typeAlias
+			type="com.mycompany.carrotMarket.review.vo.ReviewVO" alias="reviewVO" />
+		<typeAlias
+			type="com.mycompany.carrotMarket.review.dto.ReviewDTO"
+			alias="reviewDTO" />
+
 	</typeAliases>
 </configuration>

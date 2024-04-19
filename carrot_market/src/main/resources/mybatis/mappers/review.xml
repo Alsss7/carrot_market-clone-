@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="mappers.review">
+	<insert id="insertReview" parameterType="reviewDTO">
+		INSERT INTO REVIEWS(review_id, trade_id, product_id, reviewer_id, review)
+		VALUES (REVIEW_SEQ.NEXTVAL, #{tradeId}, #{productId}, #{reviewerId}, #{review})
+	</insert>
+	
+	<select id="selectReview" parameterType="reviewDTO" resultType="reviewVO">
+		SELECT
+			review_id AS reviewId,
+			trade_id AS tradeId,
+			product_id AS productId,
+			reviewer_id AS reviewerId,
+			review
+		FROM reviews
+		WHERE product_id = #{productId} AND reviewer_id = #{reviewerId}
+	</select>
+	
+	<select id="selectReviewByTradeId" parameterType="int" resultType="reviewVO">
+		SELECT
+			review_id AS reviewId,
+			trade_id AS tradeId,
+			product_id AS productId,
+			reviewer_id AS reviewerId,
+			review
+		FROM reviews
+		WHERE trade_id = #{value}
+	</select>
+	
+	<select id="selectReviewByProductId" parameterType="int" resultType="reviewVO">
+		SELECT
+			review_id AS reviewId,
+			trade_id AS tradeId,
+			product_id AS productId,
+			reviewer_id AS reviewerId,
+			review
+		FROM reviews
+		WHERE product_id = #{value}
+	</select>
+	
+	<delete id="deleteReviewByProductId" parameterType="int">
+		DELETE FROM REVIEWS
+		WHERE product_id = #{value}
+	</delete>
+</mapper>

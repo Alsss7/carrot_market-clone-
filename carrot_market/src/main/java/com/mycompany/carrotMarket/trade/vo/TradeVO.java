@@ -1,4 +1,4 @@
-package com.mycompany.carrotMarket.article.vo;
+package com.mycompany.carrotMarket.trade.vo;
 
 import java.util.Date;
 

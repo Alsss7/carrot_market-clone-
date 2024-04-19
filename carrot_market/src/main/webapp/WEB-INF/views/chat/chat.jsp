@@ -28,8 +28,15 @@
 		<div class="line"></div>
 		<div class="product-wrapper">
 			<div class="product-image">
-				<img
-					src="${contextPath}/resources/image/product_image/${article.productId}/${article.filesName[0]}" />
+				<c:choose>
+					<c:when test="${article.filesName.size() == 0 }">
+						<img src="${contextPath }/resources/image/product_image/empty.png" />
+					</c:when>
+					<c:otherwise>
+						<img
+							src="${contextPath}/resources/image/product_image/${article.productId}/${article.filesName[0]}" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<div class="product-content">
 				<div class="stat-and-title">
@@ -55,7 +62,7 @@
 							</c:choose>
 						</c:otherwise>
 					</c:choose>
-					<div class="title">${article.title }</div>
+					<div class="title">&nbsp;${article.title }</div>
 				</div>
 				<div class="price">
 					<c:set var="productPrice" value="${article.price }" />
