@@ -8,7 +8,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.mycompany.carrotMarket.trade.dao.TradeDAO;
-import com.mycompany.carrotMarket.trade.dto.TradeDTO;
 import com.mycompany.carrotMarket.trade.vo.TradeVO;
 
 @Repository
@@ -18,8 +17,8 @@ public class TradeDAOImpl implements TradeDAO {
 	SqlSession sqlSession;
 
 	@Override
-	public int insertTrade(TradeDTO dto) throws DataAccessException {
-		int result = sqlSession.insert("mappers.trade.insertTrade", dto);
+	public int insertTrade(TradeVO trade) throws DataAccessException {
+		int result = sqlSession.insert("mappers.trade.insertTrade", trade);
 		return result;
 	}
 
@@ -42,8 +41,8 @@ public class TradeDAOImpl implements TradeDAO {
 	}
 
 	@Override
-	public int updateTradeByProductId(TradeDTO dto) throws DataAccessException {
-		int result = sqlSession.update("mappers.trade.updateTradeByProductId", dto);
+	public int updateTradeByProductId(TradeVO trade) throws DataAccessException {
+		int result = sqlSession.update("mappers.trade.updateTradeByProductId", trade);
 		return result;
 	}
 

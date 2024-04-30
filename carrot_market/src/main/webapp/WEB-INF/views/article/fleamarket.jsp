@@ -3,6 +3,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
+<c:set var="loginId" value="${pageContext.request.userPrincipal.name }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -145,6 +146,7 @@
 		var articleCount = '${articleCount}';
 		var region = '${region}';
 		var allCount = '${allCount}';
+		var loginId = '${loginId}';
 	</script>
 	<script src="${contextPath }/resources/js/article/fleamarket.js"></script>
 </body>

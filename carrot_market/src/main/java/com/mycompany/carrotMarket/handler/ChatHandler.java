@@ -14,7 +14,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.mycompany.carrotMarket.chat.service.ChatService;
+import com.mycompany.carrotMarket.chat.service.MessageService;
 import com.mycompany.carrotMarket.chat.vo.MessageVO;
 
 public class ChatHandler extends TextWebSocketHandler {
@@ -24,7 +24,7 @@ public class ChatHandler extends TextWebSocketHandler {
 	private final Map<Integer, Set<WebSocketSession>> chatRoomSessionMap = new ConcurrentHashMap<Integer, Set<WebSocketSession>>();
 
 	@Autowired
-	private ChatService chatService;
+	private MessageService messageService;
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -71,7 +71,7 @@ public class ChatHandler extends TextWebSocketHandler {
 		MessageVO msgVO = new MessageVO(chatId, loginId, msg);
 		logger.info("새로운 message 생성");
 		logger.info("message : " + msgVO.toString());
-		boolean result = chatService.insertMessage(msgVO);
+		boolean result = messageService.addMessage(msgVO);
 		if (result) {
 			logger.info("메시지가 저장되었습니다.");
 		} else {

@@ -4,28 +4,22 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
-import com.mycompany.carrotMarket.chat.dto.ChatDTO;
 import com.mycompany.carrotMarket.chat.vo.ChatVO;
-import com.mycompany.carrotMarket.chat.vo.MessageVO;
 
 public interface ChatService {
-	public ChatVO selectChat(ChatDTO chatDTO) throws DataAccessException;
+	public ChatVO getChat(int productId, String buyerId) throws DataAccessException;
 
-	public ChatVO selectChatByChatId(int chatId) throws DataAccessException;
+	public ChatVO getChatByChatId(int chatId) throws DataAccessException;
 
-	public boolean insertChat(ChatVO chatVO) throws DataAccessException;
+	public boolean addChat(ChatVO chatVO) throws DataAccessException;
 
-	public boolean deleteChatById(int chatId) throws DataAccessException;
+	public boolean removeChatById(int chatId) throws DataAccessException;
 
-	public boolean deleteChatByChatDTO(ChatDTO chatDTO) throws DataAccessException;
+	public boolean removeChat(int productId, String buyerId) throws DataAccessException;
 
-	public boolean deleteChatByProductId(int productId) throws DataAccessException;
+	public boolean removeChatByProductId(int productId) throws DataAccessException;
 
-	public List<ChatVO> selectChatListByProductId(int productId) throws DataAccessException;
+	public List<ChatVO> getChatListByProductId(int productId) throws DataAccessException;
 
-	public List<MessageVO> selectMessagesByChatId(int chatId) throws DataAccessException;
-
-	public int selectMessagesCountByChatId(int chatId) throws DataAccessException;
-
-	public boolean insertMessage(MessageVO messageVO) throws DataAccessException;
+	public int getMessagesCountByChatId(int chatId) throws DataAccessException;
 }

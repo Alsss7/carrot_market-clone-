@@ -1,6 +1,6 @@
 $('document').ready(function() {
     articleCount = parseInt(articleCount);
-    if(allCount <= articleCount) {
+    if(allCount != 0 && allCount <= articleCount && loginId !== '') {
         document.getElementById('moreItemButton').style.display = 'none';
     }
 });
@@ -12,19 +12,21 @@ if(location.hash) {
     }
 }
 
-document.getElementById('moreItemButton').addEventListener('click', function() {
-    $.ajax({
-        url: contextPath + '/article/getMoreArticle/' + articleCount + '/' + region,
-        type: 'GET',
-        success : function(response) {
-            appendItemList(response);
-            history.replaceState({data: response}, '', contextPath + '/article/fleamarket##');
-        },
-        error : function(error) {
-            console.log(error);
-        }
+if(parseInt(articleCount) > 0 && loginId !== '') {
+    document.getElementById('moreItemButton').addEventListener('click', function() {
+        $.ajax({
+            url: contextPath + '/article/getMoreArticle/' + articleCount + '/' + region,
+            type: 'GET',
+            success : function(response) {
+                appendItemList(response);
+                history.replaceState({data: response}, '', contextPath + '/article/fleamarket##');
+            },
+            error : function(error) {
+                console.log(error);
+            }
+        });
     });
-});
+}
 
 function appendItemList(response) {
     response.forEach(function(element) {
@@ -101,7 +103,7 @@ function appendItemList(response) {
     
     articleCount = parseInt(articleCount);
     articleCount += 12;
-    if(allCount <= articleCount) {
+    if(allCount != 0 && allCount <= articleCount && loginId !== '') {
         document.getElementById('moreItemButton').style.display = 'none';
     }
 }

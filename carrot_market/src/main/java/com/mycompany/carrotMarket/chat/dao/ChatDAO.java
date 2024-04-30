@@ -4,12 +4,11 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
-import com.mycompany.carrotMarket.chat.dto.ChatDTO;
 import com.mycompany.carrotMarket.chat.vo.ChatVO;
 import com.mycompany.carrotMarket.chat.vo.MessageVO;
 
 public interface ChatDAO {
-	public ChatVO selectChat(ChatDTO chatDTO) throws DataAccessException;
+	public ChatVO selectChat(int productId, String buyerId) throws DataAccessException;
 
 	public ChatVO selectChatByChatId(int chatId) throws DataAccessException;
 
@@ -17,7 +16,7 @@ public interface ChatDAO {
 
 	public int deleteChatById(int chatId) throws DataAccessException;
 
-	public int deleteChatByChatDTO(ChatDTO chatDTO) throws DataAccessException;
+	public int deleteChat(int productId, String buyerId) throws DataAccessException;
 
 	public int deleteChatByProductId(int productId) throws DataAccessException;
 

@@ -1,12 +1,14 @@
 package com.mycompany.carrotMarket.member.dao.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.mycompany.carrotMarket.member.dao.MemberDAO;
-import com.mycompany.carrotMarket.member.dto.MannerDTO;
 import com.mycompany.carrotMarket.member.vo.MemberVO;
 
 @Repository
@@ -34,8 +36,11 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 
 	@Override
-	public int updateMemberManner(MannerDTO dto) throws DataAccessException {
-		return sqlSession.update("mappers.member.updateMemberManner", dto);
+	public int updateMemberManner(String buyerId, float amountOfIncrease) throws DataAccessException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", buyerId);
+		map.put("amountOfIncrease", amountOfIncrease);
+		return sqlSession.update("mappers.member.updateMemberManner", map);
 	}
 
 	@Override

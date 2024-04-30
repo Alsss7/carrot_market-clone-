@@ -1,15 +1,12 @@
 package com.mycompany.carrotMarket.article.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,20 +24,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.mycompany.carrotMarket.article.dto.LikeDTO;
-import com.mycompany.carrotMarket.article.dto.MoreArticleDTO;
-import com.mycompany.carrotMarket.article.dto.SearchDTO;
-import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
-import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
-import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 import com.mycompany.carrotMarket.article.vo.ImageVO;
+import com.mycompany.carrotMarket.article.vo.LikeVO;
 import com.mycompany.carrotMarket.chat.service.ChatService;
+import com.mycompany.carrotMarket.chat.service.MessageService;
 import com.mycompany.carrotMarket.chat.vo.ChatVO;
 import com.mycompany.carrotMarket.chat.vo.MessageVO;
 import com.mycompany.carrotMarket.member.service.MemberService;
@@ -67,70 +58,72 @@ public class ArticleController {
 	ChatService chatService;
 
 	@Autowired
+	MessageService messageService;
+
+	@Autowired
 	TradeService tradeService;
 
 	@Autowired
 	ReviewService reviewService;
 
-	@Autowired
-	private ServletContext servletContext;
-
+	/*
+	 * 중고거래 탭
+	 */
 	@RequestMapping(value = "/fleamarket", method = RequestMethod.GET)
 	public ModelAndView fleamarket(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
 
-		logger.info("loginId : {}", loginId);
+		String loginId = getLoginId();
+
+		ModelAndView mav = new ModelAndView();
+
 		List<ArticleVO> articleList;
 		if (loginId.equals("anonymousUser")) {
-			articleList = articleService.selectArticlesByRandom(12);
+			articleList = articleService.getArticlesByRandom(12);
 		} else {
 			MemberVO member = memberService.findById(loginId);
-			logger.info("member : {}", member.toString());
-			logger.info("region : {}", member.getRegion1());
-			articleList = articleService.selectArticlesByRegion(member.getRegion1());
-			int allCount = articleService.selectArticlesCountByRegion(member.getRegion1());
+			articleList = articleService.getArticlesByRegion(member.getRegion1());
+			int allCount = articleService.countArticlesByRegion(member.getRegion1());
+
 			mav.addObject("region", member.getRegion1());
-			logger.info("allCount : {}", allCount);
 			mav.addObject("allCount", allCount);
 		}
+
 		mav.addObject("articles", articleList);
 		mav.addObject("articleCount", articleList.size());
-		logger.info("articleCount : {}", articleList.size());
 		mav.addObject("pageTitle", "trade");
 		mav.setViewName("fleamarket");
 		return mav;
 	}
 
+	/*
+	 * 중고거래 탭에서 더보기 버튼을 클릭 시
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/getMoreArticle/{articleListSize}/{region}", method = RequestMethod.GET)
 	public List<ArticleVO> getMoreArticle(@PathVariable int articleListSize, @PathVariable String region) {
-		logger.info("articleListSize : {}", articleListSize);
-		logger.info("region : {}", region);
-		List<ArticleVO> articlesList = articleService
-				.selectMoreArticlesByRegion(new MoreArticleDTO(articleListSize, articleListSize + 12, region));
-
-		for (ArticleVO article : articlesList) {
-			logger.info("article.title : {}", article.getTitle());
-		}
-		return articlesList;
+		return articleService.getMoreArticlesByRegion(articleListSize, articleListSize + 12, region);
 	}
 
+	/*
+	 * 인기매물 탭
+	 */
 	@RequestMapping(value = "/hotArticle", method = RequestMethod.GET)
 	public ModelAndView hotArticle(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		List<ArticleVO> articleList = articleService.selectArticlesByRandom(100);
+		List<ArticleVO> articleList = articleService.getArticlesByRandom(100);
 		mav.addObject("pageTitle", "trade");
 		mav.addObject("articles", articleList);
 		mav.setViewName("hotArticle");
 		return mav;
 	}
 
+	/*
+	 * 인기매물 탭(시,도 선택 시)
+	 */
 	@RequestMapping(value = "/hotArticle/{region1}", method = RequestMethod.GET)
 	public ModelAndView hotArticle(@PathVariable String region1) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		List<ArticleVO> articleList = articleService.selectRandomArticlesByContainRegion(region1);
+		List<ArticleVO> articleList = articleService.getRandomArticlesByContainRegion(region1);
 		mav.addObject("region1", region1);
 		mav.addObject("pageTitle", "trade");
 		mav.addObject("articles", articleList);
@@ -138,10 +131,13 @@ public class ArticleController {
 		return mav;
 	}
 
+	/*
+	 * 인기매물 탭(군,구 선택 시)
+	 */
 	@RequestMapping(value = "/hotArticle/{region1}/{region2}", method = RequestMethod.GET)
 	public ModelAndView hotArticle(@PathVariable String region1, @PathVariable String region2) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		List<ArticleVO> articleList = articleService.selectRandomArticlesByContainRegion(region1 + " " + region2);
+		List<ArticleVO> articleList = articleService.getRandomArticlesByContainRegion(region1 + " " + region2);
 		mav.addObject("region1", region1);
 		mav.addObject("region2", region2);
 		mav.addObject("pageTitle", "trade");
@@ -150,24 +146,51 @@ public class ArticleController {
 		return mav;
 	}
 
+	/*
+	 * 글쓰기 버튼 클릭 시
+	 */
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public ModelAndView articleForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
+		String loginId = getLoginId();
+
 		MemberVO member = memberService.findById(loginId);
 		mav.addObject("region", member.getRegion1());
 		mav.setViewName("articleForm");
 		return mav;
 	}
 
+	/*
+	 * 글 작성 완료 후 등록 버튼 클릭 시
+	 */
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public ModelAndView registerArticle(@ModelAttribute("article") ArticleVO article, RedirectAttributes attributes,
+			HttpServletRequest request, HttpServletResponse response) throws IOException {
+		ModelAndView mav = new ModelAndView();
+
+		MemberVO member = memberService.findById(article.getUserId());
+		article.setRegion(member.getRegion1());
+
+		boolean result = articleService.registerArticle(article);
+
+		String uploadResult = result ? "등록 성공" : "등록 실패";
+		attributes.addFlashAttribute("result", uploadResult);
+		mav.setViewName("redirect:/article/fleamarket");
+		return mav;
+	}
+
+	/*
+	 * 글 수정 클릭 시
+	 */
 	@RequestMapping(value = "/modify/{productId}", method = RequestMethod.GET)
 	public ModelAndView modifyArticleForm(@PathVariable int productId) throws Exception {
+		String loginId = getLoginId();
+
 		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
-		ArticleVO article = articleService.selectArticle(productId);
-		List<ImageVO> images = articleService.selectArticleImages(productId);
+
+		ArticleVO article = articleService.getArticle(productId);
+		List<ImageVO> images = articleService.getArticleImages(productId);
+
 		if (loginId.equals(article.getUserId())) {
 			mav.addObject("article", article);
 			mav.addObject("images", images);
@@ -179,161 +202,84 @@ public class ArticleController {
 		return mav;
 	}
 
+	/*
+	 * 글 수정 완료 후 수정하기 버튼 클릭 시
+	 */
 	@RequestMapping(value = "/modify/{productId}", method = RequestMethod.POST)
 	public ModelAndView modifyArticle(@PathVariable int productId, @ModelAttribute("article") ArticleVO articleVO,
-			HttpServletRequest request, RedirectAttributes attributes) throws Exception {
+			HttpServletRequest req, RedirectAttributes attributes) throws Exception {
 		ModelAndView mav = new ModelAndView();
 
-		List<MultipartFile> files = articleVO.getFiles();
-		List<String> filesName = new ArrayList<String>();
-		if (files != null && !files.isEmpty()) {
-			for (MultipartFile file : files) {
-				if (!file.isEmpty()) {
-					String fileName = file.getOriginalFilename();
-					filesName.add(fileName);
-				}
-			}
-			articleVO.setFilesName(filesName);
-		}
-
-		List<Integer> keepImages = new ArrayList<Integer>();
-
-		@SuppressWarnings("unchecked")
-		Enumeration<String> parameterNames = request.getParameterNames();
-		while (parameterNames.hasMoreElements()) {
-			String paramName = parameterNames.nextElement();
-			if (!paramName.startsWith("image")) {
-				continue;
-			} else {
-				int imageId = Integer.parseInt(paramName.replace("image", ""));
-				String paramValue = request.getParameter(paramName);
-				if (paramValue.equals("true")) {
-					keepImages.add(imageId);
-				}
-			}
-		}
-
-		boolean result = articleService.updateArticle(new UpdateImagesDTO(productId, keepImages), articleVO);
+		boolean result = articleService.modifyArticle(productId, articleVO, req);
 
 		if (result) {
-			ArticleVO article = articleService.selectArticle(productId);
-			updateImageFile(article, files);
-			attributes.addFlashAttribute("modifyResult", true);
+			ArticleVO article = articleService.getArticle(productId);
 			attributes.addFlashAttribute("article", article);
-			mav.setViewName("redirect:/article/" + productId);
-		} else {
-			attributes.addFlashAttribute("modifyResult", false);
-			mav.setViewName("redirect:/article/modify/" + productId);
 		}
+		attributes.addFlashAttribute("modifyResult", result ? true : false);
+		mav.setViewName(result ? "redirect:/article/" + productId : "redirect:/article/modify/" + productId);
 		return mav;
 	}
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ModelAndView registerArticle(@ModelAttribute("article") ArticleVO articleVO, RedirectAttributes attributes,
-			HttpServletRequest request, HttpServletResponse response) throws IOException {
-		ModelAndView mav = new ModelAndView();
-
-		MemberVO member = memberService.findById(articleVO.getUserId());
-		articleVO.setRegion(member.getRegion1());
-
-		List<MultipartFile> files = articleVO.getFiles();
-		List<String> filesName = new ArrayList<String>();
-
-		if (files != null && !files.isEmpty()) {
-			for (MultipartFile file : files) {
-				if (!file.isEmpty()) {
-					String fileName = file.getOriginalFilename();
-					filesName.add(fileName);
-				}
-			}
-			articleVO.setFilesName(filesName);
-		}
-
-		String uploadResult;
-		boolean result = articleService.addArticle(articleVO);
-		if (result) {
-			uploadImageFile(articleVO.getProductId(), files);
-			uploadResult = "등록 성공";
-		} else {
-			uploadResult = "등록 실패";
-		}
-		attributes.addFlashAttribute("result", uploadResult);
-		mav.setViewName("redirect:/article/fleamarket");
-		return mav;
-
-	}
-
+	/*
+	 * 물건 이름 검색 시
+	 */
 	@RequestMapping(value = "/search/{value}", method = RequestMethod.GET)
 	public ModelAndView searchArticles(@PathVariable String value) throws Exception {
+		String loginId = getLoginId();
 		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
+
 		List<ArticleVO> articles;
 		int allCount;
-		int articleCount;
 		if (loginId == "anonymousUser") {
-			articles = articleService.selectArticlesBySearch(value);
-			allCount = articleService.selectArticlesCountBySearch(value);
-			articleCount = articles.size();
+			articles = articleService.getArticlesBySearch(value);
+			allCount = articleService.countArticlesBySearch(value);
 		} else {
 			MemberVO member = memberService.findById(loginId);
 			String[] regionArray = member.getRegion1().split(" ");
 			String region = regionArray[0] + " " + regionArray[1];
-			logger.info("region : {}", region);
-			SearchDTO dto = new SearchDTO(value, region);
-			articles = articleService.selectArticlesBySearch(dto);
+			articles = articleService.getArticlesBySearch(value, region);
+			allCount = articleService.countArticlesBySearch(value, region);
 			mav.addObject("region", region);
-			allCount = articleService.selectArticlesCountBySearch(dto);
-			articleCount = articles.size();
 		}
 		mav.addObject("allCount", allCount);
-		mav.addObject("articleCount", articleCount);
-		logger.info("allCount : {}", allCount);
-		logger.info("articleCount : {}", articleCount);
+		mav.addObject("articleCount", articles.size());
 		mav.addObject("articles", articles);
 		mav.addObject("search", value);
 		mav.setViewName("searchResult");
 		return mav;
 	}
 
+	/*
+	 * 검색 결과 더 불러오기(로그인)
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/search/getMoreArticle/{value}/{articleSize}/{region}", method = RequestMethod.GET)
 	public List<ArticleVO> getMoreArticlesAtSearch(@PathVariable String value, @PathVariable int articleSize,
 			@PathVariable String region) throws Exception {
-		logger.info("value : {}", value);
-		logger.info("articleSize : {}", articleSize);
-		logger.info("region : {}", region);
-		List<ArticleVO> list = articleService
-				.selectMoreArticlesBySearch(new MoreArticleDTO(value, articleSize, articleSize + 6, region));
-
-		for (ArticleVO article : list) {
-			logger.info(article.toString());
-		}
-		return list;
+		return articleService.getMoreArticlesBySearch(value, articleSize, articleSize + 6, region);
 	}
 
+	/*
+	 * 검색 결과 더 불러오기
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/search/getMoreArticle/{value}/{articleSize}", method = RequestMethod.GET)
 	public List<ArticleVO> getMoreArticlesAtSearch(@PathVariable String value, @PathVariable int articleSize)
 			throws Exception {
-		logger.info("value : {}", value);
-		logger.info("articleSize : {}", articleSize);
-		List<ArticleVO> list = articleService
-				.selectMoreArticlesBySearch(new MoreArticleDTO(value, articleSize, articleSize + 6));
-
-		for (ArticleVO article : list) {
-			logger.info(article.toString());
-		}
-		return list;
+		return articleService.getMoreArticlesBySearch(value, articleSize, articleSize + 6);
 	}
 
+	/*
+	 * 게시글 상세창
+	 */
 	@RequestMapping(value = "/{productId}", method = RequestMethod.GET)
 	public ModelAndView viewArticle(@PathVariable int productId, HttpServletRequest req, HttpServletResponse res)
 			throws Exception {
+		String loginId = getLoginId();
 		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
-		ArticleVO article = articleService.selectArticle(productId);
+
+		ArticleVO article = articleService.getArticle(productId);
 		if (article != null) {
 			Date currentTime = new Date();
 			Date dbTimeStamp = article.getCreatedAt();
@@ -345,12 +291,14 @@ public class ArticleController {
 			mav.addObject("timeDiff", timeDiff);
 			mav.addObject("member", member);
 			if (loginId != null) {
-				LikeDTO likeDTO = new LikeDTO(loginId, productId);
-				boolean isLiked = articleService.selectLike(likeDTO);
+				LikeVO like = new LikeVO();
+				like.setUserId(loginId);
+				like.setProductId(productId);
+				boolean isLiked = articleService.isLikedByUser(like);
 				mav.addObject("like", isLiked);
 				increaseView(req, res, productId);
 			}
-			ReviewVO review = reviewService.selectReview(productId, loginId);
+			ReviewVO review = reviewService.getReview(productId, loginId);
 			if (review != null) {
 				mav.addObject("isReviewed", "true");
 			}
@@ -361,23 +309,27 @@ public class ArticleController {
 		return mav;
 	}
 
+	/*
+	 * 찜하기 버튼 클릭 시
+	 */
 	@RequestMapping(value = "/like/{productId}", method = RequestMethod.GET)
 	public ModelAndView likeArticle(@PathVariable int productId, RedirectAttributes attributes) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
+		String loginId = getLoginId();
 		ModelAndView mav = new ModelAndView();
 
 		if (loginId.equals("anonymousUser")) {
 			attributes.addFlashAttribute("loginFirst", "loginFirst");
 			mav.setViewName("redirect:/article/" + productId);
 		} else {
-			LikeDTO likeDTO = new LikeDTO(loginId, productId);
-			boolean isLiked = articleService.selectLike(likeDTO);
+			LikeVO like = new LikeVO();
+			like.setUserId(loginId);
+			like.setProductId(productId);
+			boolean isLiked = articleService.isLikedByUser(like);
 			if (isLiked) {
-				boolean result = articleService.removeLike(likeDTO);
+				boolean result = articleService.removeLike(like);
 				attributes.addFlashAttribute("removeResult", result);
 			} else {
-				boolean result = articleService.addLike(likeDTO);
+				boolean result = articleService.addLike(like);
 				attributes.addFlashAttribute("addResult", result);
 			}
 			mav.setViewName("redirect:/article/" + productId);
@@ -385,30 +337,33 @@ public class ArticleController {
 		return mav;
 	}
 
+	/*
+	 * 글 삭제 버튼 클릭 시
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/delete/{productId}", method = RequestMethod.DELETE)
 	public ResponseEntity<Map<String, String>> deleteArticle(@PathVariable int productId) throws Exception {
 		Map<String, String> response = new HashMap<String, String>();
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
-		ArticleVO article = articleService.selectArticle(productId);
+		String loginId = getLoginId();
+
+		ArticleVO article = articleService.getArticle(productId);
 		boolean result = false;
 		if (loginId.equals(article.getUserId())) {
-			result = articleService.deleteArticleById(productId);
+			result = articleService.removeArticleById(productId);
 			response.put("msg", "success");
 		} else {
 			response.put("msg", "not valid");
 		}
 
-		if (result) {
-			deleteImageFile(productId);
-		}
 		response.put("result", String.valueOf(result));
 
 		return ResponseEntity.ok(response);
 	}
 
+	/*
+	 * 게시글 상태 변경 시
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/updateStat/{productId}", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, String>> updateArticleStatus(@PathVariable int productId,
@@ -416,12 +371,13 @@ public class ArticleController {
 		String status = requestBody.get("status");
 		String buyerId = requestBody.get("buyerId");
 
-		Map<String, String> response = new HashMap<String, String>();
 		if (status.equals("Active")) {
 			buyerId = "";
 		}
 
-		boolean result = articleService.updateArticleStatus(new UpdateStatusDTO(productId, status, buyerId));
+		Map<String, String> response = new HashMap<String, String>();
+
+		boolean result = articleService.modifyArticleStatus(productId, status, buyerId);
 		TradeVO trade = tradeService.selectTradeByProductId(productId);
 		if (trade != null) {
 			response.put("tradeId", String.valueOf(trade.getTradeId()));
@@ -432,27 +388,29 @@ public class ArticleController {
 		return ResponseEntity.ok(response);
 	}
 
+	/*
+	 * 게시글 상태(예약중, 거래완료) 변경 시 --> 구매자 선택이 필요한 경우
+	 */
 	@RequestMapping(value = "/updateStat/{productId}/selectBuyer", method = RequestMethod.GET)
 	public ModelAndView selectBuyer(@PathVariable int productId, @RequestParam("status") String status,
 			@RequestParam("pre") String pre) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
+		String loginId = getLoginId();
 
-		ArticleVO article = articleService.selectArticle(productId);
+		ModelAndView mav = new ModelAndView();
+
+		ArticleVO article = articleService.getArticle(productId);
 		if (article != null) {
 			if (article.getUserId().equals(loginId)) {
-				List<ChatVO> chats = chatService.selectChatListByProductId(productId);
+				List<ChatVO> chats = chatService.getChatListByProductId(productId);
 				List<MemberVO> members = new ArrayList<MemberVO>();
 				List<String> lastMessages = new ArrayList<String>();
 				List<Long> timeDiffs = new ArrayList<Long>();
 				Date currentTime = new Date();
 				for (ChatVO chat : chats) {
 					members.add(memberService.findById(chat.getBuyerId()));
-					List<MessageVO> messages = chatService.selectMessagesByChatId(chat.getChatId());
+					List<MessageVO> messages = messageService.getMessagesByChatId(chat.getChatId());
 					lastMessages.add(messages.get(messages.size() - 1).getContent());
-					long timeDiff = currentTime.getTime() - messages.get(messages.size() - 1).getSentAt().getTime();
-					timeDiffs.add(timeDiff);
+					timeDiffs.add(currentTime.getTime() - messages.get(messages.size() - 1).getSentAt().getTime());
 				}
 				mav.addObject("chats", chats);
 				mav.addObject("members", members);
@@ -472,13 +430,17 @@ public class ArticleController {
 		return mav;
 	}
 
+	/*
+	 * 게시글 숨기기 버튼 클릭 시
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/updateHidden/{productId}", method = RequestMethod.POST)
 	public ResponseEntity<Map<String, String>> updateArticleHidden(@PathVariable int productId,
 			@RequestBody Map<String, Integer> requestBody) throws Exception {
 		int hidden = requestBody.get("hide");
+
 		Map<String, String> response = new HashMap<String, String>();
-		boolean result = articleService.updateArticleHidden(new UpdateHiddenDTO(productId, hidden));
+		boolean result = articleService.modifyArticleHidden(productId, hidden);
 		response.put("result", String.valueOf(result));
 		if (hidden == 0) {
 			response.put("hidden", "show");
@@ -489,62 +451,9 @@ public class ArticleController {
 		return ResponseEntity.ok(response);
 	}
 
-	private void uploadImageFile(int productId, List<MultipartFile> files) {
-		for (MultipartFile file : files) {
-			if (!file.isEmpty()) {
-				try {
-					String uploadDir = servletContext.getRealPath("/resources/image/product_image/" + productId);
-					String fileName = file.getOriginalFilename();
-					String filePath = uploadDir + "\\" + fileName;
-
-					// 디렉토리가 존재하지 않으면 생성
-					File directory = new File(uploadDir);
-					if (!directory.exists()) {
-						directory.mkdir();
-					}
-
-					file.transferTo(new File(filePath));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	private void deleteImageFile(int productId) {
-		String uploadDir = servletContext.getRealPath("/resources/image/product_image/" + productId);
-		File directory = new File(uploadDir);
-		if (directory.exists()) {
-			File[] files = directory.listFiles();
-			for (File file : files) {
-				file.delete();
-			}
-			directory.delete();
-		}
-	}
-
-	private void updateImageFile(ArticleVO article, List<MultipartFile> files) {
-		String uploadDir = servletContext.getRealPath("/resources/image/product_image/" + article.getProductId());
-		File directory = new File(uploadDir);
-		if (directory.exists()) {
-			File[] existFiles = directory.listFiles();
-			for (File file : existFiles) {
-				boolean isFileExists = false;
-				for (String fileName : article.getFilesName()) {
-					if (file.getName().equals(fileName)) {
-						isFileExists = true;
-					}
-				}
-				if (!isFileExists) {
-					file.delete();
-				}
-			}
-		}
-		if (files != null && files.size() != 0) {
-			uploadImageFile(article.getProductId(), files);
-		}
-	}
-
+	/*
+	 * 게시글 조회수 증가 메서드
+	 */
 	private void increaseView(HttpServletRequest req, HttpServletResponse res, int productId) {
 		Cookie oldCookie = null;
 		Cookie[] cookies = req.getCookies();
@@ -569,5 +478,9 @@ public class ArticleController {
 			newCookie.setMaxAge(60 * 60 * 24);
 			res.addCookie(newCookie);
 		}
+	}
+
+	private String getLoginId() {
+		return SecurityContextHolder.getContext().getAuthentication().getName();
 	}
 }

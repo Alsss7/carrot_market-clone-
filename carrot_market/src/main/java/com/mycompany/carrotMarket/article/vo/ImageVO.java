@@ -1,6 +1,7 @@
 package com.mycompany.carrotMarket.article.vo;
 
 public class ImageVO {
+
 	private int imageId;
 
 	private int productId;
@@ -29,6 +30,11 @@ public class ImageVO {
 
 	public void setImageFileName(String imageFileName) {
 		this.imageFileName = imageFileName;
+	}
+
+	@Override
+	public String toString() {
+		return "ImageVO [imageId=" + imageId + ", productId=" + productId + ", imageFileName=" + imageFileName + "]";
 	}
 
 }

@@ -1,14 +1,11 @@
 package com.mycompany.carrotMarket.member.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -30,16 +26,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.mycompany.carrotMarket.article.dto.LikeDTO;
-import com.mycompany.carrotMarket.article.dto.SalesDTO;
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
+import com.mycompany.carrotMarket.article.vo.LikeVO;
 import com.mycompany.carrotMarket.member.dto.IdDTO;
-import com.mycompany.carrotMarket.member.dto.MemberDTO;
 import com.mycompany.carrotMarket.member.dto.NicknameDTO;
 import com.mycompany.carrotMarket.member.service.MemberService;
 import com.mycompany.carrotMarket.member.vo.MemberVO;
@@ -66,19 +59,15 @@ public class MemberController {
 
 	private final NicknameValidator nicknameValidator;
 
-	private final ServletContext servletContext;
-
 	@Autowired
 	public MemberController(MemberService memberService, ArticleService articleService, ReviewService reviewService,
-			MemberValidator memberValidator, IdValidator idValidator, NicknameValidator nicknameValidator,
-			ServletContext servletContext) {
+			MemberValidator memberValidator, IdValidator idValidator, NicknameValidator nicknameValidator) {
 		this.memberService = memberService;
 		this.articleService = articleService;
 		this.reviewService = reviewService;
 		this.memberValidator = memberValidator;
 		this.idValidator = idValidator;
 		this.nicknameValidator = nicknameValidator;
-		this.servletContext = servletContext;
 	}
 
 	@InitBinder("id")
@@ -98,9 +87,8 @@ public class MemberController {
 
 	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
 	public ModelAndView myPage(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String loginId = getLoginId();
 		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
 		MemberVO member = memberService.findById(loginId);
 
 		mav.addObject("member", member);
@@ -119,15 +107,14 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/myPage/profile", method = RequestMethod.POST)
-	public ModelAndView getInfo(@ModelAttribute MemberDTO dto, HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView getInfo(@ModelAttribute MemberVO vo, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		ModelAndView mav = new ModelAndView();
-		MemberVO member = memberService.findById(dto.getId());
-		boolean isMatch = memberService.matchesPassword(dto.getPw(), member.getPw());
-		System.out.println(isMatch);
+		MemberVO member = memberService.findById(vo.getId());
+		boolean isMatch = memberService.matchesPassword(vo.getPw(), member.getPw());
 		mav.addObject("isMatch", isMatch);
 		if (isMatch) {
-			member.setPw(dto.getPw());
+			member.setPw(vo.getPw());
 			mav.addObject("member", member);
 		}
 		mav.setViewName("profile");
@@ -136,44 +123,26 @@ public class MemberController {
 
 	@RequestMapping(value = "/myPage/profile/modify", method = RequestMethod.POST)
 	public ModelAndView modifyMember(@ModelAttribute("member") MemberVO memberVO, BindingResult bindingResult,
-			HttpServletRequest request, RedirectAttributes attributes) throws Exception {
-		logger.info("modifyMember");
+			HttpServletRequest req, RedirectAttributes attributes) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		attributes.addFlashAttribute("isMatch", true);
 		String password = memberVO.getPw();
 		memberValidator.validate(memberVO, bindingResult);
 
 		if (bindingResult.hasErrors()) {
-			logger.info("hasError");
 			for (FieldError error : bindingResult.getFieldErrors()) {
-				logger.info("error.getField() : {}", error.getField());
-				logger.info("error.getDefaultMessage() : {}", error.getDefaultMessage());
 				attributes.addFlashAttribute(error.getField(), error.getDefaultMessage());
 			}
 			attributes.addFlashAttribute("member", memberVO);
 		} else {
-			logger.info("NoError");
-			String paramValue = request.getParameter("fileName");
-			if (paramValue != null) {
-				logger.info("originImage : {}", paramValue);
-				memberVO.setFileName(paramValue);
-			} else {
-				logger.info("changeImage : {}", memberVO.getProfile_image().getOriginalFilename());
-				memberVO.setFileName(memberVO.getProfile_image().getOriginalFilename());
-			}
-			boolean result = memberService.modifyMember(memberVO);
+			String paramValue = req.getParameter("fileName");
+			boolean result = memberService.modifyMember(memberVO, paramValue);
 			if (result) {
-				logger.info("modify Success");
-				if (paramValue == null) {
-					updateImageFile(memberVO, memberVO.getProfile_image());
-					logger.info("image changed");
-				}
 				attributes.addFlashAttribute("result", "success");
 				MemberVO modifiedMember = memberService.findById(memberVO.getId());
 				modifiedMember.setPw(password);
 				attributes.addFlashAttribute("member", modifiedMember);
 			} else {
-				logger.info("modify fail");
 				attributes.addFlashAttribute("result", "failed");
 				attributes.addFlashAttribute("member", memberVO);
 			}
@@ -184,15 +153,15 @@ public class MemberController {
 
 	@RequestMapping(value = "/myPage/likeList", method = RequestMethod.GET)
 	public ModelAndView likeList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String loginId = getLoginId();
 		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
-		List<LikeDTO> likeList = articleService.selectLikeList(loginId);
+		List<LikeVO> likeList = articleService.getLikeList(loginId);
+
 		List<Integer> likedProducts = new ArrayList<Integer>();
-		for (LikeDTO like : likeList) {
+		for (LikeVO like : likeList) {
 			likedProducts.add(like.getProductId());
 		}
-		List<ArticleVO> articleList = articleService.selectArticlesByProductIdList(likedProducts);
+		List<ArticleVO> articleList = articleService.getArticlesByProductIdList(likedProducts);
 		mav.addObject("articles", articleList);
 		mav.setViewName("likeList");
 		return mav;
@@ -201,10 +170,12 @@ public class MemberController {
 	@RequestMapping(value = "/myPage/likeList/remove/{productId}", method = RequestMethod.GET)
 	public ModelAndView removeLikeAtLikeList(@PathVariable int productId, RedirectAttributes attributes)
 			throws Exception {
+		String loginId = getLoginId();
 		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
-		boolean result = articleService.removeLike(new LikeDTO(loginId, productId));
+		LikeVO like = new LikeVO();
+		like.setUserId(loginId);
+		like.setProductId(productId);
+		boolean result = articleService.removeLike(like);
 		attributes.addFlashAttribute("removeResult", result);
 
 		mav.setViewName("redirect:/member/myPage/likeList");
@@ -213,15 +184,15 @@ public class MemberController {
 
 	@RequestMapping(value = "/myPage/salesHistory", method = RequestMethod.GET)
 	public ModelAndView getSalesHistory(@RequestParam("status") String status) throws Exception {
+		String loginId = getLoginId();
+
 		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
-		List<ArticleVO> articleList = articleService.selectArticlesByUserIdAndStat(new SalesDTO(loginId, status));
-		Map<String, Integer> map = articleService.selectArticlesCountByStatus(loginId);
+		List<ArticleVO> articleList = articleService.getArticlesByUserIdAndStat(loginId, status);
+		Map<String, Integer> map = articleService.countArticlesByStatus(loginId);
 
 		Map<ArticleVO, ReviewVO> reviewMap = new LinkedHashMap<ArticleVO, ReviewVO>();
 		for (ArticleVO article : articleList) {
-			ReviewVO review = reviewService.selectReview(article.getProductId(), loginId);
+			ReviewVO review = reviewService.getReview(article.getProductId(), loginId);
 			reviewMap.put(article, review);
 		}
 
@@ -234,11 +205,10 @@ public class MemberController {
 
 	@RequestMapping(value = "/myPage/salesHistory/hidden", method = RequestMethod.GET)
 	public ModelAndView getSalesHidden() throws Exception {
+		String loginId = getLoginId();
 		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
-		List<ArticleVO> articleList = articleService.selectHiddenArticles(loginId);
-		Map<String, Integer> map = articleService.selectArticlesCountByStatus(loginId);
+		List<ArticleVO> articleList = articleService.getHiddenArticles(loginId);
+		Map<String, Integer> map = articleService.countArticlesByStatus(loginId);
 
 		mav.addObject("articles", articleList);
 		mav.addObject("articleCount", map);
@@ -253,14 +223,13 @@ public class MemberController {
 
 	@RequestMapping(value = "/myPage/purchaseHistory", method = RequestMethod.GET)
 	public ModelAndView getPurchaseHistory() throws Exception {
+		String loginId = getLoginId();
 		ModelAndView mav = new ModelAndView();
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String loginId = authentication.getName();
-		List<ArticleVO> articleList = articleService.selectArticlesPurchasedById(loginId);
+		List<ArticleVO> articleList = articleService.getArticlesPurchasedById(loginId);
 
 		Map<ArticleVO, ReviewVO> reviewMap = new LinkedHashMap<ArticleVO, ReviewVO>();
 		for (ArticleVO article : articleList) {
-			ReviewVO review = reviewService.selectReview(article.getProductId(), loginId);
+			ReviewVO review = reviewService.getReview(article.getProductId(), loginId);
 			reviewMap.put(article, review);
 		}
 
@@ -286,10 +255,8 @@ public class MemberController {
 			attributes.addFlashAttribute("member", memberVO); // 입력되었던 데이터들
 			mav.setViewName("redirect:/join"); // 리다이렉트
 		} else { // 에러가 없다면
-			memberVO.setFileName(memberVO.getProfile_image().getOriginalFilename());
 			boolean result = memberService.addMember(memberVO); // 회원가입 실행
 			if (result) { // 완료되었다면
-				uploadImageFile(memberVO.getId(), memberVO.getProfile_image());
 				attributes.addFlashAttribute("result", "success");
 			} else { // 실패했다면
 				attributes.addFlashAttribute("result", "failed");
@@ -357,58 +324,8 @@ public class MemberController {
 		return response;
 	}
 
-	private void uploadImageFile(String id, MultipartFile file) {
-		if (!file.isEmpty()) {
-			try {
-				String uploadDir = servletContext.getRealPath("/resources/image/profile_image/" + id);
-				String fileName = file.getOriginalFilename();
-				String filePath = uploadDir + "\\" + fileName;
-
-				// 디렉토리가 존재하지 않으면 생성
-				File directory = new File(uploadDir);
-				if (!directory.exists()) {
-					directory.mkdir();
-				}
-
-				file.transferTo(new File(filePath));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private void deleteImageFile(String id) {
-		String uploadDir = servletContext.getRealPath("/resources/image/profile_image/" + id);
-		File directory = new File(uploadDir);
-		if (directory.exists()) {
-			File[] files = directory.listFiles();
-			for (File file : files) {
-				file.delete();
-			}
-			directory.delete();
-		}
-	}
-
-	private void updateImageFile(MemberVO member, MultipartFile newFile) {
-		String uploadDir = servletContext.getRealPath("/resources/image/profile_image/" + member.getId());
-		File directory = new File(uploadDir);
-		if (directory.exists()) {
-			File[] existFiles = directory.listFiles();
-			for (File file : existFiles) {
-				boolean isFileExists = false;
-				if (file.getName().equals(member.getFileName())) {
-					isFileExists = true;
-				}
-
-				if (!isFileExists) {
-					file.delete();
-				}
-			}
-		}
-
-		if (newFile != null) {
-			uploadImageFile(member.getId(), newFile);
-		}
+	private String getLoginId() {
+		return SecurityContextHolder.getContext().getAuthentication().getName();
 	}
 
 }

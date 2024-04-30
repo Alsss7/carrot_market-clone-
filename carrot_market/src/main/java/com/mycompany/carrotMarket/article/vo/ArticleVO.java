@@ -1,11 +1,13 @@
 package com.mycompany.carrotMarket.article.vo;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
 public class ArticleVO {
+
 	private int productId;
 
 	private String userId;
@@ -132,7 +134,20 @@ public class ArticleVO {
 		return filesName;
 	}
 
-	public void setFilesName(List<String> filesName) {
+	public void setFilesNameFromMultipart(List<MultipartFile> files) {
+		List<String> filesName = new ArrayList<String>();
+		if (files != null && !files.isEmpty()) {
+			for (MultipartFile file : files) {
+				if (!file.isEmpty()) {
+					String fileName = file.getOriginalFilename();
+					filesName.add(fileName);
+				}
+			}
+		}
+		this.filesName = filesName;
+	}
+
+	public void setFilesNameFromString(List<String> filesName) {
 		this.filesName = filesName;
 	}
 
@@ -178,6 +193,11 @@ public class ArticleVO {
 
 	@Override
 	public String toString() {
-		return "ArticleVO [productId=" + productId + ", title=" + title + "]";
+		return "ArticleVO [productId=" + productId + ", userId=" + userId + ", title=" + title + ", description="
+				+ description + ", sellOrShare=" + sellOrShare + ", price=" + price + ", category=" + category
+				+ ", status=" + status + ", region=" + region + ", place=" + place + ", files=" + files + ", filesName="
+				+ filesName + ", likeCount=" + likeCount + ", viewCount=" + viewCount + ", chatCount=" + chatCount
+				+ ", createdAt=" + createdAt + ", hidden=" + hidden + "]";
 	}
+
 }

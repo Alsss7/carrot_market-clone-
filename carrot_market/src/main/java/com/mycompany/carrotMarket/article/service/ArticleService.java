@@ -3,72 +3,72 @@ package com.mycompany.carrotMarket.article.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.dao.DataAccessException;
 
-import com.mycompany.carrotMarket.article.dto.LikeDTO;
-import com.mycompany.carrotMarket.article.dto.MoreArticleDTO;
-import com.mycompany.carrotMarket.article.dto.SalesDTO;
-import com.mycompany.carrotMarket.article.dto.SearchDTO;
-import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
-import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
-import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 import com.mycompany.carrotMarket.article.vo.ImageVO;
+import com.mycompany.carrotMarket.article.vo.LikeVO;
 
 public interface ArticleService {
-	public boolean addArticle(ArticleVO articleVO) throws DataAccessException;
+	public boolean registerArticle(ArticleVO dto) throws DataAccessException;
 
-	public List<ArticleVO> selectArticles() throws DataAccessException;
+	public List<ArticleVO> getArticles() throws DataAccessException;
 
-	public List<ArticleVO> selectArticlesByRandom(int count) throws DataAccessException;
+	public List<ArticleVO> getArticlesByRandom(int count) throws DataAccessException;
 
-	public List<ArticleVO> selectArticlesBySearch(String value) throws DataAccessException;
+	public List<ArticleVO> getArticlesBySearch(String value) throws DataAccessException;
 
-	public int selectArticlesCountBySearch(String value) throws DataAccessException;
+	public int countArticlesBySearch(String value) throws DataAccessException;
 
-	public List<ArticleVO> selectArticlesBySearch(SearchDTO dto) throws DataAccessException;
+	public List<ArticleVO> getArticlesBySearch(String value, String region) throws DataAccessException;
 
-	public int selectArticlesCountBySearch(SearchDTO dto) throws DataAccessException;
+	public int countArticlesBySearch(String value, String region) throws DataAccessException;
 
-	public List<ArticleVO> selectMoreArticlesBySearch(MoreArticleDTO dto) throws DataAccessException;
+	public List<ArticleVO> getMoreArticlesBySearch(String value, int beginSize, int endSize, String region)
+			throws DataAccessException;
 
-	public List<ArticleVO> selectArticlesByRegion(String region) throws DataAccessException;
+	public List<ArticleVO> getMoreArticlesBySearch(String value, int beginSize, int endSize) throws DataAccessException;
 
-	public List<ArticleVO> selectMoreArticlesByRegion(MoreArticleDTO dto) throws DataAccessException;
+	public List<ArticleVO> getArticlesByRegion(String region) throws DataAccessException;
 
-	public int selectArticlesCountByRegion(String region) throws DataAccessException;
+	public List<ArticleVO> getMoreArticlesByRegion(int beginSize, int endSize, String region)
+			throws DataAccessException;
 
-	public List<ArticleVO> selectRandomArticlesByContainRegion(String region) throws DataAccessException;
+	public int countArticlesByRegion(String region) throws DataAccessException;
 
-	public List<ArticleVO> selectArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException;
+	public List<ArticleVO> getRandomArticlesByContainRegion(String region) throws DataAccessException;
 
-	public List<ArticleVO> selectArticlesByUserIdAndStat(SalesDTO salesDTO) throws DataAccessException;
+	public List<ArticleVO> getArticlesByProductIdList(List<Integer> productIdList) throws DataAccessException;
 
-	public List<ArticleVO> selectHiddenArticles(String userId) throws DataAccessException;
+	public List<ArticleVO> getArticlesByUserIdAndStat(String loginId, String status) throws DataAccessException;
 
-	public Map<String, Integer> selectArticlesCountByStatus(String userId) throws DataAccessException;
+	public List<ArticleVO> getHiddenArticles(String userId) throws DataAccessException;
 
-	public List<ArticleVO> selectArticlesPurchasedById(String buyerId) throws DataAccessException;
+	public Map<String, Integer> countArticlesByStatus(String userId) throws DataAccessException;
 
-	public ArticleVO selectArticle(int productId) throws DataAccessException;
+	public List<ArticleVO> getArticlesPurchasedById(String buyerId) throws DataAccessException;
 
-	public boolean updateArticle(UpdateImagesDTO updateImagesDTO, ArticleVO articleVO) throws DataAccessException;
+	public ArticleVO getArticle(int productId) throws DataAccessException;
 
-	public boolean updateArticleStatus(UpdateStatusDTO updateStatusDTO) throws DataAccessException;
+	public boolean modifyArticle(int productId, ArticleVO articleVO, HttpServletRequest req) throws DataAccessException;
 
-	public boolean updateArticleHidden(UpdateHiddenDTO updateHiddenDTO) throws DataAccessException;
+	public boolean modifyArticleStatus(int productId, String status, String buyerId) throws DataAccessException;
 
-	public boolean deleteArticleById(int productId) throws DataAccessException;
+	public boolean modifyArticleHidden(int productId, int hidden) throws DataAccessException;
 
-	public List<ImageVO> selectArticleImages(int productId) throws DataAccessException;
+	public boolean removeArticleById(int productId) throws DataAccessException;
 
-	public List<LikeDTO> selectLikeList(String loginId) throws DataAccessException;
+	public List<ImageVO> getArticleImages(int productId) throws DataAccessException;
 
-	public boolean selectLike(LikeDTO likeDTO) throws DataAccessException;
+	public List<LikeVO> getLikeList(String loginId) throws DataAccessException;
 
-	public boolean addLike(LikeDTO likeDTO) throws DataAccessException;
+	public boolean isLikedByUser(LikeVO vo) throws DataAccessException;
 
-	public boolean removeLike(LikeDTO likeDTO) throws DataAccessException;
+	public boolean addLike(LikeVO vo) throws DataAccessException;
+
+	public boolean removeLike(LikeVO vo) throws DataAccessException;
 
 	public int increaseChat(int productId) throws DataAccessException;
 

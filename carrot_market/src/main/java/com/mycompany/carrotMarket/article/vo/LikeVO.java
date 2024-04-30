@@ -1,22 +1,13 @@
-package com.mycompany.carrotMarket.article.dto;
+package com.mycompany.carrotMarket.article.vo;
 
 import java.util.Date;
 
-public class LikeDTO {
+public class LikeVO {
 	private String userId;
 
 	private int productId;
 
 	private Date createdAt;
-
-	public LikeDTO() {
-
-	}
-
-	public LikeDTO(String userId, int productId) {
-		this.userId = userId;
-		this.productId = productId;
-	}
 
 	public String getUserId() {
 		return userId;

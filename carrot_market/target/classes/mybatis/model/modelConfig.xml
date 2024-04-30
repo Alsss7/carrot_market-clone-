@@ -7,10 +7,6 @@
 		<!-- Member Model -->
 		<typeAlias
 			type="com.mycompany.carrotMarket.member.vo.MemberVO" alias="memberVO" />
-		<typeAlias
-			type="com.mycompany.carrotMarket.member.dto.MannerDTO"
-			alias="mannerDTO" />
-
 
 		<!-- Article Model -->
 		<typeAlias
@@ -19,46 +15,21 @@
 		<typeAlias
 			type="com.mycompany.carrotMarket.article.vo.ImageVO" alias="imageVO" />
 		<typeAlias
-			type="com.mycompany.carrotMarket.article.dto.LikeDTO" alias="likeDTO" />
-		<typeAlias
-			type="com.mycompany.carrotMarket.article.dto.SalesDTO"
-			alias="salesDTO" />
-		<typeAlias
-			type="com.mycompany.carrotMarket.article.dto.UpdateStatusDTO"
-			alias="updateStatusDTO" />
-		<typeAlias
-			type="com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO"
-			alias="updateHiddenDTO" />
-		<typeAlias
-			type="com.mycompany.carrotMarket.article.dto.UpdateImagesDTO"
-			alias="updateImagesDTO" />
-		<typeAlias
-			type="com.mycompany.carrotMarket.article.dto.SearchDTO"
-			alias="searchDTO" />
-		<typeAlias
-			type="com.mycompany.carrotMarket.article.dto.MoreArticleDTO"
-			alias="moreArticleDTO" />
+			type="com.mycompany.carrotMarket.article.vo.LikeVO" alias="likeVO" />
 
 		<!-- Chat Model -->
 		<typeAlias type="com.mycompany.carrotMarket.chat.vo.ChatVO"
 			alias="chatVO" />
-		<typeAlias
-			type="com.mycompany.carrotMarket.chat.dto.ChatDTO" alias="chatDTO" />
 		<typeAlias
 			type="com.mycompany.carrotMarket.chat.vo.MessageVO" alias="messageVO" />
 
 		<!-- Trade Model -->
 		<typeAlias
 			type="com.mycompany.carrotMarket.trade.vo.TradeVO" alias="tradeVO" />
-		<typeAlias
-			type="com.mycompany.carrotMarket.trade.dto.TradeDTO" alias="tradeDTO" />
 
 		<!-- Review Model -->
 		<typeAlias
 			type="com.mycompany.carrotMarket.review.vo.ReviewVO" alias="reviewVO" />
-		<typeAlias
-			type="com.mycompany.carrotMarket.review.dto.ReviewDTO"
-			alias="reviewDTO" />
 
 	</typeAliases>
 </configuration>

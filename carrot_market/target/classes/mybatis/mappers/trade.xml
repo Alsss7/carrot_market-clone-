@@ -4,7 +4,7 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	
 <mapper namespace="mappers.trade">
-	<insert id="insertTrade" parameterType="tradeDTO">
+	<insert id="insertTrade" parameterType="tradeVO">
 		INSERT INTO TRADES(TRADE_ID, PRODUCT_ID, BUYER_ID)
 		VALUES (trade_seq.NEXTVAL, #{productId}, #{buyerId})
 	</insert>
@@ -35,7 +35,7 @@
 		ORDER BY traded_at DESC
 	</select>
 	
-	<update id="updateTradeByProductId" parameterType="tradeDTO">
+	<update id="updateTradeByProductId" parameterType="tradeVO">
 		UPDATE TRADES
 		SET buyer_id = #{buyerId}
 		WHERE product_id = #{productId}

@@ -2,7 +2,6 @@ package com.mycompany.carrotMarket.member.dao;
 
 import org.springframework.dao.DataAccessException;
 
-import com.mycompany.carrotMarket.member.dto.MannerDTO;
 import com.mycompany.carrotMarket.member.vo.MemberVO;
 
 public interface MemberDAO {
@@ -12,7 +11,7 @@ public interface MemberDAO {
 
 	public MemberVO findById(String id) throws DataAccessException;
 
-	public int updateMemberManner(MannerDTO dto) throws DataAccessException;
+	public int updateMemberManner(String buyerId, float amountOfIncrease) throws DataAccessException;
 
 	public MemberVO findByNickname(String nickname) throws DataAccessException;
 

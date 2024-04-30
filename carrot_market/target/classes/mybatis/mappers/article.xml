@@ -85,13 +85,13 @@
 		]]>
 	</select>
 	
-	<select id="selectArticlesCountBySearch" parameterType="String" resultType="int">
+	<select id="countArticlesBySearch" parameterType="String" resultType="int">
 		SELECT COUNT(product_id)
 		FROM products
 		WHERE status IN ('Active', 'Booking') AND hidden = 0 AND title LIKE '%' || #{value} || '%'
 	</select>
 	
-	<select id="selectArticlesBySearchInRegion" parameterType="searchDTO" resultType="articleVO">
+	<select id="selectArticlesBySearchInRegion" parameterType="java.util.HashMap" resultType="articleVO">
 		<![CDATA[
 			SELECT * 
 			FROM (
@@ -114,13 +114,13 @@
 		]]>
 	</select>
 	
-	<select id="selectArticlesCountBySearchInRegion" parameterType="searchDTO" resultType="int">
+	<select id="countArticlesBySearchInRegion" parameterType="java.util.HashMap" resultType="int">
 		SELECT COUNT(product_id)
 		FROM products
 		WHERE status IN ('Active', 'Booking') AND hidden = 0 AND title LIKE '%' || #{value} || '%' AND region LIKE #{region} || '%'
 	</select>
 	
-	<select id="selectMoreArticlesBySearch" parameterType="moreArticleDTO" resultType="articleVO">
+	<select id="selectMoreArticlesBySearch" parameterType="java.util.HashMap" resultType="articleVO">
 	        SELECT * FROM (
             	SELECT
 	                product_id AS productId,
@@ -140,14 +140,14 @@
                 		<if test="region != null">
                 			AND region LIKE '%' || #{region} || '%'
                 		</if>
-                		AND status IN ('Active', 'Booking') AND hidden = 0 AND title LIKE '%' || #{searchValue} || '%'
+                		AND status IN ('Active', 'Booking') AND hidden = 0 AND title LIKE '%' || #{value} || '%'
                 	</where>
                 	ORDER BY product_id DESC
             	)
 		<![CDATA[
-            	WHERE ROWNUM <= #{nextArticleListSize}
+            	WHERE ROWNUM <= #{endSize}
         	)
-        	WHERE rn > #{articleListSize}
+        	WHERE rn > #{beginSize}
     	]]>
 	</select>
 	
@@ -173,7 +173,7 @@
 		]]>
 	</select>
 	
-	<select id="selectMoreArticlesByRegion" parameterType="moreArticleDTO" resultType="articleVO">
+	<select id="selectMoreArticlesByRegion" parameterType="java.util.HashMap" resultType="articleVO">
 		<![CDATA[
 	        SELECT * FROM (
             	SELECT
@@ -193,13 +193,13 @@
                 	WHERE status IN ('Active', 'Booking') AND hidden = 0 AND region = #{region}
                 	ORDER BY product_id DESC
             	)
-            	WHERE ROWNUM <= #{nextArticleListSize}
+            	WHERE ROWNUM <= #{endSize}
         	)
-        	WHERE rn > #{articleListSize}
+        	WHERE rn > #{beginSize}
     	]]>
 	</select>
 	
-	<select id="selectArticlesCountByRegion" parameterType="String" resultType="int">
+	<select id="countArticlesByRegion" parameterType="String" resultType="int">
 		SELECT COUNT(product_id)
 		FROM products
 		WHERE region = #{value} AND status NOT IN ('Sold')
@@ -268,7 +268,7 @@
 					   WHERE buyer_id = #{value})
 	</select>
 	
-	<select id="selectArticlesByUserIdAndStat" parameterType="salesDTO" resultType="articleVO">
+	<select id="selectArticlesByUserIdAndStat" parameterType="java.util.HashMap" resultType="articleVO">
 		SELECT
 			product_id AS productId,
 			user_id AS userId,
@@ -308,21 +308,21 @@
 		WHERE user_id = #{value} and hidden = 1
 	</select>
 	
-	<select id="selectActiveArticlesCount" parameterType="String" resultType="int">
+	<select id="countActiveArticles" parameterType="String" resultType="int">
 		SELECT
 			COUNT(*)
 		FROM PRODUCTS
 		WHERE USER_ID = #{value} AND status IN ('Active', 'Booking') AND HIDDEN = 0
 	</select>
 	
-	<select id="selectSoldArticlesCount" parameterType="String" resultType="int">
+	<select id="countSoldArticles" parameterType="String" resultType="int">
 		SELECT
 			COUNT(*)
 		FROM PRODUCTS
 		WHERE USER_ID = #{value} AND status = 'Sold' AND HIDDEN = 0
 	</select>
 	
-	<select id="selectHiddenArticlesCount" parameterType="String" resultType="int">
+	<select id="countHiddenArticles" parameterType="String" resultType="int">
 		SELECT
 			COUNT(*)
 		FROM PRODUCTS
@@ -362,7 +362,7 @@
 		WHERE product_id = #{productId}
 	</update>
 	
-	<delete id="updateImages" parameterType="updateImagesDTO">
+	<delete id="updateImages" parameterType="java.util.HashMap">
 		DELETE
 		FROM product_images
 		WHERE image_id NOT IN 
@@ -372,13 +372,13 @@
 		AND product_id = #{productId}
 	</delete>
 	
-	<update id="updateArticleStatus" parameterType="updateStatusDTO">
+	<update id="updateArticleStatus" parameterType="java.util.HashMap">
 		UPDATE products
 		SET status = #{status}
 		WHERE product_id = #{productId}
 	</update>
 	
-	<update id="updateArticleHidden" parameterType="updateHiddenDTO">
+	<update id="updateArticleHidden" parameterType="java.util.HashMap">
 		UPDATE products
 		SET hidden = #{hidden}
 		WHERE product_id = #{productId}
@@ -413,7 +413,7 @@
 		WHERE product_id = #{value}
 	</delete>
 	
-	<select id="selectLikeList" parameterType="String" resultType="likeDTO">
+	<select id="selectLikeList" parameterType="String" resultType="likeVO">
 		SELECT
 			user_id as userId,
 			product_id as productId
@@ -422,7 +422,7 @@
 		ORDER BY created_at DESC
 	</select>
 	
-	<select id="selectLike" parameterType="likeDTO"
+	<select id="selectLike" parameterType="likeVO"
 		resultType="int">
 		<![CDATA[
 			SELECT COUNT(*)
@@ -431,7 +431,7 @@
 		]]>
 	</select>
 	
-	<insert id="addLike" parameterType="likeDTO">
+	<insert id="insertLike" parameterType="likeVO">
 		INSERT INTO LIKES(like_id, user_id, product_id)
 		VALUES(like_seq.NEXTVAL, #{userId}, #{productId})
 	</insert>
@@ -442,7 +442,7 @@
 		WHERE PRODUCT_ID = #{value}
 	</update>
 	
-	<delete id="removeLike" parameterType="likeDTO">
+	<delete id="deleteLike" parameterType="likeVO">
 		DELETE FROM LIKES
 		WHERE user_id = #{userId} AND product_id = #{productId}
 	</delete>

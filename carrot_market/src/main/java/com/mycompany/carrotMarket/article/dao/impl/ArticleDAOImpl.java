@@ -1,6 +1,8 @@
 package com.mycompany.carrotMarket.article.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +10,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.mycompany.carrotMarket.article.dao.ArticleDAO;
-import com.mycompany.carrotMarket.article.dto.LikeDTO;
-import com.mycompany.carrotMarket.article.dto.MoreArticleDTO;
-import com.mycompany.carrotMarket.article.dto.SalesDTO;
-import com.mycompany.carrotMarket.article.dto.SearchDTO;
-import com.mycompany.carrotMarket.article.dto.UpdateHiddenDTO;
-import com.mycompany.carrotMarket.article.dto.UpdateImagesDTO;
-import com.mycompany.carrotMarket.article.dto.UpdateStatusDTO;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
 import com.mycompany.carrotMarket.article.vo.ImageVO;
+import com.mycompany.carrotMarket.article.vo.LikeVO;
 
 @Repository
 public class ArticleDAOImpl implements ArticleDAO {
@@ -25,14 +21,14 @@ public class ArticleDAOImpl implements ArticleDAO {
 	SqlSession sqlSession;
 
 	@Override
-	public int insertArticle(ArticleVO articleVO) throws DataAccessException {
-		int result = sqlSession.insert("mappers.article.insertArticle", articleVO);
+	public int insertArticle(ArticleVO vo) throws DataAccessException {
+		int result = sqlSession.insert("mappers.article.insertArticle", vo);
 		return result;
 	}
 
 	@Override
-	public int insertImageFiles(ArticleVO articleVO) throws DataAccessException {
-		int result = sqlSession.update("mappers.article.insertProductImages", articleVO);
+	public int insertImageFiles(ArticleVO vo) throws DataAccessException {
+		int result = sqlSession.update("mappers.article.insertProductImages", vo);
 		return result;
 	}
 
@@ -55,26 +51,49 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public int selectArticlesCountBySearch(String value) throws DataAccessException {
-		int count = sqlSession.selectOne("mappers.article.selectArticlesCountBySearch", value);
+	public int countArticlesBySearch(String value) throws DataAccessException {
+		int count = sqlSession.selectOne("mappers.article.countArticlesBySearch", value);
 		return count;
 	}
 
 	@Override
-	public List<ArticleVO> selectArticlesBySearch(SearchDTO dto) throws DataAccessException {
-		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesBySearchInRegion", dto);
+	public List<ArticleVO> selectArticlesBySearch(String value, String region) throws DataAccessException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("value", value);
+		map.put("region", region);
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesBySearchInRegion", map);
 		return list;
 	}
 
 	@Override
-	public int selectArticlesCountBySearch(SearchDTO dto) throws DataAccessException {
-		int count = sqlSession.selectOne("mappers.article.selectArticlesCountBySearchInRegion", dto);
+	public int countArticlesBySearch(String value, String region) throws DataAccessException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("value", value);
+		map.put("region", region);
+		int count = sqlSession.selectOne("mappers.article.countArticlesBySearchInRegion", map);
 		return count;
 	}
 
 	@Override
-	public List<ArticleVO> selectMoreArticlesBySearch(MoreArticleDTO dto) throws DataAccessException {
-		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectMoreArticlesBySearch", dto);
+	public List<ArticleVO> selectMoreArticlesBySearch(String value, int beginSize, int endSize, String region)
+			throws DataAccessException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("value", value);
+		map.put("beginSize", beginSize);
+		map.put("endSize", endSize);
+		map.put("region", region);
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectMoreArticlesBySearch", map);
+		return list;
+	}
+
+	@Override
+	public List<ArticleVO> selectMoreArticlesBySearch(String value, int beginSize, int endSize)
+			throws DataAccessException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("value", value);
+		map.put("beginSize", beginSize);
+		map.put("endSize", endSize);
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectMoreArticlesBySearch", map);
 		return list;
 	}
 
@@ -85,14 +104,19 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public List<ArticleVO> selectMoreArticlesByRegion(MoreArticleDTO dto) throws DataAccessException {
-		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectMoreArticlesByRegion", dto);
+	public List<ArticleVO> selectMoreArticlesByRegion(int beginSize, int endSize, String region)
+			throws DataAccessException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("beginSize", beginSize);
+		map.put("endSize", endSize);
+		map.put("region", region);
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectMoreArticlesByRegion", map);
 		return list;
 	}
 
 	@Override
-	public int selectArticlesCountByRegion(String region) throws DataAccessException {
-		int count = sqlSession.selectOne("mappers.article.selectArticlesCountByRegion", region);
+	public int countArticlesByRegion(String region) throws DataAccessException {
+		int count = sqlSession.selectOne("mappers.article.countArticlesByRegion", region);
 		return count;
 	}
 
@@ -115,8 +139,11 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public List<ArticleVO> selectArticlesByUserIdAndStat(SalesDTO salesDTO) throws DataAccessException {
-		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesByUserIdAndStat", salesDTO);
+	public List<ArticleVO> selectArticlesByUserIdAndStat(String loginId, String status) throws DataAccessException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("userId", loginId);
+		map.put("status", status);
+		List<ArticleVO> list = sqlSession.selectList("mappers.article.selectArticlesByUserIdAndStat", map);
 		return list;
 	}
 
@@ -127,20 +154,20 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public int selectActiveArticlesCount(String userId) throws DataAccessException {
-		int result = sqlSession.selectOne("mappers.article.selectActiveArticlesCount", userId);
+	public int countActiveArticles(String userId) throws DataAccessException {
+		int result = sqlSession.selectOne("mappers.article.countActiveArticles", userId);
 		return result;
 	}
 
 	@Override
-	public int selectSoldArticlesCount(String userId) throws DataAccessException {
-		int result = sqlSession.selectOne("mappers.article.selectSoldArticlesCount", userId);
+	public int countSoldArticles(String userId) throws DataAccessException {
+		int result = sqlSession.selectOne("mappers.article.countSoldArticles", userId);
 		return result;
 	}
 
 	@Override
-	public int selectHiddenArticlesCount(String userId) throws DataAccessException {
-		int result = sqlSession.selectOne("mappers.article.selectHiddenArticlesCount", userId);
+	public int countHiddenArticles(String userId) throws DataAccessException {
+		int result = sqlSession.selectOne("mappers.article.countHiddenArticles", userId);
 		return result;
 	}
 
@@ -157,20 +184,30 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public int updateImages(UpdateImagesDTO updateImagesDTO) throws DataAccessException {
-		int result = sqlSession.update("mappers.article.updateImages", updateImagesDTO);
+	public int updateImages(int productId, List<Integer> keepImages) throws DataAccessException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("productId", productId);
+		map.put("keepImages", keepImages);
+		int result = sqlSession.update("mappers.article.updateImages", map);
 		return result;
 	}
 
 	@Override
-	public int updateArticleStatus(UpdateStatusDTO updateStatusDTO) throws DataAccessException {
-		int result = sqlSession.update("mappers.article.updateArticleStatus", updateStatusDTO);
+	public int updateArticleStatus(int productId, String status, String buyerId) throws DataAccessException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("productId", productId);
+		map.put("status", status);
+		map.put("buyerId", buyerId);
+		int result = sqlSession.update("mappers.article.updateArticleStatus", map);
 		return result;
 	}
 
 	@Override
-	public int updateArticleHidden(UpdateHiddenDTO updateHiddenDTO) throws DataAccessException {
-		int result = sqlSession.update("mappers.article.updateArticleHidden", updateHiddenDTO);
+	public int updateArticleHidden(int productId, int hidden) throws DataAccessException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("productId", productId);
+		map.put("hidden", hidden);
+		int result = sqlSession.update("mappers.article.updateArticleHidden", map);
 		return result;
 	}
 
@@ -199,32 +236,32 @@ public class ArticleDAOImpl implements ArticleDAO {
 	}
 
 	@Override
-	public List<LikeDTO> selectLikeList(String loginId) throws DataAccessException {
-		List<LikeDTO> likeList = sqlSession.selectList("mappers.article.selectLikeList", loginId);
+	public List<LikeVO> selectLikeList(String loginId) throws DataAccessException {
+		List<LikeVO> likeList = sqlSession.selectList("mappers.article.selectLikeList", loginId);
 		return likeList;
 	}
 
 	@Override
-	public int selectLike(LikeDTO likeDTO) throws DataAccessException {
-		int result = sqlSession.selectOne("mappers.article.selectLike", likeDTO);
+	public int selectLike(LikeVO vo) throws DataAccessException {
+		int result = sqlSession.selectOne("mappers.article.selectLike", vo);
 		return result;
 	}
 
 	@Override
-	public int addLike(LikeDTO likeDTO) throws DataAccessException {
-		int result = sqlSession.insert("mappers.article.addLike", likeDTO);
+	public int insertLike(LikeVO vo) throws DataAccessException {
+		int result = sqlSession.insert("mappers.article.insertLike", vo);
+		return result;
+	}
+
+	@Override
+	public int deleteLike(LikeVO vo) throws DataAccessException {
+		int result = sqlSession.delete("mappers.article.deleteLike", vo);
 		return result;
 	}
 
 	@Override
 	public int increaseLike(int productId) throws DataAccessException {
 		int result = sqlSession.update("mappers.article.increaseLike", productId);
-		return result;
-	}
-
-	@Override
-	public int removeLike(LikeDTO likeDTO) throws DataAccessException {
-		int result = sqlSession.delete("mappers.article.removeLike", likeDTO);
 		return result;
 	}
 

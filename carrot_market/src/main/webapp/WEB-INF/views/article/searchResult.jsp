@@ -75,7 +75,7 @@
 											</div>
 										</div>
 									</a>
-								</div>ㄴ
+								</div>
 							</c:forEach>
 						</div>
 					</div>

@@ -20,9 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mycompany.carrotMarket.article.service.ArticleService;
 import com.mycompany.carrotMarket.article.vo.ArticleVO;
-import com.mycompany.carrotMarket.member.dto.MannerDTO;
 import com.mycompany.carrotMarket.member.service.MemberService;
-import com.mycompany.carrotMarket.review.dto.ReviewDTO;
 import com.mycompany.carrotMarket.review.service.ReviewService;
 import com.mycompany.carrotMarket.review.vo.ReviewVO;
 import com.mycompany.carrotMarket.trade.service.TradeService;
@@ -53,8 +51,8 @@ public class ReviewController {
 		String loginId = authentication.getName();
 		ModelAndView mav = new ModelAndView();
 		TradeVO trade = tradeService.selectTrade(tradeId);
-		ArticleVO article = articleService.selectArticle(trade.getProductId());
-		ReviewVO review = reviewService.selectReview(article.getProductId(), loginId);
+		ArticleVO article = articleService.getArticle(trade.getProductId());
+		ReviewVO review = reviewService.getReview(article.getProductId(), loginId);
 		if (review == null) {
 			if (loginId.equals(article.getUserId())) {
 				mav.addObject("targetId", trade.getBuyerId());
@@ -75,31 +73,17 @@ public class ReviewController {
 
 	@ResponseBody
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ResponseEntity<Map<String, String>> registerReview(@RequestBody ReviewDTO review) throws Exception {
+	public ResponseEntity<Map<String, String>> registerReview(@RequestBody ReviewVO review) throws Exception {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String loginId = authentication.getName();
 		Map<String, String> response = new HashMap<String, String>();
-		boolean result = reviewService.insertReview(review);
+		boolean result = reviewService.addReview(review);
 		TradeVO trade = tradeService.selectTrade(review.getTradeId());
-		ArticleVO article = articleService.selectArticle(trade.getProductId());
+		ArticleVO article = articleService.getArticle(trade.getProductId());
 
-		String targetId;
-		if (loginId.equals(article.getUserId())) {
-			targetId = trade.getBuyerId();
-		} else {
-			targetId = article.getUserId();
-		}
-		logger.info("targetId : {}", targetId);
+		String targetId = loginId.equals(article.getUserId()) ? trade.getBuyerId() : article.getUserId();
 
-		float amountOfIncrease;
-		if (review.getReview() == 1) {
-			amountOfIncrease = (float) -0.5;
-		} else if (review.getReview() == 2) {
-			amountOfIncrease = (float) 0.1;
-		} else {
-			amountOfIncrease = (float) 0.2;
-		}
-		memberService.updateMemberManner(new MannerDTO(targetId, amountOfIncrease));
+		memberService.updateMemberManner(targetId, review.getReview());
 		response.put("result", String.valueOf(result));
 		return ResponseEntity.ok(response);
 	}
